@@ -4,6 +4,8 @@ using System.Windows.Input;
 using SMART_CLINIC_SOFTWAR_2026.View.Doctors;
 using SMART_CLINIC_SOFTWAR_2026.ViewModel.Commands;
 
+// test commit
+
 namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Dashboard
 {
     public class DashboardViewModel : BaseViewModel
