@@ -1,0 +1,233 @@
+﻿<UserControl x:Class="SMART_CLINIC_SOFTWAR_2026.View.Card.CardsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SMART_CLINIC_SOFTWAR_2026.View.Card"
+             xmlns:vm="clr-namespace:SMART_CLINIC_SOFTWAR_2026.ViewModel.Cards"
+             xmlns:controls="clr-namespace:SMART_CLINIC_SOFTWAR_2026.View.Resorsus.DataViews"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="1000"
+             FlowDirection="RightToLeft">
+
+    <Grid Background="{StaticResource BgMainBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- الهيدر الرئيسي -->
+        <Border Grid.Row="0" 
+                Background="{StaticResource HeaderBgBrush}" 
+                BorderBrush="{StaticResource BorderBrush}" 
+                BorderThickness="0,0,0,1" 
+                Padding="10,8">
+            <TextBlock Text="إدارة بطاقات التأمين" 
+                       FontSize="16" 
+                       FontWeight="Bold" 
+                       HorizontalAlignment="Center" 
+                       Foreground="{StaticResource TextPrimaryBrush}"/>
+        </Border>
+
+        <Grid Grid.Row="1" Margin="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="410"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- القسم الأيمن: نموذج إدخال البيانات والأزرار -->
+            <Grid Grid.Column="0" Margin="0,0,8,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <GroupBox Grid.Row="0" 
+                          Header="بيانات البطاقة" 
+                          FontWeight="Bold" 
+                          Foreground="{StaticResource TextPrimaryBrush}" 
+                          Background="{StaticResource SurfaceBrush}" 
+                          BorderBrush="{StaticResource BorderBrush}" 
+                          Padding="8">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="0,4">
+
+                            <!-- كود البطاقة -->
+                            <Grid Margin="0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="120"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="كود البطاقة" VerticalAlignment="Center" HorizontalAlignment="Right" FontWeight="Normal" Margin="0,0,5,0"/>
+                                <TextBox Grid.Column="1" Text="{Binding CARD_CODE, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"/>
+                            </Grid>
+
+                            <!-- اسم البطاقة -->
+                            <Grid Margin="0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="120"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="اسم البطاقة" VerticalAlignment="Center" HorizontalAlignment="Right" FontWeight="Normal" Margin="0,0,5,0"/>
+                                <TextBox Grid.Column="1" Text="{Binding CARD_NAME, UpdateSourceTrigger=PropertyChanged}"/>
+                            </Grid>
+
+                            <!-- تاريخ البطاقة / الصلاحية -->
+                            <Grid Margin="0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="120"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="تاريخ البطاقة" VerticalAlignment="Center" HorizontalAlignment="Right" FontWeight="Normal" Margin="0,0,5,0"/>
+                                <DatePicker Grid.Column="1" SelectedDate="{Binding CARD_DATE, UpdateSourceTrigger=PropertyChanged}" Height="28" VerticalContentAlignment="Center"/>
+                            </Grid>
+
+                            <!-- نسبة التأمين -->
+                            <Grid Margin="0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="120"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="نسبة التأمين" VerticalAlignment="Center" HorizontalAlignment="Right" FontWeight="Normal" Margin="0,0,5,0"/>
+                                <TextBox Grid.Column="1" Text="{Binding CARD_PER, UpdateSourceTrigger=PropertyChanged}"/>
+                            </Grid>
+
+                            <!-- حالة البطاقة -->
+                            <Grid Margin="0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="120"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="حالة البطاقة" VerticalAlignment="Center" HorizontalAlignment="Right" FontWeight="Normal" Margin="0,0,5,0"/>
+                                <CheckBox Grid.Column="1" Content="بطاقة نشطة / مفعلة" IsChecked="{Binding CARD_STATE, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"/>
+                            </Grid>
+
+                            <!-- شركة التأمين -->
+                            <Grid Margin="0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="120"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="رقم الشركة" VerticalAlignment="Center" HorizontalAlignment="Right" FontWeight="Normal" Margin="0,0,5,0"/>
+                                <TextBox Grid.Column="1" Text="{Binding COM_ID, UpdateSourceTrigger=PropertyChanged}"/>
+                            </Grid>
+
+                            <!-- ملاحظات -->
+                            <Grid Margin="0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="120"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="ملاحظات" VerticalAlignment="Top" HorizontalAlignment="Right" FontWeight="Normal" Margin="0,5,5,0"/>
+                                <TextBox Grid.Column="1" Text="{Binding CARD_NOTE, UpdateSourceTrigger=PropertyChanged}" Height="60" TextWrapping="Wrap" AcceptsReturn="True" VerticalContentAlignment="Top"/>
+                            </Grid>
+
+                        </StackPanel>
+                    </ScrollViewer>
+                </GroupBox>
+
+                <!-- أزرار العمليات -->
+                <Border Grid.Row="1" 
+                        Background="{StaticResource HeaderBgBrush}" 
+                        BorderBrush="{StaticResource BorderBrush}" 
+                        BorderThickness="1" 
+                        Margin="0,8,0,0" 
+                        Padding="4">
+                    <UniformGrid Columns="4" Rows="1">
+                        <Button x:Name="BtnSave" 
+                                Command="{Binding AddCardCommand}" 
+                                Style="{StaticResource AccentButtonStyle}" 
+                                Margin="2">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <TextBlock Text="💾" Margin="0,0,4,0" VerticalAlignment="Center" Foreground="{StaticResource TextWhiteBrush}"/>
+                                <TextBlock Text="حفظ" VerticalAlignment="Center" Foreground="{StaticResource TextWhiteBrush}"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button x:Name="BtnEdit" 
+                                Command="{Binding UpdateCardCommand}" 
+                                Margin="2">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <TextBlock Text="✏️" Margin="0,0,4,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="تعديل" VerticalAlignment="Center" FontWeight="Bold"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button x:Name="BtnDelete" 
+                                Command="{Binding DeleteCardCommand}" 
+                                Style="{StaticResource DangerButtonStyle}" 
+                                Margin="2">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <TextBlock Text="✖" Margin="0,0,4,0" VerticalAlignment="Center" Foreground="{StaticResource TextWhiteBrush}"/>
+                                <TextBlock Text="حذف" VerticalAlignment="Center" Foreground="{StaticResource TextWhiteBrush}"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button x:Name="BtnClear" 
+                                Command="{Binding ClearFieldsCommand}" 
+                                Margin="2">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <TextBlock Text="🧹" Margin="0,0,4,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="مسح" VerticalAlignment="Center" FontWeight="Bold"/>
+                            </StackPanel>
+                        </Button>
+                    </UniformGrid>
+                </Border>
+            </Grid>
+
+            <!-- القسم الأيسر: شريط البحث والجدول المرقّم -->
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0" Margin="0,0,0,8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Column="0" 
+                            Command="{Binding ClearSearchCommand}"
+                            Padding="10,4" 
+                            Margin="0,0,8,0"
+                            VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🧹" Margin="0,0,4,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="مسح" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                        </StackPanel>
+                    </Button>
+
+                    <TextBox Grid.Column="1" 
+                             Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
+                             Padding="8,6" 
+                             VerticalContentAlignment="Center" 
+                             FontSize="13"
+                             Background="{StaticResource SurfaceBrush}"
+                             BorderBrush="{StaticResource BorderBrush}"/>
+                </Grid>
+
+                <!-- الجدول المرقّم المخصص -->
+                <controls:PaginatedGridControl 
+                             Grid.Row="1"
+                             ItemsSource="{Binding CardsList}"
+                             SelectedItem="{Binding SelectedCard, Mode=TwoWay}"
+                             CurrentPage="{Binding CurrentPage, Mode=TwoWay}"
+                             TotalRows="{Binding TotalRows, Mode=TwoWay}"
+                             NumberOfRows="{Binding PageSize, Mode=TwoWay}"
+                             PageChangedCommand="{Binding PageChangedCommand}">
+
+                    <DataGridTextColumn Header="المعرف" Binding="{Binding CARD_ID}" Width="0.6*"/>
+                    <DataGridTextColumn Header="كود البطاقة" Binding="{Binding CARD_CODE}" Width="0.8*"/>
+                    <DataGridTextColumn Header="اسم البطاقة" Binding="{Binding CARD_NAME}" Width="1.8*"/>
+                    <DataGridTextColumn Header="تاريخ الصلاحية" Binding="{Binding CARD_DATE}" Width="1.2*"/>
+                    <DataGridTextColumn Header="الحالة" Binding="{Binding CARD_STATE}" Width="0.8*"/>
+                    <DataGridTextColumn Header="نسبة التأمين" Binding="{Binding CARD_PER}" Width="1*"/>
+                    <DataGridTextColumn Header="ملاحظات" Binding="{Binding CARD_NOTE}" Width="1.5*"/>
+
+                </controls:PaginatedGridControl>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

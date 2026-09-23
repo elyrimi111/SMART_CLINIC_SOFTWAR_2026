@@ -1,0 +1,100 @@
+﻿<UserControl x:Class="SMART_CLINIC_SOFTWAR_2026.View.Resorsus.Header.MainHeader"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SMART_CLINIC_SOFTWAR_2026.View.Resorsus.Header"
+             mc:Ignorable="d" 
+             d:DesignWidth="800" d:DesignHeight="32"
+             FlowDirection="RightToLeft">
+
+    <UserControl.Resources>
+        <StreamGeometry x:Key="IconMinimize">M0,6 L10,6</StreamGeometry>
+        <StreamGeometry x:Key="IconMaximize">M0,0 L9,0 L9,9 L0,9 Z</StreamGeometry>
+        <StreamGeometry x:Key="IconClose">M0,0 L9,9 M9,0 L0,9</StreamGeometry>
+    </UserControl.Resources>
+
+    <Border Background="{StaticResource HeaderBgBrush}" 
+            BorderBrush="{StaticResource BorderBrush}" 
+            BorderThickness="0,0,0,1" 
+            Height="32">
+        <Grid MouseLeftButtonDown="Header_MouseLeftButtonDown">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- ربط العنوان دون أي قيمة افتراضية -->
+            <TextBlock Grid.Column="0"
+                       Text="{Binding Title, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                       FontSize="12" 
+                       FontWeight="Bold" 
+                       Foreground="{StaticResource TextPrimaryBrush}" 
+                       VerticalAlignment="Center" 
+                       Margin="12,0"/>
+
+            <!-- أزرار التحكم -->
+            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Stretch">
+
+                <!-- زر التصغير -->
+                <Button x:Name="BtnMinimize" 
+                        Width="40" 
+                        Padding="0" 
+                        Margin="0"
+                        BorderThickness="0"
+                        Background="Transparent"
+                        Click="BtnMinimize_Click">
+                    <Path Data="{StaticResource IconMinimize}" 
+                          Stroke="{StaticResource TextPrimaryBrush}" 
+                          StrokeThickness="1.5" 
+                          HorizontalAlignment="Center" 
+                          VerticalAlignment="Center"/>
+                </Button>
+
+                <!-- زر التكبير / الاستعادة -->
+                <Button x:Name="BtnMaximize" 
+                        Width="40" 
+                        Padding="0" 
+                        Margin="0"
+                        BorderThickness="0"
+                        Background="Transparent"
+                        Click="BtnMaximize_Click">
+                    <Path Data="{StaticResource IconMaximize}" 
+                          Stroke="{StaticResource TextPrimaryBrush}" 
+                          StrokeThickness="1.2" 
+                          Fill="Transparent"
+                          HorizontalAlignment="Center" 
+                          VerticalAlignment="Center"/>
+                </Button>
+
+                <!-- زر الإغلاق -->
+                <Button x:Name="BtnClose" 
+                        Width="40" 
+                        Padding="0" 
+                        Margin="0"
+                        BorderThickness="0"
+                        Click="BtnClose_Click">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="border" Background="Transparent">
+                                <Path x:Name="path" 
+                                      Data="{StaticResource IconClose}" 
+                                      Stroke="{StaticResource TextPrimaryBrush}" 
+                                      StrokeThickness="1.5" 
+                                      HorizontalAlignment="Center" 
+                                      VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="{StaticResource DangerBrush}"/>
+                                    <Setter TargetName="path" Property="Stroke" Value="{StaticResource TextWhiteBrush}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>

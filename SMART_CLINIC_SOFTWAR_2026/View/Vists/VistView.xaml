@@ -1,0 +1,532 @@
+﻿<UserControl x:Class="SMART_CLINIC_SOFTWAR_2026.View.Vists.VistView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SMART_CLINIC_SOFTWAR_2026.View.Vists"
+             xmlns:vm="clr-namespace:SMART_CLINIC_SOFTWAR_2026.ViewModel.Vists"
+             xmlns:controls="clr-namespace:SMART_CLINIC_SOFTWAR_2026.View.Resorsus.DataViews"
+             mc:Ignorable="d" 
+             d:DesignHeight="680" d:DesignWidth="1100"
+             FlowDirection="RightToLeft">
+
+    <UserControl.Resources>
+        <!-- سهم القائمة المنسدلة للـ ComboBox -->
+        <StreamGeometry x:Key="IconDownArrow">M7,10L12,15L17,10H7Z</StreamGeometry>
+
+        <!-- استايل تبهيت العناصر عند تعطيلها -->
+        <Style x:Key="FadedDisabledGroupBox" TargetType="FrameworkElement">
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value="0.45"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- استايل موحد للـ ComboBox -->
+        <Style TargetType="ComboBox">
+            <Setter Property="FontFamily" Value="{StaticResource AppFontFamily}"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
+            <Setter Property="Background" Value="{StaticResource SurfaceBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="MinHeight" Value="28"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Padding" Value="8,2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid x:Name="MainGrid">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="26"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Border x:Name="Border" 
+                                    Grid.ColumnSpan="2" 
+                                    Background="{TemplateBinding Background}" 
+                                    BorderBrush="{TemplateBinding BorderBrush}" 
+                                    BorderThickness="{TemplateBinding BorderThickness}" 
+                                    CornerRadius="3"/>
+
+                            <ContentPresenter Grid.Column="0" 
+                                              IsHitTestVisible="False" 
+                                              Content="{TemplateBinding SelectionBoxItem}" 
+                                              ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" 
+                                              ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" 
+                                              Margin="{TemplateBinding Padding}" 
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
+
+                            <ToggleButton Grid.Column="1" 
+                                          Background="Transparent" 
+                                          BorderThickness="0" 
+                                          Focusable="False" 
+                                          IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
+                                <ToggleButton.Template>
+                                    <ControlTemplate TargetType="ToggleButton">
+                                        <Border Background="Transparent">
+                                            <Path Data="{StaticResource IconDownArrow}" 
+                                                  Fill="{StaticResource TextSecondaryBrush}" 
+                                                  HorizontalAlignment="Center" 
+                                                  VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </ToggleButton.Template>
+                            </ToggleButton>
+
+                            <Popup x:Name="PART_Popup" 
+                                   AllowsTransparency="True" 
+                                   Grid.ColumnSpan="2" 
+                                   IsOpen="{TemplateBinding IsDropDownOpen}" 
+                                   Placement="Bottom" 
+                                   PopupAnimation="Slide">
+                                <Border x:Name="DropDownBorder" 
+                                        Background="{StaticResource SurfaceBrush}" 
+                                        BorderBrush="{StaticResource BorderBrush}" 
+                                        BorderThickness="1" 
+                                        CornerRadius="3" 
+                                        MaxHeight="200" 
+                                        MinWidth="{Binding ActualWidth, ElementName=MainGrid}"
+                                        Margin="0,2,0,0">
+                                    <Border.Effect>
+                                        <DropShadowEffect BlurRadius="6" ShadowDepth="2" Opacity="0.15" Color="Black"/>
+                                    </Border.Effect>
+                                    <ScrollViewer SnapsToDevicePixels="True">
+                                        <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained"/>
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource PrimaryLightBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource BorderFocusBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsDropDownOpen" Value="True">
+                                <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource BorderFocusBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- استايل عناصر ComboBoxItem -->
+        <Style TargetType="ComboBoxItem">
+            <Setter Property="Padding" Value="8,5"/>
+            <Setter Property="FontFamily" Value="{StaticResource AppFontFamily}"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBoxItem">
+                        <Border x:Name="Bd" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{StaticResource HeaderBgBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{StaticResource PrimaryLightBrush}"/>
+                                <Setter Property="Foreground" Value="{StaticResource TextWhiteBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Background="{StaticResource BgMainBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- الهيدر الرئيسي -->
+        <Border Grid.Row="0" 
+                Background="{StaticResource HeaderBgBrush}" 
+                BorderBrush="{StaticResource BorderBrush}" 
+                BorderThickness="0,0,0,1" 
+                Padding="10,8">
+            <TextBlock Text="إدخال كشف جديد" 
+                       FontSize="16" 
+                       FontWeight="Bold" 
+                       HorizontalAlignment="Center" 
+                       Foreground="{StaticResource TextPrimaryBrush}"/>
+        </Border>
+
+        <Grid Grid.Row="1" Margin="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.25*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- القسم الأيمن: بيانات المريض والخدمات -->
+            <Grid Grid.Column="0" Margin="0,0,4,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- مجموعة بيانات المريض -->
+                <GroupBox Grid.Row="0" 
+                          Header="بيانات المريض" 
+                          FontWeight="Bold" 
+                          Foreground="{StaticResource TextPrimaryBrush}" 
+                          Background="{StaticResource SurfaceBrush}" 
+                          BorderBrush="{StaticResource BorderBrush}" 
+                          Padding="8,4" 
+                          Margin="0,0,0,4">
+                    <StackPanel Margin="0,2">
+                        <Grid Margin="0,3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="رقم الزيارة" VerticalAlignment="Center" FontWeight="Normal"/>
+                            <TextBox Grid.Column="1" Text="{Binding VIS_CODE, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Center" Margin="0,0,8,0" IsReadOnly="True"/>
+
+                            <TextBlock Grid.Column="2" Text="كود المريض" VerticalAlignment="Center" FontWeight="Normal"/>
+                            <TextBox Grid.Column="3" Text="{Binding CUST_ID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Center" IsReadOnly="True"/>
+                        </Grid>
+
+                        <Grid Margin="0,3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="اسم المريض" VerticalAlignment="Center" FontWeight="Normal" />
+                            <TextBox Grid.Column="1" Text="{Binding FIRST_NAME, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="1,0" IsReadOnly="True"/>
+                            <TextBox Grid.Column="2" Text="{Binding SECOND_NAME, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="1,0" IsReadOnly="True"/>
+                            <TextBox Grid.Column="3" Text="{Binding THIRD_NAME, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="1,0" IsReadOnly="True"/>
+                            <TextBox Grid.Column="4" Text="{Binding FOURTH_NAME, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="1,0" IsReadOnly="True"/>
+                            <Button Grid.Column="5" Content="🔍" Command="{Binding OpenPatientsLookupCommand}" Margin="4,0,0,0" ToolTip="بحث عن مريض"/>
+                        </Grid>
+
+                        <Grid Margin="0,3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="60"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="العمر" VerticalAlignment="Center" FontWeight="Normal"/>
+                            <TextBox Grid.Column="1" Text="{Binding CUST_AGE, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Center" Margin="0,0,8,0" IsReadOnly="True"/>
+
+                            <TextBlock Grid.Column="2" Text="تاريخ الميلاد" VerticalAlignment="Center" FontWeight="Normal"/>
+                       <TextBox Grid.Column="3" 
+                                Text="{Binding CUST_BD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=\{0:yyyy/MM/dd\}}" 
+                                Height="28" 
+                                VerticalContentAlignment="Center" />
+                                               </Grid>
+
+                        <Grid Margin="0,3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="طريقة الدفع" VerticalAlignment="Center" FontWeight="Normal"/>
+                            <ComboBox Grid.Column="1" 
+                                      ItemsSource="{Binding PaymentTypesList}" 
+                                      SelectedItem="{Binding VIS_PAY_TYPE, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                      Margin="0,0,8,0"/>
+
+                            <Button Grid.Column="2" Command="{Binding ClearFieldsCommand}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="🧹 " VerticalAlignment="Center"/>
+                                    <TextBlock Text="مسح الملف" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                        </Grid>
+
+                        <Grid Margin="0,3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="ملاحظات" VerticalAlignment="Center" FontWeight="Normal"/>
+                            <TextBox Grid.Column="1" Text="{Binding VIS_NOTES, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
+                        </Grid>
+
+                        <Grid Margin="0,3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="العيادة" VerticalAlignment="Center" FontWeight="Normal"/>
+                            <!-- ComboBox الخاص برقم العيادة -->
+                            <ComboBox Grid.Column="1" 
+                                 ItemsSource="{Binding ClinicsList}" 
+                                 SelectedValue="{Binding CLI_ID, Mode=TwoWay,                   UpdateSourceTrigger=PropertyChanged}"
+                                 SelectedValuePath="CLI_ID"
+                                 DisplayMemberPath="CLI_ID"
+                                 Margin="0,0,4,0"/>
+
+                            <!-- ComboBox الخاص باسم العيادة -->
+                            <ComboBox Grid.Column="2" 
+                               ItemsSource="{Binding ClinicsList}" 
+                               SelectedValue="{Binding CLI_ID, Mode=TwoWay,                 UpdateSourceTrigger=PropertyChanged}"
+                               SelectedValuePath="CLI_ID"
+                               DisplayMemberPath="CLI_NAME"
+                               Margin="0,0,4,0"/>
+
+                            <!-- زر البحث -->
+                            <Button Grid.Column="3" 
+                            Content="🔍" 
+                            Command="{Binding OpenClinicsLookupCommand}" 
+                            ToolTip="بحث عن عيادة"/>
+
+                        </Grid>
+                    </StackPanel>
+                </GroupBox>
+
+                <!-- مجموعة الخدمات وملاحظات الطبيب -->
+                <GroupBox Grid.Row="1" 
+                          Header="الخدمات والملاحظات الطبية" 
+                          IsEnabled="{Binding IsPatientAndClinicSelected}"
+                          Style="{StaticResource FadedDisabledGroupBox}"
+                          FontWeight="Bold" 
+                          Foreground="{StaticResource TextPrimaryBrush}" 
+                          Background="{StaticResource SurfaceBrush}" 
+                          BorderBrush="{StaticResource BorderBrush}" 
+                          Padding="6" 
+                          Margin="0,4,0,0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="95"/>
+                        </Grid.RowDefinitions>
+
+                        <UniformGrid Grid.Row="0" Columns="3" Rows="3" Margin="0,0,0,4">
+                            <Button Margin="2" Command="{Binding OpenDiagnosisCommand}" Padding="6">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <TextBlock Text="👨‍⚕️ " VerticalAlignment="Center" FontSize="14"/>
+                                    <TextBlock Text="التشخيص" VerticalAlignment="Center" FontSize="13" FontWeight="Bold"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Margin="2" Command="{Binding OpenProceduresCommand}" Padding="6">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <TextBlock Text="💉 " VerticalAlignment="Center" FontSize="14"/>
+                                    <TextBlock Text="الإجراءات" VerticalAlignment="Center" FontSize="13" FontWeight="Bold"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Margin="2" Command="{Binding OpenMedicationCommand}" Padding="6">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <TextBlock Text="💊 " VerticalAlignment="Center" FontSize="14"/>
+                                    <TextBlock Text="صرف العلاج" VerticalAlignment="Center" FontSize="13" FontWeight="Bold"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Margin="2" Command="{Binding OpenLabTestsCommand}" Padding="6">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <TextBlock Text="🔬 " VerticalAlignment="Center" FontSize="14"/>
+                                    <TextBlock Text="الفحوصات" VerticalAlignment="Center" FontSize="13" FontWeight="Bold"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Margin="2" Command="{Binding OpenAppointmentsCommand}" Padding="6">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <TextBlock Text="📅 " VerticalAlignment="Center" FontSize="14"/>
+                                    <TextBlock Text="المواعيد" VerticalAlignment="Center" FontSize="13" FontWeight="Bold"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Margin="2" Command="{Binding OpenMedicalReportsCommand}" Padding="6">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <TextBlock Text="📋 " VerticalAlignment="Center" FontSize="14"/>
+                                    <TextBlock Text="تقارير طبية" VerticalAlignment="Center" FontSize="13" FontWeight="Bold"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Margin="2" Command="{Binding OpenSickLeavesCommand}" Padding="6">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <TextBlock Text="🛏️ " VerticalAlignment="Center" FontSize="14"/>
+                                    <TextBlock Text="الإجازات" VerticalAlignment="Center" FontSize="13" FontWeight="Bold"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Margin="2" Command="{Binding OpenChronicDiseasesCommand}" Padding="6">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <TextBlock Text="☣️ " VerticalAlignment="Center" FontSize="14"/>
+                                    <TextBlock Text="أمراض مزمنة" VerticalAlignment="Center" FontSize="13" FontWeight="Bold"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Margin="2" Command="{Binding OpenPatientCardCommand}" Padding="6">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <TextBlock Text="📁 " VerticalAlignment="Center" FontSize="14"/>
+                                    <TextBlock Text="بطاقة المريض" VerticalAlignment="Center" FontSize="13" FontWeight="Bold"/>
+                                </StackPanel>
+                            </Button>
+                        </UniformGrid>
+
+                        <!-- ملاحظات الطبيب -->
+                        <Border Grid.Row="1" 
+                                Background="{StaticResource BgMainBrush}" 
+                                BorderBrush="{StaticResource BorderBrush}" 
+                                BorderThickness="1" 
+                                CornerRadius="3" 
+                                Padding="4">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" 
+                                           Text="ملاحظات الطبيب:" 
+                                           FontWeight="Bold" 
+                                           Foreground="{StaticResource TextSecondaryBrush}" 
+                                           Margin="0,0,0,2"/>
+                                <TextBox Grid.Row="1" 
+                                         Text="{Binding VIS_DOC_NOTES, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                         AcceptsReturn="True" 
+                                         TextWrapping="Wrap" 
+                                         VerticalScrollBarVisibility="Auto" 
+                                         HorizontalScrollBarVisibility="Disabled"
+                                         FontWeight="Normal"
+                                         Padding="4"/>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </GroupBox>
+            </Grid>
+
+            <!-- القسم الأيسر: قائمة الزيارات المرقّمة والحسابات -->
+            <Grid Grid.Column="1" Margin="4,0,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1.35*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0" Margin="0,0,0,4">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" Margin="0,0,0,6">
+                        <Button Command="{Binding DeleteVisitCommand}" 
+                                Style="{StaticResource DangerButtonStyle}" 
+                                HorizontalAlignment="Left">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="✖ " VerticalAlignment="Center" Foreground="{StaticResource TextWhiteBrush}"/>
+                                <TextBlock Text="إلغاء من القائمة" VerticalAlignment="Center" Foreground="{StaticResource TextWhiteBrush}"/>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+
+                    <controls:PaginatedGridControl 
+                          Grid.Row="1"
+                          ItemsSource="{Binding OrdersList}"
+                          SelectedItem="{Binding SelectedOrder, Mode=TwoWay}"
+                          CurrentPage="{Binding CurrentPage, Mode=TwoWay}"
+                          TotalRows="{Binding TotalRows, Mode=TwoWay}"
+                          NumberOfRows="{Binding PageSize, Mode=TwoWay}"
+                          PageChangedCommand="{Binding PageChangedCommand}">
+
+                        <DataGridTextColumn Header="رقم الطلب" Binding="{Binding ORDER_ID}" Width="0.6*"/>
+                        <DataGridTextColumn Header="التاريخ" Binding="{Binding ORDER_DATE, StringFormat=\{0:dd/MM/yyyy\}}" Width="1.2*"/>
+                        <DataGridTextColumn Header="الوقت" Binding="{Binding ORDER_TIME}" Width="1*"/>
+                        <DataGridTextColumn Header="رقم المريض" Binding="{Binding CUST_ID}" Width="1*"/>
+                        <DataGridTextColumn Header="اسم المريض" Binding="{Binding CUST_NAME}" Width="2*"/>
+
+                    </controls:PaginatedGridControl>
+
+                </Grid>
+
+                <!-- مجموعة الحسابات -->
+                <GroupBox Grid.Row="1" 
+                          Header="الحسابات" 
+                          IsEnabled="{Binding IsPatientAndClinicSelected}"
+                          Style="{StaticResource FadedDisabledGroupBox}"
+                          FontWeight="Bold" 
+                          Foreground="{StaticResource TextPrimaryBrush}" 
+                          Background="{StaticResource SurfaceBrush}" 
+                          BorderBrush="{StaticResource BorderBrush}" 
+                          Padding="8" 
+                          Margin="0,4,0,0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid Grid.Row="0" VerticalAlignment="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                                <TextBlock Text="المبلغ" VerticalAlignment="Center" Margin="0,0,6,0" FontWeight="Normal"/>
+                                <TextBox Text="{Binding VIS_PRICE, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=\{0:N0\}}" Width="75" TextAlignment="Center"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                                <TextBlock Text="الخصم" VerticalAlignment="Center" Margin="0,0,6,0" FontWeight="Normal"/>
+                                <TextBox Text="{Binding VIS_DISCOUNT, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=\{0:N0\}}" Width="75" TextAlignment="Center"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center">
+                                <TextBlock Text="الإجمالي" VerticalAlignment="Center" Margin="0,0,6,0" FontWeight="Bold"/>
+                                <TextBox Text="{Binding VIS_TOTAL, Mode=OneWay, StringFormat=\{0:N0\}}" IsReadOnly="True" Width="75" Background="{StaticResource BgMainBrush}" TextAlignment="Center" FontWeight="Bold"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <Border Grid.Row="1" 
+                                Background="{StaticResource HeaderBgBrush}" 
+                                BorderBrush="{StaticResource BorderBrush}" 
+                                BorderThickness="1" 
+                                Padding="4">
+                            <UniformGrid Columns="3" Rows="1">
+                                <Button Command="{Binding AddVisitCommand}" 
+                                        Style="{StaticResource AccentButtonStyle}" 
+                                        Margin="2">
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <TextBlock Text="💾" Margin="0,0,4,0" VerticalAlignment="Center" Foreground="{StaticResource TextWhiteBrush}"/>
+                                        <TextBlock Text="تسجيل" VerticalAlignment="Center" Foreground="{StaticResource TextWhiteBrush}"/>
+                                    </StackPanel>
+                                </Button>
+
+                                <Button Command="{Binding PrintVisitCommand}" Margin="2">
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <TextBlock Text="🖨️" Margin="0,0,4,0" VerticalAlignment="Center"/>
+                                        <TextBlock Text="طباعة" VerticalAlignment="Center" FontWeight="Bold"/>
+                                    </StackPanel>
+                                </Button>
+
+                                <Button Command="{Binding ClearFieldsCommand}" 
+                                        Margin="2">
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <TextBlock Text="🧹" Margin="0,0,4,0" VerticalAlignment="Center"/>
+                                        <TextBlock Text="مسح" VerticalAlignment="Center" FontWeight="Bold"/>
+                                    </StackPanel>
+                                </Button>
+                            </UniformGrid>
+                        </Border>
+                    </Grid>
+                </GroupBox>
+            </Grid>
+
+        </Grid>
+    </Grid>
+</UserControl>

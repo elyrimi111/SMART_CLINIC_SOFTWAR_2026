@@ -1,0 +1,99 @@
+﻿<UserControl x:Class="SMART_CLINIC_SOFTWAR_2026.View.Resorsus.DataViews.PaginationControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SMART_CLINIC_SOFTWAR_2026.View.Resorsus.DataViews"
+             mc:Ignorable="d" 
+             d:DesignHeight="50" d:DesignWidth="600">
+
+    <UserControl.Resources>
+        <!-- نمط الأزرار الخاصة بالترقيم -->
+        <Style x:Key="PaginationButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Margin" Value="2,0"/>
+            <Setter Property="MinWidth" Value="34"/>
+            <Setter Property="Height" Value="34"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" 
+                                Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#10000000"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="border" Property="Opacity" Value="0.4"/>
+                                <Setter Property="Cursor" Value="Arrow"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+
+        <!-- زر الصفحة السابقة -->
+        <Button x:Name="BtnPrev" 
+                Content="&lt; السابق" 
+                Style="{StaticResource PaginationButtonStyle}" 
+                Click="BtnPrev_Click"/>
+
+        <!-- قائمة أرقام الصفحات الديناميكية -->
+        <ItemsControl x:Name="PagesItemsControl">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button Content="{Binding DisplayText}" 
+                            Click="PageButton_Click" 
+                            IsEnabled="{Binding IsClickable}">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource PaginationButtonStyle}">
+                                <Style.Triggers>
+                                    <!-- تمييز الصفحة الحالية بصرياً -->
+                                    <DataTrigger Binding="{Binding IsCurrent}" Value="True">
+                                        <Setter Property="Background" Value="#007ACC"/>
+                                        <Setter Property="Foreground" Value="White"/>
+                                        <Setter Property="BorderBrush" Value="#007ACC"/>
+                                    </DataTrigger>
+                                    <!-- إلغاء إطار زر النقاط الثلاث ... -->
+                                    <DataTrigger Binding="{Binding IsEllipsis}" Value="True">
+                                        <Setter Property="BorderThickness" Value="0"/>
+                                        <Setter Property="Background" Value="Transparent"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <!-- زر الصفحة التالية -->
+        <Button x:Name="BtnNext" 
+                Content="التالي &gt;" 
+                Style="{StaticResource PaginationButtonStyle}" 
+                Click="BtnNext_Click"/>
+
+    </StackPanel>
+</UserControl>
+ 
