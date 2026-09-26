@@ -672,7 +672,7 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Vists
         {
             try
             {
-                TotalRows = await _ordersMnager.GetTotalOrdersCountAsync(SearchQuery);
+                TotalRows = await OrdersManger.GetTotalOrdersCountAsync(SearchQuery);
                 var pagedOrders = await _ordersMnager.GetOrdersPagedAsync(CurrentPage, PageSize, SearchQuery) ?? new List<clsOrders>();
                 OrdersList = new ObservableCollection<clsOrders>(pagedOrders);
             }

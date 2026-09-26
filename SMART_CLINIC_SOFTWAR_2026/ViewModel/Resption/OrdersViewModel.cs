@@ -367,7 +367,7 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Orders
         {
             try
             {
-                TotalRows = await _ordersManger.GetTotalOrdersCountAsync(SearchQuery);
+                TotalRows = await OrdersManger.GetTotalOrdersCountAsync(SearchQuery);
                 if (token.IsCancellationRequested) return;
 
                 var pagedOrders = await _ordersManger.GetOrdersPagedAsync(CurrentPage, PageSize, SearchQuery)
