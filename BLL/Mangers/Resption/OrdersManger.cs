@@ -15,7 +15,7 @@ namespace BLL.Mangers.Orders
             _ordersRepo = new OrdersRepo();
         }
 
-        #region 1. جلب كافة الطلبات
+        #region Get all 
 
         public async Task<List<Core.Entites.Orders.clsOrders>> GetAllOrdersAsync()
         {
@@ -31,7 +31,7 @@ namespace BLL.Mangers.Orders
 
         #endregion
 
-        #region 2. جلب طلب برقم المعرف
+        #region Get By ID
 
         public async Task<Core.Entites.Orders.clsOrders?> GetOrderByIdAsync(long orderId)
         {
@@ -52,7 +52,7 @@ namespace BLL.Mangers.Orders
 
         #endregion
 
-        #region 3. إضافة طلب جديد
+        #region Add New Order
 
         public async Task<long> AddOrderAsync(Core.Entites.Orders.clsOrders order)
         {
@@ -70,7 +70,7 @@ namespace BLL.Mangers.Orders
 
         #endregion
 
-        #region 4. تعديل بيانات طلب
+        #region Update Order
 
         public async Task<bool> UpdateOrderAsync(Core.Entites.Orders.clsOrders order)
         {
@@ -93,7 +93,7 @@ namespace BLL.Mangers.Orders
 
         #endregion
 
-        #region 5. حذف طلب
+        #region 5. Delete Order
 
         public async Task<bool> DeleteOrderAsync(long orderId)
         {
@@ -114,7 +114,7 @@ namespace BLL.Mangers.Orders
 
         #endregion
 
-        #region 6. جلب الطلبات بنظام الصفحات مع البحث
+        #region Get Orders by Paging system
 
         public async Task<List<Core.Entites.Orders.clsOrders>> GetOrdersPagedAsync(int pageNumber, int rowsPerPage, string? searchQuery = null)
         {
@@ -140,7 +140,7 @@ namespace BLL.Mangers.Orders
 
         #endregion
 
-        #region 7. جلب إجمالي عدد الطلبات مع البحث
+        #region Get total Pages Count
 
         public async Task<int> GetTotalOrdersCountAsync(string? searchQuery = null)
         {
@@ -156,7 +156,7 @@ namespace BLL.Mangers.Orders
 
         #endregion
 
-        #region 8. توليد كود تلقائي للطلب الجديد
+        #region Genrate New order Code
 
         public async Task<long> GetNewOrder_CodeAsync()
         {
@@ -173,7 +173,7 @@ namespace BLL.Mangers.Orders
 
         #endregion
 
-        #region Helper Methods - التحقق من صحة البيانات
+        #region Helper Methods 
 
         private void ValidateOrderData(Core.Entites.Orders.clsOrders order)
         {

@@ -282,7 +282,6 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Orders
             set { _totalCustRows = value; OnPropertyChanged(); }
         }
 
-        // الصفحة الحالية لجدول الطلبات
         private int _currentPage;
         public int CurrentPage
         {
@@ -290,7 +289,6 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Orders
             set { if (_currentPage != value) { _currentPage = value; OnPropertyChanged(); } }
         }
 
-        // الصفحة الحالية لجدول المرضى (مفصولة)
         private int _custCurrentPage;
         public int CustCurrentPage
         {
