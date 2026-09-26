@@ -263,7 +263,7 @@ namespace DAL.Repo.Orders
 
         #region 7. جلب إجمالي عدد الطلبات بنظام البحث (GetTotalCount)
 
-        public async Task<int> GetTotalOrdersCountAsync(string? searchQuery = null)
+        public static async Task<int> GetTotalOrdersCountAsync(string? searchQuery = null)
         {
             int totalCount = 0;
             string query = @"SELECT TotalCount FROM dbo.fn_GetTotalOrdersCount(@SearchValue)";

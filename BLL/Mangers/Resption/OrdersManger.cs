@@ -140,13 +140,13 @@ namespace BLL.Mangers.Orders
 
         #endregion
 
-        #region Get total Pages Count
+        #region Get total Count
 
-        public async Task<int> GetTotalOrdersCountAsync(string? searchQuery = null)
+        public static  async Task<int> GetTotalOrdersCountAsync(string? searchQuery = null)
         {
             try
             {
-                return await _ordersRepo.GetTotalOrdersCountAsync(searchQuery);
+                return await OrdersRepo.GetTotalOrdersCountAsync(searchQuery);
             }
             catch (Exception ex)
             {
