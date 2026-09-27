@@ -64,7 +64,6 @@
                             </Grid>
                         </Border>
 
-                        <!-- كارت 3: مواعيد اليوم -->
                         <Border Style="{StaticResource ErpCardStyle}" Margin="5" Padding="15">
                             <Grid>
                                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">

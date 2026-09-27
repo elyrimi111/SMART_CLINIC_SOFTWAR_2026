@@ -168,7 +168,7 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Apointments
 
                 AppointmentsList = new ObservableCollection<clsAppointments>(list);
 
-                TotalRows = await _appointmentsManager.GetTotalAppointmentsCountAsync();
+                TotalRows = await clsApointmentsManger.GetTotalAppointmentsCountAsync();
             }
             catch (Exception ex)
             {

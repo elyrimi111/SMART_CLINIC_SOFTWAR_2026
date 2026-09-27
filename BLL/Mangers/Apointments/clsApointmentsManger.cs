@@ -180,14 +180,12 @@ namespace BLL.Mangers.Apointments
 
         #region 8. جلب إجمالي عدد المواعيد مع البحث
 
-        /// <summary>
-        /// جلب إجمالي عدد المواعيد المطابقة لنص البحث لحساب عدد الصفحات في الواجهة
-        /// </summary>
-        public async Task<int> GetTotalAppointmentsCountAsync(string? searchQuery = null)
+
+        public static async Task<int> GetTotalAppointmentsCountAsync(string? searchQuery = null)
         {
             try
             {
-                return await _appointmentsRepo.GetTotalAppointmentsCountAsync(searchQuery);
+                return await  clsAppointmentsRepo.GetTotalAppointmentsCountAsync(searchQuery);
             }
             catch (Exception ex)
             {

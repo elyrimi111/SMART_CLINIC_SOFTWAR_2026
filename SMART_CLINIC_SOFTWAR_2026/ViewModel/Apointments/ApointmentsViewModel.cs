@@ -239,7 +239,7 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Apointments
             {
                 if (string.IsNullOrWhiteSpace(SearchQuery))
                 {
-                    TotalRows = await _appointmentsManger.GetTotalAppointmentsCountAsync(null);
+                    TotalRows = await clsApointmentsManger.GetTotalAppointmentsCountAsync(null);
 
                     var pagedAppointments = await _appointmentsManger.GetAppointmentsPagedAsync(CurrentPage, PageSize, null)
                                            ?? new List<clsAppointments>();

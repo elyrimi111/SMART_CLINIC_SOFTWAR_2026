@@ -319,7 +319,7 @@ namespace DAL.Repo.Apointments
 
         #region 8. جلب إجمالي عدد المواعيد بنظام البحث (GetTotalCount)
 
-        public async Task<int> GetTotalAppointmentsCountAsync(string? searchQuery = null)
+        public static async Task<int> GetTotalAppointmentsCountAsync(string? searchQuery = null)
         {
             int totalCount = 0;
 
