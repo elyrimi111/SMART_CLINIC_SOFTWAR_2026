@@ -75,9 +75,6 @@ namespace DAL.Repo.Users
             return usersList;
         }
 
-        /// <summary>
-        /// البحث عن مستخدم عبر USER_ID باستخدام SqlDataReader
-        /// </summary>
         public clsUser? GetById(long userId)
         {
             string query = @"SELECT USER_ID, USER_CODE, USER_NAME, USER_PASSWORD, USER_TYPE, CLI_ID 
@@ -120,9 +117,6 @@ namespace DAL.Repo.Users
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
 
         public clsUser? GetByUsername(string Username)
         {
@@ -166,9 +160,6 @@ namespace DAL.Repo.Users
             }
         }
 
-        /// <summary>
-        /// التحقق من بيانات الدخول يدوي باستخدام SqlDataReader
-        /// </summary>
         public bool ValidateLogin(string username, string password, string userType)
         {
             string query = @"SELECT USER_ID, USER_CODE, USER_NAME, USER_PASSWORD, USER_TYPE, CLI_ID 
@@ -215,9 +206,6 @@ namespace DAL.Repo.Users
             }
         }
 
-        /// <summary>
-        /// إضافة مستخدم جديد وقراءة الـ USER_ID المولد عبر SqlDataReader
-        /// </summary>
         public long Add(long userCode, string userName, string userPassword, string userType, long? cliId)
         {
             string query = @"INSERT INTO USERS_TBL (USER_CODE, USER_NAME, USER_PASSWORD, USER_TYPE, CLI_ID)
@@ -264,9 +252,6 @@ namespace DAL.Repo.Users
             }
         }
 
-        /// <summary>
-        /// تحديث مستخدم مع الإغلاق والصيانة اليدوية للموارد
-        /// </summary>
         public bool Update(long userId, long userCode, string userName, string userPassword, string userType, long? cliId)
         {
             string query = @"UPDATE USERS_TBL 
@@ -308,9 +293,6 @@ namespace DAL.Repo.Users
             }
         }
 
-        /// <summary>
-        /// حذف مستخدم مع الإغلاق والصيانة اليدوية للموارد
-        /// </summary>
         public bool Delete(long userId)
         {
             string query = @"DELETE FROM USERS_TBL WHERE USER_ID = @UserId";
