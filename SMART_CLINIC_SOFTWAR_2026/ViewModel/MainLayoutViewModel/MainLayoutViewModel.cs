@@ -21,6 +21,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using System.Security.Cryptography.Xml;
+using SMART_CLINIC_SOFTWAR_2026.View.Users;
 
 namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.MainLayoutViewModel
 {
@@ -265,7 +266,8 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.MainLayoutViewModel
 
         private void ExecuteChangePassword(object? parameter)
         {
-            MessageBox.Show("شاشة تغيير كلمة المرور قيد التطوير.", "تنبيه", MessageBoxButton.OK, MessageBoxImage.Information);
+            var changePasswordWindow = new ChangeUserPasswordWindow(); 
+            changePasswordWindow.Show ();
         }
 
         private void OpenTestingWindo(object? parameter)

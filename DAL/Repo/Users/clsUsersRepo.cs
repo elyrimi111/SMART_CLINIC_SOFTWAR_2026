@@ -10,12 +10,9 @@ namespace DAL.Repo.Users
 {
     public class clsUsersRepo
     {
-        private readonly string _connectionString = clsConnectionStringcs.ConnectionString;
 
-        #region Helper Mapping Method
-        /// <summary>
-        /// قراءة البيانات يدوياً بأسلوب الكاست المباشر مع معالجة الـ DBNull
-        /// </summary>
+        #region Helper 
+
         private clsUser MapReaderToUser(SqlDataReader reader)
         {
             var user = new clsUser
@@ -40,7 +37,7 @@ namespace DAL.Repo.Users
             string query = @"SELECT USER_ID, USER_CODE, USER_NAME, USER_PASSWORD, USER_TYPE, CLI_ID 
                             FROM USERS_TBL";
 
-            SqlConnection conn = new SqlConnection(_connectionString);
+            SqlConnection conn = new SqlConnection(clsConnectionStringcs.ConnectionString);
             SqlCommand cmd = new SqlCommand(query, conn);
             SqlDataReader? reader = null;
 
@@ -82,7 +79,7 @@ namespace DAL.Repo.Users
               where CLI_ID = @CLI_ID";
 
 
-            SqlConnection conn = new SqlConnection(_connectionString);
+            SqlConnection conn = new SqlConnection(clsConnectionStringcs.ConnectionString);
             SqlCommand cmd = new SqlCommand(query, conn);
 
             cmd.Parameters.AddWithValue("@CLI_ID", CLI_ID);
@@ -127,7 +124,7 @@ namespace DAL.Repo.Users
                             FROM USERS_TBL 
                             WHERE USER_ID = @UserId";
 
-            SqlConnection conn = new SqlConnection(_connectionString);
+            SqlConnection conn = new SqlConnection(clsConnectionStringcs.ConnectionString);
             SqlCommand cmd = new SqlCommand(query, conn);
             SqlDataReader? reader = null;
 
@@ -170,7 +167,7 @@ namespace DAL.Repo.Users
                             FROM USERS_TBL 
                             WHERE USER_NAME =@Username";
 
-            SqlConnection conn = new SqlConnection(_connectionString);
+            SqlConnection conn = new SqlConnection(clsConnectionStringcs.ConnectionString);
             SqlCommand cmd = new SqlCommand(query, conn);
             SqlDataReader? reader = null;
 
@@ -214,7 +211,7 @@ namespace DAL.Repo.Users
                               AND USER_PASSWORD = @Password 
                               AND USER_TYPE = @UserType";
 
-            SqlConnection conn = new SqlConnection(_connectionString);
+            SqlConnection conn = new SqlConnection(clsConnectionStringcs.ConnectionString);
             SqlCommand cmd = new SqlCommand(query, conn);
             SqlDataReader? reader = null;
 
@@ -258,7 +255,7 @@ namespace DAL.Repo.Users
                             VALUES (@UserCode, @UserName, @UserPassword, @UserType, @CliId);
                             SELECT SCOPE_IDENTITY() AS NewID;";
 
-            SqlConnection conn = new SqlConnection(_connectionString);
+            SqlConnection conn = new SqlConnection(clsConnectionStringcs.ConnectionString);
             SqlCommand cmd = new SqlCommand(query, conn);
             SqlDataReader? reader = null;
 
@@ -298,7 +295,7 @@ namespace DAL.Repo.Users
             }
         }
 
-        public bool Update(long userId, long userCode, string userName, string userPassword, string userType, long? cliId)
+        public static bool Update(long userId, long userCode, string userName, string userPassword, string userType, long? cliId)
         {
             string query = @"UPDATE USERS_TBL 
                             SET USER_CODE = @UserCode,
@@ -308,7 +305,7 @@ namespace DAL.Repo.Users
                                 CLI_ID = @CliId
                             WHERE USER_ID = @UserId";
 
-            SqlConnection conn = new SqlConnection(_connectionString);
+            SqlConnection conn = new SqlConnection(clsConnectionStringcs.ConnectionString);
             SqlCommand cmd = new SqlCommand(query, conn);
 
             try
@@ -343,7 +340,7 @@ namespace DAL.Repo.Users
         {
             string query = @"DELETE FROM USERS_TBL WHERE USER_ID = @UserId";
 
-            SqlConnection conn = new SqlConnection(_connectionString);
+            SqlConnection conn = new SqlConnection(clsConnectionStringcs.ConnectionString);
             SqlCommand cmd = new SqlCommand(query, conn);
 
             try

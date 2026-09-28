@@ -15,7 +15,6 @@ namespace Core.Entites.User
         public string USER_TYPE { set; get; } = string.Empty;
         public long CLI_ID { set; get; }
 
-        // إرجاع الاسم للواجهة بنفس المسمى الخاص بك
         public override string ToString()
         {
             return USER_NAME;

@@ -1,4 +1,6 @@
-﻿using Core.Entites.User;
+﻿using BLL.Mangers.Users;
+using Core.CurrentSession;
+using Core.Entites.User;
 using SMART_CLINIC_SOFTWAR_2026.ViewModel.Commands;
 using System;
 using System.Globalization;
@@ -27,10 +29,23 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Users
             set { _errorMessage = value; OnPropertyChanged(); }
         }
 
+        private bool _isCurrentPasswordVerified;
+        public bool IsCurrentPasswordVerified
+        {
+            get => _isCurrentPasswordVerified;
+            set
+            {
+                _isCurrentPasswordVerified = value;
+                OnPropertyChanged();
+                (SavePasswordCommand as RelayCommand)?.RaiseCanExecuteChanged();
+            }
+        }
+
         #endregion
 
         #region Commands
 
+        public ICommand VerifyPasswordCommand { get; }
         public ICommand SavePasswordCommand { get; }
         public ICommand CloseWindowCommand { get; }
 
@@ -40,44 +55,64 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Users
 
         public ChangeUserPasswordViewModel()
         {
+            VerifyPasswordCommand = new RelayCommand(ExecuteVerifyPassword);
             SavePasswordCommand = new RelayCommand(ExecuteSavePassword, CanExecuteSavePassword);
             CloseWindowCommand = new RelayCommand(ExecuteCloseWindow);
+            CurrentUser = clsCurrentSectioncs.CurrentUser;
         }
 
-        public ChangeUserPasswordViewModel(clsUser user) : this()
-        {
-            CurrentUser = user;
-        }
 
         #endregion
 
         #region Command Methods
 
+        private void ExecuteVerifyPassword(object parameter)
+        {
+            ErrorMessage = string.Empty;
+
+            if (parameter is PasswordBox txtCurrent)
+            {
+                string currentPassword = txtCurrent.Password;
+
+                if (string.IsNullOrWhiteSpace(currentPassword))
+                {
+                    ErrorMessage = "يرجى إدخال كلمة المرور الحالية أولاً.";
+                    IsCurrentPasswordVerified = false;
+                    txtCurrent.Focus();
+                    return;
+                }
+
+                if ( string.Equals(clsCurrentSectioncs.CurrentUser.USER_PASSWORD, currentPassword))
+                {
+                    IsCurrentPasswordVerified = true;
+                    ErrorMessage = string.Empty;
+                }
+                else
+                {
+                    IsCurrentPasswordVerified = false;
+                    ErrorMessage = "كلمة المرور الحالية غير صحيحة.";
+                    txtCurrent.SelectAll();
+                    txtCurrent.Focus();
+                }
+            }
+        }
+
         private bool CanExecuteSavePassword(object parameter)
         {
-            return CurrentUser != null;
+            return CurrentUser != null && IsCurrentPasswordVerified;
         }
 
         private void ExecuteSavePassword(object parameter)
         {
             ErrorMessage = string.Empty;
 
-            if (parameter is object[] passwordBoxes && passwordBoxes.Length == 3)
+            if (parameter is object[] passwordBoxes && passwordBoxes.Length == 2)
             {
-                var txtCurrent = passwordBoxes[0] as PasswordBox;
-                var txtNew = passwordBoxes[1] as PasswordBox;
-                var txtConfirm = passwordBoxes[2] as PasswordBox;
+                var txtNew = passwordBoxes[0] as PasswordBox;
+                var txtConfirm = passwordBoxes[1] as PasswordBox;
 
-                string currentPassword = txtCurrent?.Password;
                 string newPassword = txtNew?.Password;
                 string confirmPassword = txtConfirm?.Password;
-
-                if (string.IsNullOrWhiteSpace(currentPassword))
-                {
-                    ErrorMessage = "يرجى إدخال كلمة المرور الحالية.";
-                    txtCurrent?.Focus();
-                    return;
-                }
 
                 if (string.IsNullOrWhiteSpace(newPassword))
                 {
@@ -93,25 +128,25 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Users
                     return;
                 }
 
-   
                 if (newPassword != confirmPassword)
                 {
                     ErrorMessage = "كلمة المرور الجديدة غير متطابقة مع التأكيد.";
+                    txtConfirm?.SelectAll();
                     txtConfirm?.Focus();
                     return;
                 }
 
- 
-                if (newPassword.Length < 4)
+                if (newPassword.Length < 3)
                 {
-                    ErrorMessage = "يجب أن تحتوي كلمة المرور الجديدة على 4 خانات على الأقل.";
+                    ErrorMessage = "يجب أن تحتوي كلمة المرور الجديدة على 3 خانات على الأقل.";
+                    txtNew?.SelectAll();
                     txtNew?.Focus();
                     return;
                 }
 
                 try
                 {
-  
+                    UsersManger.UpdateUser(CurrentUser.USER_ID,CurrentUser.USER_CODE,CurrentUser.USER_NAME, newPassword,CurrentUser.USER_TYPE,CurrentUser.CLI_ID);
 
                     MessageBox.Show("تم تغيير كلمة المرور بنجاح!", "تأكيد", MessageBoxButton.OK, MessageBoxImage.Information);
 
@@ -121,10 +156,6 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Users
                 {
                     ErrorMessage = $"حدث خطأ أثناء حفظ البيانات: {ex.Message}";
                 }
-            }
-            else
-            {
-                ErrorMessage = "تعذر قراءة حقول كلمة المرور بشكل صحيح.";
             }
         }
 

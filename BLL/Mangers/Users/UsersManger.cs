@@ -41,9 +41,6 @@ namespace BLL.Mangers.Users
             }
         }
 
-     
-
-
         public clsUser? GetUserById(long userId)
         {
             if (userId <= 0)
@@ -132,7 +129,7 @@ namespace BLL.Mangers.Users
             }
         }
 
-        public bool UpdateUser(long userId, long userCode, string userName, string userPassword, string userType, long? cliId)
+        public static bool UpdateUser(long userId, long userCode, string userName, string userPassword, string userType, long cliId)
         {
             if (userId <= 0)
             {
@@ -146,7 +143,7 @@ namespace BLL.Mangers.Users
 
             try
             {
-                return _usersRepo.Update(userId, userCode, userName.Trim(), userPassword, userType.Trim(), cliId);
+                return clsUsersRepo.Update(userId, userCode, userName.Trim(), userPassword, userType.Trim(), cliId);
             }
             catch (Exception ex)
             {
