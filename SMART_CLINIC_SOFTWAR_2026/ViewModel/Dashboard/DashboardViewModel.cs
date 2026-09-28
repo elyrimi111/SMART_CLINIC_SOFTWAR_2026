@@ -1,5 +1,6 @@
 ﻿using BLL.Mangers.Apointments;
 using BLL.Mangers.Orders;
+using Core.CurrentSession;
 using System;
 using System.Threading.Tasks;
 
@@ -14,6 +15,38 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Dashboard
         }
 
         #region Properties 
+
+        private string _currentClincName
+        {  get; set; }
+
+        public string CurrentClincName
+        {
+            get => _currentClincName;
+            set
+            {
+                if (_currentClincName != value)
+                {
+                    _currentClincName = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _currentUsername
+        { get; set; }
+
+        public string CurrentUsername
+        {
+            get => _currentUsername;
+            set
+            {
+                if (_currentUsername != value)
+                {
+                    _currentUsername = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         private int _waitingPatientsCount;
 
@@ -54,6 +87,8 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Dashboard
                 WaitingPatientsCount = await OrdersManger.GetTotalOrdersCountAsync();
                 TodayAppointmentsCount = await 
                     clsApointmentsManger.GetTotalAppointmentsCountAsync();
+                CurrentClincName = clsCurrentSectioncs.CurrentClinc.CLI_NAME;
+                CurrentUsername = clsCurrentSectioncs.CurrentUser.USER_NAME; 
             }
             catch (Exception ex)
             {

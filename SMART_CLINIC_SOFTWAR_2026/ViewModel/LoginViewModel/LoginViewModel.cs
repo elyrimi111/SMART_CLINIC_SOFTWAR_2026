@@ -15,8 +15,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-// make the megaor same of the clinck
-// get the dayes of the current doctor came into the attendance 
 namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.LoginViewModel
 {
     public class LoginViewModel : BaseViewModel
@@ -152,7 +150,7 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.LoginViewModel
 
         private void LoadUsers()
         {
-            var list = _usersManger.GetAllUsers();
+            var list = _usersManger.GetAllByClincID(clsCurrentSectioncs.CurrentClinc.CLI_ID);
             UsersList = new ObservableCollection<clsUser>(list);
         }
       
