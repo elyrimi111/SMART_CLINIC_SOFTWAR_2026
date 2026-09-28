@@ -74,6 +74,52 @@ namespace DAL.Repo.Users
 
             return usersList;
         }
+        public List<clsUser> GetAllByClincID(long CLI_ID)
+        {
+            var usersList = new List<clsUser>();
+            string query = @"SELECT USER_ID, USER_CODE, USER_NAME, USER_PASSWORD, USER_TYPE, CLI_ID 
+              FROM USERS_TBL 
+              where CLI_ID = @CLI_ID";
+
+
+            SqlConnection conn = new SqlConnection(_connectionString);
+            SqlCommand cmd = new SqlCommand(query, conn);
+
+            cmd.Parameters.AddWithValue("@CLI_ID", CLI_ID);
+
+            SqlDataReader? reader = null;
+
+            try
+            {
+                conn.Open();
+                reader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                while (reader.Read())
+                {
+                    usersList.Add(MapReaderToUser(reader));
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("خطأ أثناء جلب قائمة المستخدمين: " + ex.Message, ex);
+            }
+            finally
+            {
+                if (reader != null && !reader.IsClosed)
+                {
+                    reader.Close();
+                }
+                if (conn.State == ConnectionState.Open)
+                {
+                    conn.Close();
+                }
+                cmd.Dispose();
+                conn.Dispose();
+            }
+
+            return usersList;
+        }
+
 
         public clsUser? GetById(long userId)
         {

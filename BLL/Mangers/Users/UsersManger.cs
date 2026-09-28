@@ -3,6 +3,7 @@ using Core.Entites.User;
 using DAL.Repo.Users;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 
 namespace BLL.Mangers.Users
 {
@@ -27,6 +28,21 @@ namespace BLL.Mangers.Users
                 throw new Exception("حدث خطأ في BLL أثناء جلب قائمة المستخدمين: " + ex.Message, ex);
             }
         }
+
+        public List<clsUser> GetAllByClincID(long CLI_ID)
+        {
+            try
+            {
+                return _usersRepo.GetAllByClincID(CLI_ID);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("حدث خطأ في BLL أثناء جلب قائمة المستخدمين: " + ex.Message, ex);
+            }
+        }
+
+     
+
 
         public clsUser? GetUserById(long userId)
         {
