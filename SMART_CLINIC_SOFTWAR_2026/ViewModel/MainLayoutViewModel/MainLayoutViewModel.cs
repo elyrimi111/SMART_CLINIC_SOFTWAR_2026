@@ -30,7 +30,7 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.MainLayoutViewModel
         public object? ViewContent { get; set; }
     }
 
-    public class MainLayoutViewModel : INotifyPropertyChanged
+    public class MainLayoutViewModel : BaseViewModel
     {
         #region Properties
         public ObservableCollection<TabItemModel> OpenTabs { get; set; } = new ObservableCollection<TabItemModel>();
@@ -278,13 +278,5 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.MainLayoutViewModel
 
         #endregion
 
-        #region INotifyPropertyChanged Implementation
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        #endregion
     }
 }
