@@ -22,6 +22,8 @@ using System.Windows;
 using System.Windows.Input;
 using System.Security.Cryptography.Xml;
 using SMART_CLINIC_SOFTWAR_2026.View.Users;
+using SMART_CLINIC_SOFTWAR_2026.ViewModel.Resption;
+
 
 namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.MainLayoutViewModel
 {
@@ -152,7 +154,6 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.MainLayoutViewModel
 
             OpenTestingCommand = new RelayCommand(OpenTestingWindo);
 
-           //ExecuteNavigateToDoctors(null);
         }
 
         #region Helper Methods - Tabs System
@@ -192,8 +193,32 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.MainLayoutViewModel
         #region Methods - Navigation Execution
         private void ExecuteNavigateToReception(object? parameter)
         {
-            OpenOrSelectTab("استقبال المرضى", new Cust_Resption());
+            var receptionOptionVm = new ResptionChoseOptionViewModel();
+
+            receptionOptionVm.OnNavigateToPatientReception = () =>
+            {
+                OpenOrSelectTab("إدارة الاستقبال والتسجيل", new Cust_Resption());
+            };
+
+            receptionOptionVm.OnNavigateToAppointmentBooking = () =>
+            {
+                OpenOrSelectTab("حجز المواعيد والجدولة", new ApointmentsView());
+            };
+
+            receptionOptionVm.OnNavigateToExaminationEntry = () =>
+            {
+                OpenOrSelectTab("الفحص الأولي والكشف", new VistView());
+            };
+
+            var receptionView = new ResptionChoseOptionView
+            {
+                DataContext = receptionOptionVm
+            };
+
+            OpenOrSelectTab("استقبال المرضى", receptionView);
         }
+
+
 
         private void ExecuteNavigateToPatients(object? parameter)
         {

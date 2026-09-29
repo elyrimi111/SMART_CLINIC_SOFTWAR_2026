@@ -6,7 +6,11 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <!-- 1. القاموس الأساسي للثيم والألوان -->
                 <ResourceDictionary Source="pack://application:,,,/SMART_CLINIC_SOFTWAR_2026;component/View/Resorsus/Themes/ErpTheme.xaml"/>
+
+                <!-- 2. قاموس الأنميشن الموحد -->
+                <ResourceDictionary Source="pack://application:,,,/SMART_CLINIC_SOFTWAR_2026;component/View/Resorsus/Animations/AnimationsDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
