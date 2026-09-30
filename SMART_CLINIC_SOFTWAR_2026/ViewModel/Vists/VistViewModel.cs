@@ -9,6 +9,7 @@ using Core.Entites.Vist;
 using SMART_CLINIC_SOFTWAR_2026.View.Clinc;
 using SMART_CLINIC_SOFTWAR_2026.View.Customers;
 using SMART_CLINIC_SOFTWAR_2026.View.Diagnose;
+using SMART_CLINIC_SOFTWAR_2026.View.Services;
 using SMART_CLINIC_SOFTWAR_2026.ViewModel.Clinc;
 using SMART_CLINIC_SOFTWAR_2026.ViewModel.Commands;
 using SMART_CLINIC_SOFTWAR_2026.ViewModel.Customers;
@@ -484,7 +485,6 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Vists
                         THIRD_NAME = custmer.CUST_T_NAME;
                         FOURTH_NAME = custmer.CUST_L_NAME;
 
-                        // تحويل DateOnly المباشر إلى DateTime
                         CUST_BD = custmer.CUST_BD.ToDateTime(TimeOnly.MinValue);
                     }
 
@@ -769,8 +769,9 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Vists
 
         private async Task OpenProcedures()
         {
-            MessageBox.Show("تم التحقق من تفعيل الزيارة: سيتم فتح شاشة الإجراءات والعمليات.", "الإجراءات الطبية", MessageBoxButton.OK, MessageBoxImage.Information);
-            await Task.CompletedTask;
+            var ServWin = new CustServeseFromViestWin(CUST_ID);
+
+            ServWin.ShowDialog();
         }
 
         private async Task OpenMedication()

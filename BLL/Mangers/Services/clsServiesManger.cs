@@ -15,7 +15,7 @@ namespace BLL.Mangers.Services
             _servicesRepo = new clsServicesRepo();
         }
 
-        #region 1. جلب كافة الخدمات
+        #region GetAll
 
         public async Task<List<clsService>> GetAllServicesAsync()
         {

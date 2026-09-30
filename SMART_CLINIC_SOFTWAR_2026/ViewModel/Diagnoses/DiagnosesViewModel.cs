@@ -34,7 +34,6 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Diagnoses
             DeleteDiagnosCommand = new RelayCommand(async param => await DeleteDiagnosAsync(), param => CanDelete());
             ClearFieldsCommand = new RelayCommand(async param => await ClearFieldsAsync());
 
-            // تهيئة البيانات الأولية بشكل غير متزامن
             _ = InitializeViewModelAsync();
         }
 
