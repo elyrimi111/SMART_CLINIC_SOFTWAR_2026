@@ -210,7 +210,7 @@ namespace BLL.Mangers.Medicens
 
         #endregion
 
-        #region 9. توليد كود تلقائي للدواء الجديد
+        #region Genrate
 
         public async Task<long> GetNewMed_CodeAsync()
         {

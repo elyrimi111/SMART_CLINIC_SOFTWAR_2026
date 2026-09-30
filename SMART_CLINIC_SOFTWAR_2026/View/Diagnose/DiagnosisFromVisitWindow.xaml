@@ -6,36 +6,30 @@
         xmlns:local="clr-namespace:SMART_CLINIC_SOFTWAR_2026.View.Diagnose"
         xmlns:customers="clr-namespace:SMART_CLINIC_SOFTWAR_2026.View.Customers"
         xmlns:controls="clr-namespace:SMART_CLINIC_SOFTWAR_2026.View.Resorsus.DataViews"
-        xmlns:header="clr-namespace:SMART_CLINIC_SOFTWAR_2026.View.Resorsus.Header"
         mc:Ignorable="d"
         Title="التشخيص في الزيارة" 
-        Height="720" Width="1100"
+        Height="720" 
+        Width="1100"
         WindowStartupLocation="CenterScreen"
-        WindowStyle="None"
-        ResizeMode="NoResize"
-        FlowDirection="RightToLeft">
+        FlowDirection="RightToLeft"
+        Background="{StaticResource BgMainBrush}">
 
-    <Grid Background="{StaticResource BgMainBrush}">
+    <Grid Margin="12">
         <Grid.RowDefinitions>
-            <!-- 1. الهيدر الرئيسي -->
+            <!-- 1. شريط الأزرار والتحكم العلوي -->
             <RowDefinition Height="Auto"/>
-            <!-- 2. شريط أزرار العمليات الموحد -->
-            <RowDefinition Height="Auto"/>
-            <!-- 3. الجزء الرئيسي (الجداول وبطاقة المريض) -->
+            <!-- 2. الجزء الرئيسي: محتوى النافذة المقسم لجانبين -->
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- 1. الهيدر الرئيسي -->
-        <header:MainHeader Grid.Row="0" Title="التشخيص من الكشف"/>
-
-        <!-- 2. شريط العمليات والأزرار العلوية (يمتد بملء الشاشة) -->
-        <Border Grid.Row="1" 
+        <!-- 1. شريط الأزرار العلوي -->
+        <Border Grid.Row="0" 
                 Background="{StaticResource SurfaceBrush}" 
                 BorderBrush="{StaticResource BorderBrush}" 
                 BorderThickness="1" 
                 CornerRadius="8" 
-                Padding="10,6"
-                Margin="8,8,8,4">
+                Padding="8" 
+                Margin="0,0,0,10">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -43,15 +37,14 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- أزرار الإضافة والتصفح -->
+                <!-- أزرار التحكم والخيارات العامة (تم نقلها إلى اليسار) -->
                 <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
                     <Button x:Name="BtnNewDiagnosis" 
                             Command="{Binding NewDiagnosisCommand}" 
-                            Style="{StaticResource AccentButtonStyle}" 
-                            Padding="14,6" Margin="0,0,8,0">
+                            Padding="12,6" Margin="0,0,6,0">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="➕" Margin="0,0,6,0" VerticalAlignment="Center" Foreground="{StaticResource TextWhiteBrush}"/>
-                            <TextBlock Text="تشخيص جديد" VerticalAlignment="Center" Foreground="{StaticResource TextWhiteBrush}" FontWeight="Bold"/>
+                            <TextBlock Text="➕" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="تشخيص جديد" VerticalAlignment="Center" FontWeight="Bold"/>
                         </StackPanel>
                     </Button>
 
@@ -65,35 +58,33 @@
                     </Button>
                 </StackPanel>
 
-                <!-- أزرار الحذف -->
+                <!-- أزرار الإجراءات للزيارة الحالية: الحذف وحذف الكل (تم نقلها إلى اليمين) -->
                 <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
                     <Button x:Name="BtnDelete" 
                             Command="{Binding DeleteCommand}" 
-                            Style="{StaticResource DangerButtonStyle}" 
-                            Margin="0,0,8,0" Padding="12,6">
+                            Padding="12,6" Margin="6,0,0,0">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="✖" Margin="0,0,4,0" VerticalAlignment="Center" Foreground="{StaticResource TextWhiteBrush}"/>
-                            <TextBlock Text="حذف" VerticalAlignment="Center" Foreground="{StaticResource TextWhiteBrush}"/>
+                            <TextBlock Text="❌" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="حذف" VerticalAlignment="Center" FontWeight="SemiBold"/>
                         </StackPanel>
                     </Button>
 
                     <Button x:Name="BtnDeleteAll" 
                             Command="{Binding DeleteAllCommand}" 
-                            Style="{StaticResource DangerButtonStyle}" 
-                            Padding="12,6">
+                            Padding="12,6" Margin="6,0,0,0">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="🗑️" Margin="0,0,4,0" VerticalAlignment="Center" Foreground="{StaticResource TextWhiteBrush}"/>
-                            <TextBlock Text="حذف الكل" VerticalAlignment="Center" Foreground="{StaticResource TextWhiteBrush}"/>
+                            <TextBlock Text="🗑️" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="حذف الكل" VerticalAlignment="Center" FontWeight="SemiBold"/>
                         </StackPanel>
                     </Button>
                 </StackPanel>
             </Grid>
         </Border>
 
-        <!-- 3. المحتوى الرئيسي: الجداول مقسمة مع وضع البطاقة تحت جدول تشخيصات الزيارة -->
-        <Grid Grid.Row="2" Margin="8,4,8,8">
+        <!-- 2. محتوى النافذة الرئيسي -->
+        <Grid Grid.Row="1" Margin="0,0,0,0">
             <Grid.ColumnDefinitions>
-                <!-- العمود الأيمن: قائمة التشخيصات العامة (تأخذ المساحة الكاملة ارتفاعاً) -->
+                <!-- العمود الأيمن: قائمة التشخيصات العامة -->
                 <ColumnDefinition Width="1.2*"/>
                 <!-- العمود الأيسر: تشخيصات الزيارة + البطاقة بالأسفل -->
                 <ColumnDefinition Width="1*"/>
@@ -106,7 +97,7 @@
                       Foreground="{StaticResource TextPrimaryBrush}" 
                       Background="{StaticResource SurfaceBrush}" 
                       BorderBrush="{StaticResource BorderBrush}" 
-                      Margin="0,0,4,0" 
+                      Margin="0,0,6,0" 
                       Padding="6">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -115,30 +106,28 @@
                     </Grid.RowDefinitions>
 
                     <!-- شريط البحث -->
-                    <Grid Grid.Row="0" Margin="0,0,0,6">
+                    <Grid Grid.Row="0" Margin="0,0,0,8">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <TextBox Grid.Column="0" 
+                        <Button Grid.Column="0" 
+                                Command="{Binding ClearSearchCommand}"
+                                Padding="10,5" Margin="0,0,6,0">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="🧹" Margin="0,0,4,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="مسح" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                            </StackPanel>
+                        </Button>
+
+                        <TextBox Grid.Column="1" 
                                  Text="{Binding SearchDiagnosisQuery, UpdateSourceTrigger=PropertyChanged}"
                                  Padding="8,6" 
                                  VerticalContentAlignment="Center" 
                                  FontSize="13"
                                  Background="{StaticResource SurfaceBrush}"
                                  BorderBrush="{StaticResource BorderBrush}"/>
-
-                        <Button Grid.Column="1" 
-                                Command="{Binding ClearSearchCommand}"
-                                Padding="10,5" 
-                                Margin="6,0,0,0"
-                                VerticalAlignment="Center">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="🧹" Margin="0,0,4,0" VerticalAlignment="Center"/>
-                                <TextBlock Text="مسح" VerticalAlignment="Center" FontWeight="SemiBold"/>
-                            </StackPanel>
-                        </Button>
                     </Grid>
 
                     <!-- جدول البيانات الرئيسي الممتد -->
@@ -160,7 +149,7 @@
             </GroupBox>
 
             <!-- العمود الثاني: تشخيصات الزيارة الحالية وفي أسفلها البطاقة -->
-            <Grid Grid.Column="1" Margin="4,0,0,0">
+            <Grid Grid.Column="1" Margin="6,0,0,0">
                 <Grid.RowDefinitions>
                     <!-- جدول تشخيصات الزيارة يأخذ معظم المساحة العلويّة -->
                     <RowDefinition Height="*"/>
@@ -175,7 +164,7 @@
                           Foreground="{StaticResource TextPrimaryBrush}" 
                           Background="{StaticResource SurfaceBrush}" 
                           BorderBrush="{StaticResource BorderBrush}" 
-                          Margin="0,0,0,6" 
+                          Margin="0,0,0,8" 
                           Padding="6">
 
                     <controls:PaginatedGridControl 

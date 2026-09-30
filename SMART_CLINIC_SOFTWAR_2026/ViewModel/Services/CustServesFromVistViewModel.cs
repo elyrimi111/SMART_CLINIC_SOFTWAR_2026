@@ -68,7 +68,7 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Services
             set { _allServicesTotalRows = value; OnPropertyChanged(); }
         }
 
-        private int _allServicesPageSize = 10;
+        private int _allServicesPageSize = 13;
         public int AllServicesPageSize
         {
             get => _allServicesPageSize;

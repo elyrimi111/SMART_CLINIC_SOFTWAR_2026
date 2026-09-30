@@ -9,10 +9,12 @@ using Core.Entites.Vist;
 using SMART_CLINIC_SOFTWAR_2026.View.Clinc;
 using SMART_CLINIC_SOFTWAR_2026.View.Customers;
 using SMART_CLINIC_SOFTWAR_2026.View.Diagnose;
+using SMART_CLINIC_SOFTWAR_2026.View.Medicens;
 using SMART_CLINIC_SOFTWAR_2026.View.Services;
 using SMART_CLINIC_SOFTWAR_2026.ViewModel.Clinc;
 using SMART_CLINIC_SOFTWAR_2026.ViewModel.Commands;
 using SMART_CLINIC_SOFTWAR_2026.ViewModel.Customers;
+using SMART_CLINIC_SOFTWAR_2026.ViewModel.Medicens;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -776,9 +778,12 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Vists
 
         private async Task OpenMedication()
         {
-            MessageBox.Show("تم التحقق من تفعيل الزيارة: سيتم فتح شاشة وصف وصرف العلاج.", "الوصفات الطبية", MessageBoxButton.OK, MessageBoxImage.Information);
-            await Task.CompletedTask;
+            var window = new CustDispensingMedicatonWindow(CUST_ID);
+
+            window.ShowDialog();
+
         }
+
 
         private async Task OpenSickLeave()
         {
