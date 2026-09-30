@@ -12,7 +12,7 @@ namespace DAL.Repo.Customers
     {
         #region Helper Methods (قراءة البيانات وتنظيف قيم NULL)
 
-        private clsCust MapDataReaderToCustomer(SqlDataReader reader)
+        private static clsCust MapDataReaderToCustomer(SqlDataReader reader)
         {
             return new clsCust
             {
@@ -70,9 +70,9 @@ namespace DAL.Repo.Customers
 
         #endregion
 
-        #region 2. جلب عميل برقم المعرف (GetById)
+        #region  GetById
 
-        public async Task<clsCust?> GetCustomerByIdAsync(long? custId)
+        public async static Task<clsCust?> GetCustomerByIdAsync(long? custId)
         {
             clsCust? customer = null;
 

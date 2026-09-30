@@ -15,7 +15,7 @@ namespace BLL.Mangers.Customers
             _customersRepo = new clsCustomersRepo();
         }
 
-        #region 1. جلب كافة العملاء
+        #region Get All
 
         public async Task<List<clsCust>> GetAllCustomersAsync()
         {
@@ -31,9 +31,9 @@ namespace BLL.Mangers.Customers
 
         #endregion
 
-        #region 2. جلب عميل برقم المعرف
+        #region Get By Id
 
-        public async Task<clsCust?> GetCustomerByIdAsync(long? custId)
+        public static async Task<clsCust?> GetCustomerByIdAsync(long? custId)
         {
             if (custId <= 0)
             {
@@ -42,7 +42,7 @@ namespace BLL.Mangers.Customers
 
             try
             {
-                return await _customersRepo.GetCustomerByIdAsync(custId);
+                return await clsCustomersRepo.GetCustomerByIdAsync(custId);
             }
             catch (Exception ex)
             {

@@ -143,7 +143,7 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Diagnoses
                 }
                 else
                 {
-                    var allDiagnoses = await _diagnosesManager.GetAllDiagnosAsync() ?? new List<clsDiagnos>();
+                    var allDiagnoses = await clsDiagnosesManger.GetAllDiagnosAsync() ?? new List<clsDiagnos>();
 
                     var filteredList = allDiagnoses.Where(dig =>
                         dig != null && (

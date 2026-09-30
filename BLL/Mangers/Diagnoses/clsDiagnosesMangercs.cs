@@ -15,13 +15,13 @@ namespace BLL.Mangers.Diagnoses
             _diagnosRepo = new clsDiagnosRepo();
         }
 
-        #region 1. جلب كافة التشخيصات
+        #region get All 
 
-        public async Task<List<clsDiagnos>> GetAllDiagnosAsync()
+        public static async Task<List<clsDiagnos>> GetAllDiagnosAsync()
         {
             try
             {
-                return await _diagnosRepo.GetAllDiagnosAsync();
+                return await clsDiagnosRepo.GetAllDiagnosAsync();
             }
             catch (Exception ex)
             {
@@ -31,9 +31,9 @@ namespace BLL.Mangers.Diagnoses
 
         #endregion
 
-        #region 2. جلب تشخيص برقم المعرف
+        #region Get by id 
 
-        public async Task<clsDiagnos?> GetDiagnosByIdAsync(long digId)
+        public static async Task<clsDiagnos> GetDiagnosByIdAsync(long digId)
         {
             if (digId <= 0)
             {
@@ -42,7 +42,7 @@ namespace BLL.Mangers.Diagnoses
 
             try
             {
-                return await _diagnosRepo.GetDiagnosByIdAsync(digId);
+                return await clsDiagnosRepo.GetDiagnosByIdAsync(digId);
             }
             catch (Exception ex)
             {
@@ -52,7 +52,7 @@ namespace BLL.Mangers.Diagnoses
 
         #endregion
 
-        #region 3. جلب التشخيصات حسب العيادة
+        #region Get by Clinc ID
 
         public async Task<List<clsDiagnos>> GetDiagnosByClinicAsync(long clinicId)
         {
@@ -73,7 +73,7 @@ namespace BLL.Mangers.Diagnoses
 
         #endregion
 
-        #region 4. إضافة تشخيص جديد
+        #region Add
 
         public async Task<long> AddDiagnosAsync(clsDiagnos diagnos)
         {
@@ -91,7 +91,7 @@ namespace BLL.Mangers.Diagnoses
 
         #endregion
 
-        #region 5. تعديل بيانات تشخيص
+        #region Update
 
         public async Task<bool> UpdateDiagnosAsync(clsDiagnos diagnos)
         {
@@ -114,7 +114,7 @@ namespace BLL.Mangers.Diagnoses
 
         #endregion
 
-        #region 6. حذف تشخيص
+        #region Delete
 
         public async Task<bool> DeleteDiagnosAsync(long digId)
         {
@@ -135,7 +135,7 @@ namespace BLL.Mangers.Diagnoses
 
         #endregion
 
-        #region Helper Methods - التحقق من صحة البيانات
+        #region Helper Methods  
 
         private void ValidateDiagnosData(clsDiagnos diagnos)
         {
@@ -157,7 +157,7 @@ namespace BLL.Mangers.Diagnoses
 
         #endregion
 
-        #region 7. جلب التشخيصات بنظام الصفحات مع البحث
+        #region Get By Pageing 
 
         /// <summary>
         /// جلب صفحة محددة من التشخيصات بناءً على رقم الصفحة وعدد العناصر ونص البحث
@@ -186,11 +186,8 @@ namespace BLL.Mangers.Diagnoses
 
         #endregion
 
-        #region 8. جلب إجمالي عدد التشخيصات مع البحث
+        #region Get Total 
 
-        /// <summary>
-        /// جلب إجمالي عدد التشخيصات المطابقة لنص البحث لحساب عدد الصفحات في الواجهة
-        /// </summary>
         public async Task<int> GetTotalDiagnosCountAsync(string? searchQuery = null)
         {
             try
@@ -205,7 +202,7 @@ namespace BLL.Mangers.Diagnoses
 
         #endregion
 
-        #region 9. توليد كود تلقائي للتشخيص الجديد
+        #region Genrate New Code
 
         public async Task<long> GetNewDig_CodeAsync()
         {

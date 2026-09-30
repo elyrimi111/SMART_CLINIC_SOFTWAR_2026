@@ -12,7 +12,7 @@ namespace DAL.Repo.Diagnos
     {
         #region Helper Methods (قراءة البيانات وتحويل القيم)
 
-        private clsDiagnos MapDataReaderToDiagnos(SqlDataReader reader)
+        private static clsDiagnos MapDataReaderToDiagnos(SqlDataReader reader)
         {
             return new clsDiagnos
             {
@@ -29,7 +29,7 @@ namespace DAL.Repo.Diagnos
 
         #region 1. جلب كافة التشخيصات (GetAll)
 
-        public async Task<List<clsDiagnos>> GetAllDiagnosAsync()
+        public static async Task<List<clsDiagnos>> GetAllDiagnosAsync()
         {
             List<clsDiagnos> diagnosList = new List<clsDiagnos>();
 
@@ -62,9 +62,9 @@ namespace DAL.Repo.Diagnos
 
         #endregion
 
-        #region 2. جلب تشخيص برقم المعرف (GetById)
+        #region GetById 
 
-        public async Task<clsDiagnos?> GetDiagnosByIdAsync(long digId)
+        public static async Task<clsDiagnos> GetDiagnosByIdAsync(long digId)
         {
             clsDiagnos? diagnos = null;
 

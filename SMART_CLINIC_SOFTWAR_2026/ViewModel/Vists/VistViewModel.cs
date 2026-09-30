@@ -8,6 +8,7 @@ using Core.Entites.Orders;
 using Core.Entites.Vist;
 using SMART_CLINIC_SOFTWAR_2026.View.Clinc;
 using SMART_CLINIC_SOFTWAR_2026.View.Customers;
+using SMART_CLINIC_SOFTWAR_2026.View.Diagnose;
 using SMART_CLINIC_SOFTWAR_2026.ViewModel.Clinc;
 using SMART_CLINIC_SOFTWAR_2026.ViewModel.Commands;
 using SMART_CLINIC_SOFTWAR_2026.ViewModel.Customers;
@@ -472,7 +473,7 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Vists
 
             if (CUST_ID.HasValue)
             {
-                clsCust custmer = await _custManger.GetCustomerByIdAsync(CUST_ID);
+                clsCust custmer = await clsCustomersManager.GetCustomerByIdAsync(CUST_ID);
 
                 if (custmer != null)
                 {
@@ -755,8 +756,9 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Vists
 
         private async Task OpenDiagnosis()
         {
-            MessageBox.Show("تم التحقق من تفعيل الزيارة: سيتم فتح شاشة التشخيص والفحوصات الطبية.", "التشخيص", MessageBoxButton.OK, MessageBoxImage.Information);
-            await Task.CompletedTask;
+           var DiagnosisWin = new DiagnosisFromVisitWindow(CUST_ID);
+
+           DiagnosisWin.ShowDialog();
         }
 
         private async Task OpenLabTest()
