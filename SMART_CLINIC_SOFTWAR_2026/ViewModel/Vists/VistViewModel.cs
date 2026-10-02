@@ -763,9 +763,9 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Vists
            DiagnosisWin.ShowDialog();
         }
 
-        private async Task OpenLabTest()
+        private async Task OpenLabTest()  
         {
-            MessageBox.Show("تم التحقق من تفعيل الزيارة: سيتم فتح شاشة فحوصات المختبر.", "المختبر", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(" شاشة فحوصات المختبر قيد التطوير حاليا", "المختبر", MessageBoxButton.OK, MessageBoxImage.Information);
             await Task.CompletedTask;
         }
 
