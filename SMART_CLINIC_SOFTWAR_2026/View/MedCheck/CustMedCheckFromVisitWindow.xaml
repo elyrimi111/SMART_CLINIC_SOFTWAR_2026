@@ -1,0 +1,204 @@
+﻿<Window x:Class="SMART_CLINIC_SOFTWAR_2026.View.MedCheck.CustMedCheckFromVisitWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SMART_CLINIC_SOFTWAR_2026.View.MedCheck"
+        xmlns:customers="clr-namespace:SMART_CLINIC_SOFTWAR_2026.View.Customers"
+        xmlns:controls="clr-namespace:SMART_CLINIC_SOFTWAR_2026.View.Resorsus.DataViews"
+        mc:Ignorable="d"
+        Title="الفحوصات الطبية في الزيارة" 
+        Height="720" 
+        Width="1100"
+        WindowStartupLocation="CenterScreen"
+        FlowDirection="RightToLeft"
+        Background="{StaticResource BgMainBrush}">
+
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <!-- 1. شريط الأزرار والتحكم العلوي -->
+            <RowDefinition Height="Auto"/>
+            <!-- 2. الجزء الرئيسي: محتوى النافذة المقسم لجانبين -->
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- 1. شريط الأزرار العلوي -->
+        <Border Grid.Row="0" 
+                Background="{StaticResource SurfaceBrush}" 
+                BorderBrush="{StaticResource BorderBrush}" 
+                BorderThickness="1" 
+                CornerRadius="8" 
+                Padding="8" 
+                Margin="0,0,0,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- أزرار التحكم والخيارات العامة (الجانب الأيمن/البداية) -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button x:Name="BtnNewMedCheck" 
+                            Command="{Binding NewMedCheckCommand}" 
+                            Padding="12,6" Margin="0,0,6,0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="➕" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="فحص جديد" VerticalAlignment="Center" FontWeight="Bold"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button x:Name="BtnPrint" 
+                            Command="{Binding PrintCommand}" 
+                            Padding="12,6">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🖨️" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="طباعة" VerticalAlignment="Center" FontWeight="Bold"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+
+                    <Button x:Name="BtnPreviousDiagnosis" 
+                            Command="{Binding PreviousDiagnosisCommand}" 
+                            Padding="12,6" Margin="0,0,6,0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="📋" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="تشخيصات سابقة" VerticalAlignment="Center" FontWeight="Bold"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button x:Name="BtnDelete" 
+                            Command="{Binding DeleteCommand}" 
+                            Padding="12,6" Margin="6,0,0,0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="❌" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="حذف" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button x:Name="BtnDeleteAll" 
+                            Command="{Binding DeleteAllCommand}" 
+                            Padding="12,6" Margin="6,0,0,0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🗑️" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="حذف الكل" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- 2. محتوى النافذة الرئيسي -->
+        <Grid Grid.Row="1" Margin="0,0,0,0">
+            <Grid.ColumnDefinitions>
+                <!-- العمود الأيمن: قائمة الفحوصات العامة -->
+                <ColumnDefinition Width="1.2*"/>
+                <!-- العمود الأيسر: فحوصات الزيارة + البطاقة بالأسفل -->
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- العمود الأول: القائمة العامة للفحوصات الطبية -->
+            <GroupBox Grid.Column="0" 
+                      Header="قائمة الفحوصات الطبية العامة" 
+                      FontWeight="Bold" 
+                      Foreground="{StaticResource TextPrimaryBrush}" 
+                      Background="{StaticResource SurfaceBrush}" 
+                      BorderBrush="{StaticResource BorderBrush}" 
+                      Margin="0,0,6,0" 
+                      Padding="6">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- شريط البحث -->
+                    <Grid Grid.Row="0" Margin="0,0,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button Grid.Column="0" 
+                                Command="{Binding ClearSearchCommand}"
+                                Padding="10,5" Margin="0,0,6,0">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="🧹" Margin="0,0,4,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="مسح" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                            </StackPanel>
+                        </Button>
+
+                        <TextBox Grid.Column="1" 
+                                 Text="{Binding SearchMedCheckQuery, UpdateSourceTrigger=PropertyChanged}"
+                                 Padding="8,6" 
+                                 VerticalContentAlignment="Center" 
+                                 FontSize="13"
+                                 Background="{StaticResource SurfaceBrush}"
+                                 BorderBrush="{StaticResource BorderBrush}"/>
+                    </Grid>
+
+                    <!-- جدول البيانات الرئيسي الممتد -->
+                    <controls:PaginatedGridControl 
+                             Grid.Row="1"
+                             ItemsSource="{Binding AllMedChecksList}"
+                             SelectedItem="{Binding SelectedAllMedCheck, Mode=TwoWay}"
+                             CurrentPage="{Binding AllMedChecksCurrentPage, Mode=TwoWay}"
+                             TotalRows="{Binding AllMedChecksTotalRows, Mode=TwoWay}"
+                             NumberOfRows="{Binding AllMedChecksPageSize, Mode=TwoWay}"
+                             PageChangedCommand="{Binding AllMedChecksPageChangedCommand}">
+
+                        <DataGridTextColumn Header="كود الفحص" Binding="{Binding MEDCHECK_CODE}" Width="0.8*"/>
+                        <DataGridTextColumn Header="اسم الفحص" Binding="{Binding MEDCHECK_NAME}" Width="2*"/>
+                        <DataGridTextColumn Header="نوع الفحص" Binding="{Binding MEDCHECK_TYPE}" Width="1.2*"/>
+                        <DataGridTextColumn Header="السعر" Binding="{Binding MEDCHECK_PRICE}" Width="1*"/>
+
+                    </controls:PaginatedGridControl>
+                </Grid>
+            </GroupBox>
+
+            <!-- العمود الثاني: فحوصات الزيارة الحالية وفي أسفلها بطاقة المريض -->
+            <Grid Grid.Column="1" Margin="6,0,0,0">
+                <Grid.RowDefinitions>
+                    <!-- جدول فحوصات الزيارة -->
+                    <RowDefinition Height="*"/>
+                    <!-- بطاقة المريض مثبتة في الأسفل -->
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- 1. فحوصات الزيارة الحالية -->
+                <GroupBox Grid.Row="0" 
+                          Header="فحوصات الزيارة الحالية" 
+                          FontWeight="Bold" 
+                          Foreground="{StaticResource TextPrimaryBrush}" 
+                          Background="{StaticResource SurfaceBrush}" 
+                          BorderBrush="{StaticResource BorderBrush}" 
+                          Margin="0,0,0,8" 
+                          Padding="6">
+
+                    <controls:PaginatedGridControl 
+                                 ItemsSource="{Binding VisitMedChecksList}"
+                                 SelectedItem="{Binding SelectedVisitMedCheck, Mode=TwoWay}"
+                                 CurrentPage="{Binding VisitPage, Mode=TwoWay}"
+                                 TotalRows="{Binding VisitTotalRows, Mode=TwoWay}"
+                                 NumberOfRows="{Binding VisitPageSize, Mode=TwoWay}"
+                                 PageChangedCommand="{Binding VisitPageChangedCommand}">
+
+                        <DataGridTextColumn Header="كود الفحص" Binding="{Binding MEDCHECK_CODE}" Width="0.8*"/>
+                        <DataGridTextColumn Header="اسم الفحص" Binding="{Binding MEDCHECK_NAME}" Width="2*"/>
+                        <DataGridTextColumn Header="نوع الفحص" Binding="{Binding MEDCHECK_TYPE}" Width="1.2*"/>
+                        <DataGridTextColumn Header="السعر" Binding="{Binding MEDCHECK_PRICE}" Width="1*"/>
+
+                    </controls:PaginatedGridControl>
+                </GroupBox>
+
+                <!-- 2. بطاقة المريض مثبتة بأسفل جدول الزيارة -->
+                <customers:CustomerCard Grid.Row="1" 
+                                       DataContext="{Binding Customer}" 
+                                       Margin="0"
+                                       VerticalAlignment="Bottom"/>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
