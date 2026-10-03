@@ -15,6 +15,7 @@ using SMART_CLINIC_SOFTWAR_2026.ViewModel.Clinc;
 using SMART_CLINIC_SOFTWAR_2026.ViewModel.Commands;
 using SMART_CLINIC_SOFTWAR_2026.ViewModel.Customers;
 using SMART_CLINIC_SOFTWAR_2026.ViewModel.Medicens;
+using SMART_CLINIC_SOFTWAR_2026.View.MedCheck; 
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -25,6 +26,8 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using SMART_CLINIC_SOFTWAR_2026.View.Holdays;
+using SMART_CLINIC_SOFTWAR_2026.View.MedRepo;
 
 namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Vists
 {
@@ -765,8 +768,8 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Vists
 
         private async Task OpenLabTest()  
         {
-            MessageBox.Show(" شاشة فحوصات المختبر قيد التطوير حاليا", "المختبر", MessageBoxButton.OK, MessageBoxImage.Information);
-            await Task.CompletedTask;
+            var MedCheckWin = new CustMedCheckFromVisitWindow(CUST_ID);
+            MedCheckWin.ShowDialog(); 
         }
 
         private async Task OpenProcedures()
@@ -787,14 +790,16 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Vists
 
         private async Task OpenSickLeave()
         {
-            MessageBox.Show("تم التحقق من تفعيل الزيارة: سيتم فتح شاشة الإجازات المرضية.", "الإجازات المرضية", MessageBoxButton.OK, MessageBoxImage.Information);
-            await Task.CompletedTask;
+            var window = new HoldayFromVistWindow(CUST_ID);
+
+            window.ShowDialog();
         }
 
         private async Task OpenMedicalReports()
         {
-            MessageBox.Show("تم التحقق من تفعيل الزيارة: سيتم فتح شاشة التقارير الطبية.", "التقارير الطبية", MessageBoxButton.OK, MessageBoxImage.Information);
-            await Task.CompletedTask;
+            var window = new MedRepoFromVisitWindow(CUST_ID);
+
+            window.ShowDialog();
         }
 
         private async Task OpenAppointments()

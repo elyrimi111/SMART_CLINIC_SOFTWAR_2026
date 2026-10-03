@@ -10,9 +10,6 @@
              d:DesignHeight="600" d:DesignWidth="1000"
              FlowDirection="RightToLeft">
 
-    <UserControl.DataContext>
-        <vm:DoctorsViewModel />
-    </UserControl.DataContext>
 
     <Grid Background="{StaticResource BgMainBrush}">
         <Grid.RowDefinitions>

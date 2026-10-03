@@ -410,7 +410,7 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Medicens
             {
                 MEDCHECK_CODE = SelectedAllMedication.MED_ID,
                 MEDCHECK_NAME = SelectedAllMedication.MED_NAME,
-                MEDCHECK_PRICE = SelectedAllMedication.MED_PRICE.ToString(),
+                MEDCHECK_PRICE = SelectedAllMedication.MED_PRICE,
                 MEDCHECK_NOTE = string.IsNullOrWhiteSpace(dosageDetails) ? "حسب إرشادات الطبيب" : dosageDetails,
                 CLI_ID = SelectedAllMedication.CLI_ID
             };
