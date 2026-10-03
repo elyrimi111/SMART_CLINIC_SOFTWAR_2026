@@ -8,15 +8,15 @@ namespace Core.Entites.Holday
 {
     public class clsHolday
     {
-        public static long   HOL_ID;
-        public static long   HOL_CODE;
-        public static string HOL_DATE;
-        public static string HOL_TIME;
-        public static string HOL_NAME;
-        public static string HOL_TEXT;
-        public static string HOL_NOTE;
-        public static long   CUST_ID;
-        public static long   CLI_ID;
-        public static long   VIS_ID;
+        public long HOL_ID { get; set; }
+        public long? HOL_CODE { get; set; }
+        public DateTime? HOL_DATE { get; set; }
+        public TimeSpan? HOL_TIME { get; set; }
+        public string HOL_NAME { get; set; } = string.Empty; 
+        public string HOL_TEXT { get; set; } = string.Empty;
+        public string HOL_NOTE { get; set; } = string.Empty;
+        public long? CUST_ID { get; set; }
+        public long? CLI_ID { get; set; }
+        public long? VIS_ID { get; set; }
     }
 }

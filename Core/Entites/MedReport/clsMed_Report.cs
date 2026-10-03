@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.CurrentSession;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,16 +9,15 @@ namespace Core.Entites.Med_Report
 {
     public class clsMed_Report
     {
-       public static long MREP_ID;
-       public static long MREP_CODE;
-       public static string MREP_DATE;
-       public static string MREP_NAME;
-       public static string MREP_TIME;
-       public static string MREP_TEXT;
-       public static string MREP_NOTE;
-       public static long CUST_ID;
-       public static long CLI_ID;
-       public static long VIS_ID;
-
+        public long MREP_ID { get; set; }
+        public long MREP_CODE { get; set; }
+        public DateTime? MREP_DATE { get; set; }
+        public string MREP_NAME { get; set; } = string.Empty;
+        public TimeSpan? MREP_TIME { get; set; }
+        public string MREP_TEXT { get; set; } = string.Empty;
+        public string MREP_NOTE { get; set; } = string.Empty; 
+        public long CUST_ID { get; set; }
+        public long CLI_ID { get; set; } = clsCurrentSectioncs.CurrentClinc.CLI_ID; 
+        public long VIS_ID { get; set; }
     }
 }

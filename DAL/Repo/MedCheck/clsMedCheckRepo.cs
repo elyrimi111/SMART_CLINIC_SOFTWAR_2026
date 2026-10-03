@@ -10,9 +10,15 @@ namespace DAL.Repo.MedCheck
 {
     public class clsMedCheckRepo
     {
+<<<<<<< HEAD
         #region Helper Methods (قراءة البيانات وتحويل القيم)
 
         private static clsMed_Check MapDataReaderToMedCheck(SqlDataReader reader)
+=======
+        #region Helper Methods 
+
+        private clsMed_Check MapDataReaderToMedCheck(SqlDataReader reader)
+>>>>>>> featur/medcheck-mangament
         {
             return new clsMed_Check
             {
@@ -20,7 +26,11 @@ namespace DAL.Repo.MedCheck
                 MEDCHECK_CODE = reader["MEDCHECK_CODE"] != DBNull.Value ? Convert.ToInt64(reader["MEDCHECK_CODE"]) : 0,
                 MEDCHECK_NAME = reader["MEDCHECK_NAME"] != DBNull.Value ? reader["MEDCHECK_NAME"].ToString()! : string.Empty,
                 MEDCHECK_TYPE = reader["MEDCHECK_TYPE"] != DBNull.Value ? reader["MEDCHECK_TYPE"].ToString()! : string.Empty,
+<<<<<<< HEAD
                 MEDCHECK_PRICE = reader["MEDCHECK_PRICE"] != DBNull.Value ? reader["MEDCHECK_PRICE"].ToString()! : string.Empty,
+=======
+                MEDCHECK_PRICE = reader["MEDCHECK_PRICE"] != DBNull.Value ? Convert.ToDecimal(reader["MEDCHECK_PRICE"]) : null,
+>>>>>>> featur/medcheck-mangament
                 MEDCHECK_NOTE = reader["MEDCHECK_NOTE"] != DBNull.Value ? reader["MEDCHECK_NOTE"].ToString()! : string.Empty,
                 CLI_ID = reader["CLI_ID"] != DBNull.Value ? Convert.ToInt64(reader["CLI_ID"]) : 0
             };
@@ -28,9 +38,15 @@ namespace DAL.Repo.MedCheck
 
         #endregion
 
+<<<<<<< HEAD
         #region 1. GetAll (Static)
 
         public static async Task<List<clsMed_Check>> GetAllMedChecksAsync()
+=======
+        #region GetAll
+
+        public async Task<List<clsMed_Check>> GetAllMedChecksAsync()
+>>>>>>> featur/medcheck-mangament
         {
             List<clsMed_Check> medCheckList = new List<clsMed_Check>();
 
@@ -63,9 +79,15 @@ namespace DAL.Repo.MedCheck
 
         #endregion
 
+<<<<<<< HEAD
         #region 2. GetById (Static)
 
         public static async Task<clsMed_Check?> GetMedCheckByIdAsync(long medCheckId)
+=======
+        #region (GetById)
+
+        public async Task<clsMed_Check?> GetMedCheckByIdAsync(long? medCheckId)
+>>>>>>> featur/medcheck-mangament
         {
             clsMed_Check? medCheck = null;
 
@@ -77,7 +99,11 @@ namespace DAL.Repo.MedCheck
                 {
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
+<<<<<<< HEAD
                         command.Parameters.AddWithValue("@MEDCHECK_ID", medCheckId);
+=======
+                        command.Parameters.AddWithValue("@MEDCHECK_ID", (object?)medCheckId ?? DBNull.Value);
+>>>>>>> featur/medcheck-mangament
                         await connection.OpenAsync();
 
                         using (SqlDataReader reader = await command.ExecuteReaderAsync())
@@ -100,9 +126,15 @@ namespace DAL.Repo.MedCheck
 
         #endregion
 
+<<<<<<< HEAD
         #region 3. GetByClinic (Static)
 
         public static async Task<List<clsMed_Check>> GetMedChecksByClinicAsync(long clinicId)
+=======
+        #region (GetByClinic)
+
+        public async Task<List<clsMed_Check>> GetMedChecksByClinicAsync(long clinicId)
+>>>>>>> featur/medcheck-mangament
         {
             List<clsMed_Check> medCheckList = new List<clsMed_Check>();
 
@@ -137,9 +169,15 @@ namespace DAL.Repo.MedCheck
 
         #endregion
 
+<<<<<<< HEAD
         #region 4. Add (Static)
 
         public static async Task<long> AddMedCheckAsync(clsMed_Check medCheck)
+=======
+        #region (Insert)
+
+        public async Task<long> AddMedCheckAsync(clsMed_Check medCheck)
+>>>>>>> featur/medcheck-mangament
         {
             long newInsertedId = 0;
             string query = @"INSERT INTO dbo.MEDCHECK_TBL 
@@ -154,6 +192,7 @@ namespace DAL.Repo.MedCheck
                 {
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
+<<<<<<< HEAD
                         command.Parameters.AddWithValue("@MEDCHECK_CODE", medCheck.MEDCHECK_CODE == 0 ? DBNull.Value : medCheck.MEDCHECK_CODE);
                         command.Parameters.AddWithValue("@MEDCHECK_NAME", string.IsNullOrEmpty(medCheck.MEDCHECK_NAME) ? DBNull.Value : medCheck.MEDCHECK_NAME);
                         command.Parameters.AddWithValue("@MEDCHECK_TYPE", string.IsNullOrEmpty(medCheck.MEDCHECK_TYPE) ? DBNull.Value : medCheck.MEDCHECK_TYPE);
@@ -165,6 +204,17 @@ namespace DAL.Repo.MedCheck
 
                         command.Parameters.AddWithValue("@MEDCHECK_NOTE", string.IsNullOrEmpty(medCheck.MEDCHECK_NOTE) ? DBNull.Value : medCheck.MEDCHECK_NOTE);
                         command.Parameters.AddWithValue("@CLI_ID", medCheck.CLI_ID == 0 ? DBNull.Value : medCheck.CLI_ID);
+=======
+                        command.Parameters.AddWithValue("@MEDCHECK_CODE", medCheck.MEDCHECK_CODE != 0 ? medCheck.MEDCHECK_CODE : DBNull.Value);
+                        command.Parameters.AddWithValue("@MEDCHECK_NAME", !string.IsNullOrEmpty(medCheck.MEDCHECK_NAME) ? medCheck.MEDCHECK_NAME : DBNull.Value);
+                        command.Parameters.AddWithValue("@MEDCHECK_TYPE", !string.IsNullOrEmpty(medCheck.MEDCHECK_TYPE) ? medCheck.MEDCHECK_TYPE : DBNull.Value);
+
+                        // تم التعديل هنا لعدم استخدام decimal.TryParse
+                        command.Parameters.AddWithValue("@MEDCHECK_PRICE", (object?)medCheck.MEDCHECK_PRICE ?? DBNull.Value);
+
+                        command.Parameters.AddWithValue("@MEDCHECK_NOTE", !string.IsNullOrEmpty(medCheck.MEDCHECK_NOTE) ? medCheck.MEDCHECK_NOTE : DBNull.Value);
+                        command.Parameters.AddWithValue("@CLI_ID", medCheck.CLI_ID != 0 ? medCheck.CLI_ID : DBNull.Value);
+>>>>>>> featur/medcheck-mangament
 
                         await connection.OpenAsync();
                         object result = await command.ExecuteScalarAsync();
@@ -186,9 +236,15 @@ namespace DAL.Repo.MedCheck
 
         #endregion
 
+<<<<<<< HEAD
         #region 5. Update (Static)
 
         public static async Task<bool> UpdateMedCheckAsync(clsMed_Check medCheck)
+=======
+        #region (Update)
+
+        public async Task<bool> UpdateMedCheckAsync(clsMed_Check medCheck)
+>>>>>>> featur/medcheck-mangament
         {
             int rowsAffected = 0;
             string query = @"UPDATE dbo.MEDCHECK_TBL SET 
@@ -207,6 +263,7 @@ namespace DAL.Repo.MedCheck
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@MEDCHECK_ID", medCheck.MEDCHECK_ID);
+<<<<<<< HEAD
                         command.Parameters.AddWithValue("@MEDCHECK_CODE", medCheck.MEDCHECK_CODE == 0 ? DBNull.Value : medCheck.MEDCHECK_CODE);
                         command.Parameters.AddWithValue("@MEDCHECK_NAME", string.IsNullOrEmpty(medCheck.MEDCHECK_NAME) ? DBNull.Value : medCheck.MEDCHECK_NAME);
                         command.Parameters.AddWithValue("@MEDCHECK_TYPE", string.IsNullOrEmpty(medCheck.MEDCHECK_TYPE) ? DBNull.Value : medCheck.MEDCHECK_TYPE);
@@ -218,6 +275,17 @@ namespace DAL.Repo.MedCheck
 
                         command.Parameters.AddWithValue("@MEDCHECK_NOTE", string.IsNullOrEmpty(medCheck.MEDCHECK_NOTE) ? DBNull.Value : medCheck.MEDCHECK_NOTE);
                         command.Parameters.AddWithValue("@CLI_ID", medCheck.CLI_ID == 0 ? DBNull.Value : medCheck.CLI_ID);
+=======
+                        command.Parameters.AddWithValue("@MEDCHECK_CODE", medCheck.MEDCHECK_CODE != 0 ? medCheck.MEDCHECK_CODE : DBNull.Value);
+                        command.Parameters.AddWithValue("@MEDCHECK_NAME", !string.IsNullOrEmpty(medCheck.MEDCHECK_NAME) ? medCheck.MEDCHECK_NAME : DBNull.Value);
+                        command.Parameters.AddWithValue("@MEDCHECK_TYPE", !string.IsNullOrEmpty(medCheck.MEDCHECK_TYPE) ? medCheck.MEDCHECK_TYPE : DBNull.Value);
+
+                        // تم التعديل هنا لعدم استخدام decimal.TryParse
+                        command.Parameters.AddWithValue("@MEDCHECK_PRICE", (object?)medCheck.MEDCHECK_PRICE ?? DBNull.Value);
+
+                        command.Parameters.AddWithValue("@MEDCHECK_NOTE", !string.IsNullOrEmpty(medCheck.MEDCHECK_NOTE) ? medCheck.MEDCHECK_NOTE : DBNull.Value);
+                        command.Parameters.AddWithValue("@CLI_ID", medCheck.CLI_ID != 0 ? medCheck.CLI_ID : DBNull.Value);
+>>>>>>> featur/medcheck-mangament
 
                         await connection.OpenAsync();
                         rowsAffected = await command.ExecuteNonQueryAsync();
@@ -234,9 +302,15 @@ namespace DAL.Repo.MedCheck
 
         #endregion
 
+<<<<<<< HEAD
         #region 6. Delete (Static)
 
         public static async Task<bool> DeleteMedCheckAsync(long medCheckId)
+=======
+        #region (Delete)
+
+        public async Task<bool> DeleteMedCheckAsync(long medCheckId)
+>>>>>>> featur/medcheck-mangament
         {
             int rowsAffected = 0;
             string query = @"DELETE FROM dbo.MEDCHECK_TBL WHERE MEDCHECK_ID = @MEDCHECK_ID";
@@ -264,9 +338,15 @@ namespace DAL.Repo.MedCheck
 
         #endregion
 
+<<<<<<< HEAD
         #region 7. GetPaged (Static)
 
         public static async Task<List<clsMed_Check>> GetMedChecksPagedAsync(int pageNumber, int rowsPerPage, string? searchQuery = null)
+=======
+        #region (GetPaged)
+
+        public async Task<List<clsMed_Check>> GetMedChecksPagedAsync(int pageNumber, int rowsPerPage, string? searchQuery = null)
+>>>>>>> featur/medcheck-mangament
         {
             List<clsMed_Check> medCheckList = new List<clsMed_Check>();
 
@@ -309,9 +389,15 @@ namespace DAL.Repo.MedCheck
 
         #endregion
 
+<<<<<<< HEAD
         #region 8. GetTotalCount (Static)
 
         public static async Task<int> GetTotalMedChecksCountAsync(string? searchQuery = null)
+=======
+        #region (GetTotalCount)
+
+        public async Task<int> GetTotalMedChecksCountAsync(string? searchQuery = null)
+>>>>>>> featur/medcheck-mangament
         {
             int totalCount = 0;
 
@@ -338,7 +424,11 @@ namespace DAL.Repo.MedCheck
             }
             catch (Exception ex)
             {
+<<<<<<< HEAD
                 throw new Exception("حدث خطأ أثناء جلب إجمالي عدد الفحوصات: " + ex.Message, ex);
+=======
+                throw new Exception("حدث خطأ أثناء جلب إجمالي عدد الفحوصات الطبية: " + ex.Message, ex);
+>>>>>>> featur/medcheck-mangament
             }
 
             return totalCount;
@@ -346,9 +436,15 @@ namespace DAL.Repo.MedCheck
 
         #endregion
 
+<<<<<<< HEAD
         #region 9. GetMaxId (Static)
 
         public static async Task<long> GetMaxMedCheckIdAsync()
+=======
+        #region (GetMaxMedCheckId)
+
+        public async Task<long> GetMaxMedCheckIdAsync()
+>>>>>>> featur/medcheck-mangament
         {
             long maxId = 0;
 

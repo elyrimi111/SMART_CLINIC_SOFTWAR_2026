@@ -1,0 +1,192 @@
+﻿<Window x:Class="SMART_CLINIC_SOFTWAR_2026.View.MedRepo.MedRepoFromVisitWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SMART_CLINIC_SOFTWAR_2026.View.MedRepo"
+        xmlns:customers="clr-namespace:SMART_CLINIC_SOFTWAR_2026.View.Customers"
+        xmlns:controls="clr-namespace:SMART_CLINIC_SOFTWAR_2026.View.Resorsus.DataViews"
+        mc:Ignorable="d"
+        Title="كتابة التقرير الطبي" 
+        Height="720" 
+        Width="1150"
+        WindowStartupLocation="CenterScreen"
+        FlowDirection="RightToLeft"
+        Background="{StaticResource BgMainBrush}">
+
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <!-- 1. شريط الأزرار العلوي -->
+            <RowDefinition Height="Auto"/>
+            <!-- 2. الجزء الرئيسي لشاشة كتابة التقرير والتقارير السابقة -->
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" 
+                Background="{StaticResource SurfaceBrush}" 
+                BorderBrush="{StaticResource BorderBrush}" 
+                BorderThickness="1" 
+                CornerRadius="8" 
+                Padding="8" 
+                Margin="0,0,0,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+
+
+                    <Button x:Name="BtnSaveMedReport" 
+                            Command="{Binding SaveMedReportCommand}" 
+                            Padding="12,6" Margin="0,0,6,0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="💾" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="حفظ التقرير" VerticalAlignment="Center" FontWeight="Bold"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button x:Name="BtnPrintMedReport" 
+                            Command="{Binding PrintMedReportCommand}" 
+                            Padding="12,6">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🖨️" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="طباعة" VerticalAlignment="Center" FontWeight="Bold"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+                <!-- أزرار الحذف -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button x:Name="BtnDelete" 
+                            Command="{Binding DeleteCommand}" 
+                            Padding="12,6" Margin="6,0,0,0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="❌" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="حذف" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button x:Name="BtnDeleteAll" 
+                            Command="{Binding DeleteAllCommand}" 
+                            Padding="12,6" Margin="6,0,0,0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🗑️" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="حذف الكل" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- 2. محتوى النافذة الرئيسي -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <!-- العمود الأيمن: كتابة التقرير الطبي يدوياً -->
+                <ColumnDefinition Width="1.4*"/>
+                <!-- العمود الأيسر: التقارير السابقة للمريض + البطاقة -->
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- العمود الأول: كتابة وتدوين التقرير الطبي -->
+            <GroupBox Grid.Column="0" 
+                      Header="كتابة التقرير الطبي" 
+                      FontWeight="Bold" 
+                      Foreground="{StaticResource TextPrimaryBrush}" 
+                      Background="{StaticResource SurfaceBrush}" 
+                      BorderBrush="{StaticResource BorderBrush}" 
+                      Margin="0,0,6,0" 
+                      Padding="10">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <!-- عنوان التقرير -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- نص التقرير الطبي -->
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Row 0: عنوان التقرير -->
+                    <StackPanel Grid.Row="0" Margin="0,0,0,10">
+                        <TextBlock Text="عنوان / اسم التقرير الطبي:" 
+                                   FontWeight="SemiBold" 
+                                   Margin="0,0,0,5" 
+                                   Foreground="{StaticResource TextPrimaryBrush}"/>
+                        <TextBox Text="{Binding CurrentReport.MREP_NAME, UpdateSourceTrigger=PropertyChanged}" 
+                                 Padding="8,6" 
+                                 FontSize="13" 
+                                 Background="{StaticResource SurfaceBrush}" 
+                                 BorderBrush="{StaticResource BorderBrush}"/>
+                    </StackPanel>
+
+                    <!-- Row 1: نص التقرير الطبي للكتابة اليدوية الحرة -->
+                    <Grid Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" 
+                                   Text="نص التقرير الطبي:" 
+                                   FontWeight="SemiBold" 
+                                   Margin="0,0,0,5" 
+                                   Foreground="{StaticResource TextPrimaryBrush}"/>
+
+                        <TextBox Grid.Row="1" 
+                                 Text="{Binding CurrentReport.MREP_TEXT, UpdateSourceTrigger=PropertyChanged}" 
+                                 AcceptsReturn="True" 
+                                 TextWrapping="Wrap" 
+                                 VerticalScrollBarVisibility="Auto"
+                                 VerticalContentAlignment="Top"
+                                 Padding="12" 
+                                 FontSize="13" 
+                                 Background="{StaticResource SurfaceBrush}" 
+                                 BorderBrush="{StaticResource BorderBrush}"/>
+                    </Grid>
+                </Grid>
+            </GroupBox>
+
+            <!-- العمود الثاني: التقارير السابقة للمريض وبطاقته -->
+            <Grid Grid.Column="1" Margin="6,0,0,0">
+                <Grid.RowDefinitions>
+                    <!-- جدول التقارير السابقة -->
+                    <RowDefinition Height="*"/>
+                    <!-- بطاقة المريض بالأسفل -->
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- أرشيف تقارير المريض السابقة -->
+                <GroupBox Grid.Row="0" 
+                          Header="التقارير الطبية السابقة للمريض" 
+                          FontWeight="Bold" 
+                          Foreground="{StaticResource TextPrimaryBrush}" 
+                          Background="{StaticResource SurfaceBrush}" 
+                          BorderBrush="{StaticResource BorderBrush}" 
+                          Margin="0,0,0,8" 
+                          Padding="6">
+
+                    <controls:PaginatedGridControl 
+                                 ItemsSource="{Binding VisitMedReportsList}"
+                                 SelectedItem="{Binding SelectedVisitMedReport, Mode=TwoWay}"
+                                 CurrentPage="{Binding VisitPage, Mode=TwoWay}"
+                                 TotalRows="{Binding VisitTotalRows, Mode=TwoWay}"
+                                 NumberOfRows="{Binding VisitPageSize, Mode=TwoWay}"
+                                 PageChangedCommand="{Binding VisitPageChangedCommand}">
+
+                        <DataGridTextColumn Header="كود التقرير" Binding="{Binding MREP_CODE}" Width="0.8*"/>
+                        <DataGridTextColumn Header="اسم التقرير" Binding="{Binding MREP_NAME}" Width="1.8*"/>
+                        <DataGridTextColumn Header="التاريخ" Binding="{Binding MREP_DATE, StringFormat=\{0:yyyy/MM/dd\}}" Width="1.2*"/>
+
+                    </controls:PaginatedGridControl>
+                </GroupBox>
+
+                <!-- بطاقة المريض أسفل الجدول -->
+                <customers:CustomerCard Grid.Row="1" 
+                                       DataContext="{Binding Customer}" 
+                                       Margin="0"
+                                       VerticalAlignment="Bottom"/>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

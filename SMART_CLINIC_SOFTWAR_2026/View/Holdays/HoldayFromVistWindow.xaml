@@ -1,0 +1,250 @@
+﻿<Window x:Class="SMART_CLINIC_SOFTWAR_2026.View.Holdays.HoldayFromVistWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SMART_CLINIC_SOFTWAR_2026.View.Holdays"
+        xmlns:customers="clr-namespace:SMART_CLINIC_SOFTWAR_2026.View.Customers"
+        xmlns:controls="clr-namespace:SMART_CLINIC_SOFTWAR_2026.View.Resorsus.DataViews"
+        mc:Ignorable="d"
+        Title="الاجازات المرضية" 
+        Height="720" 
+        Width="1150"
+        WindowStartupLocation="CenterScreen"
+        FlowDirection="RightToLeft"
+        Background="{StaticResource BgMainBrush}">
+
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <!-- 1. شريط الأزرار والتحكم العلوي -->
+            <RowDefinition Height="Auto"/>
+            <!-- 2. قسم بيانات الإجازة الأساسية -->
+            <RowDefinition Height="Auto"/>
+            <!-- 3. الجزء السفلي: نص الإجازة، سجل إجازات المريض وبطاقة المريض -->
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- 1. شريط التحكم والأزرار العلوي -->
+        <Border Grid.Row="0" 
+                Background="{StaticResource SurfaceBrush}" 
+                BorderBrush="{StaticResource BorderBrush}" 
+                BorderThickness="1" 
+                CornerRadius="8" 
+                Padding="8" 
+                Margin="0,0,0,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <!-- زر حفظ الإجازة -->
+                    <Button x:Name="BtnSave" 
+                            Command="{Binding AddHolidayCommand}" 
+                            Style="{StaticResource AccentButtonStyle}" 
+                            Padding="12,6" Margin="0,0,6,0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="💾" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="حفظ الإجازة" VerticalAlignment="Center" FontWeight="Bold" Foreground="{StaticResource TextWhiteBrush}"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- زر جديد / تنظيف الحقول -->
+                    <Button x:Name="BtnClear" 
+                            Command="{Binding ClearFieldsCommand}" 
+                            Padding="12,6" Margin="0,0,6,0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🧹" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                            <TextBlock Text=" مسح" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                    <!-- زر طباعة -->
+                    <Button x:Name="BtnPrint" 
+                            Command="{Binding PrintHolidayCommand}" 
+                            Padding="12,6" Margin="6,0,0,0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🖨️" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="طباعة" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- زر حذف -->
+                    <Button x:Name="BtnDelete" 
+                            Command="{Binding DeleteCommand}" 
+                            Style="{StaticResource DangerButtonStyle}" 
+                            Padding="12,6" Margin="6,0,0,0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="❌" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="حذف" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="{StaticResource TextWhiteBrush}"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- 2. قسم بيانات الإجازة -->
+        <GroupBox Grid.Row="1" 
+                  Header="بيانات الإجازة" 
+                  FontWeight="Bold" 
+                  Foreground="{StaticResource TextPrimaryBrush}" 
+                  Background="{StaticResource SurfaceBrush}" 
+                  BorderBrush="{StaticResource BorderBrush}" 
+                  Margin="0,0,0,8" 
+                  Padding="8">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="15"/>
+                    <ColumnDefinition Width="1.2*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- الصف الأول - اليمين: كود الإجازة -->
+                <Grid Grid.Row="0" Grid.Column="0" Margin="0,3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="كود الإجازة" VerticalAlignment="Center" FontWeight="Normal"/>
+                    <TextBox Grid.Column="1" 
+                             Text="{Binding HOL_CODE, Mode=OneWay}" 
+                             IsReadOnly="True" 
+                             Focusable="False" 
+                             IsTabStop="False"  
+                             Cursor="No"/>
+                </Grid>
+
+                <!-- الصف الأول - اليسار: تاريخ الإجازة -->
+                <Grid Grid.Row="0" Grid.Column="2" Margin="0,3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="تاريخ الإجازة" VerticalAlignment="Center" FontWeight="Normal"/>
+                    <DatePicker Grid.Column="1" SelectedDate="{Binding HOL_DATE, UpdateSourceTrigger=PropertyChanged}"/>
+                </Grid>
+
+                <!-- الصف الثاني - اليمين: اسم المريض -->
+                <Grid Grid.Row="1" Grid.Column="0" Margin="0,3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="اسم المريض" VerticalAlignment="Center" FontWeight="Normal"/>
+                    <TextBox Grid.Column="1" Text="{Binding FullPatientName, Mode=OneWay}" IsReadOnly="True" Background="#F8F9FA" FontWeight="Bold"/>
+                </Grid>
+
+                <!-- الصف الثاني - اليسار: مدة الإجازة -->
+                <Grid Grid.Row="1" Grid.Column="2" Margin="0,3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Text="مدة الإجازة" VerticalAlignment="Center" FontWeight="Normal"/>
+
+                    <Grid Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1.2*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox Grid.Column="0" 
+                                 Text="{Binding HOL_DURATION_VALUE, UpdateSourceTrigger=PropertyChanged}" 
+                                 Margin="0,0,3,0"
+                                 HorizontalContentAlignment="Center"
+                                 ToolTip="أدخل عدد الأيام أو الساعات"/>
+
+                        <ComboBox Grid.Column="1" 
+                                  SelectedValue="{Binding HOL_DURATION_UNIT, Mode=TwoWay}"
+                                  SelectedValuePath="Content"
+                                  SelectedIndex="0">
+                            <ComboBoxItem Content="يوم"/>
+                            <ComboBoxItem Content="أسبوع"/>
+                            <ComboBoxItem Content="شهر"/>
+                        </ComboBox>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </GroupBox>
+
+        <!-- 3. المحتوى السفلي الرئيسي -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <!-- الجانب الأيمن: نص الإجازة المرضية -->
+                <ColumnDefinition Width="1.1*"/>
+                <!-- الجانب الأيسر: جدول الإجازات وبطاقة المريض -->
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- القسم الأيمن السفلي: نص الإجازة -->
+            <GroupBox Grid.Column="0" 
+                      Header="نص الإجازة المرضية" 
+                      FontWeight="Bold" 
+                      Foreground="{StaticResource TextPrimaryBrush}" 
+                      Background="{StaticResource SurfaceBrush}" 
+                      BorderBrush="{StaticResource BorderBrush}" 
+                      Margin="0,0,4,0" 
+                      Padding="6">
+                <!-- مربع نص الإجازة ممتد بالكامل مع أقصى مساحة للكتابة -->
+                <TextBox Text="{Binding HOL_TEXT, UpdateSourceTrigger=PropertyChanged}" 
+                         TextWrapping="Wrap" 
+                         AcceptsReturn="True" 
+                         VerticalContentAlignment="Top" 
+                         FontSize="13" 
+                         Padding="8"
+                         Background="{StaticResource SurfaceBrush}"
+                         BorderBrush="{StaticResource BorderBrush}"/>
+            </GroupBox>
+
+            <!-- القسم الأيسر السفلي: سجل الإجازات وبطاقة المريض -->
+            <Grid Grid.Column="1" Margin="4,0,0,0">
+                <Grid.RowDefinitions>
+                    <!-- جدول إجازات المريض مرن ويأخذ الارتفاع المتبقي -->
+                    <RowDefinition Height="*"/>
+                    <!-- بطاقة المريض مثبتة بالأسفل مباشرة -->
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <GroupBox Grid.Row="0" 
+                          Header="سجل إجازات المريض" 
+                          FontWeight="Bold" 
+                          Foreground="{StaticResource TextPrimaryBrush}" 
+                          Background="{StaticResource SurfaceBrush}" 
+                          BorderBrush="{StaticResource BorderBrush}" 
+                          Margin="0,0,0,6" 
+                          Padding="4">
+
+                    <controls:PaginatedGridControl 
+                                 ItemsSource="{Binding VisitHolidaysList}"
+                                 SelectedItem="{Binding SelectedVisitHoliday, Mode=TwoWay}"
+                                 CurrentPage="{Binding VisitPage, Mode=TwoWay}"
+                                 TotalRows="{Binding VisitTotalRows, Mode=TwoWay}"
+                                 NumberOfRows="{Binding VisitPageSize, Mode=TwoWay}"
+                                 PageChangedCommand="{Binding VisitPageChangedCommand}">
+
+                        <DataGridTextColumn Header="الرقم" Binding="{Binding HOL_ID}" Width="0.6*"/>
+                        <DataGridTextColumn Header="التاريخ" Binding="{Binding HOL_DATE, StringFormat=\{0:yyyy/MM/dd\}}" Width="1*"/>
+                        <DataGridTextColumn Header="مدة الإجازة" Binding="{Binding FullHolidayDuration}" Width="1*"/>
+                        <DataGridTextColumn Header="رقم المريض" Binding="{Binding CUST_ID}" Width="0.8*"/>
+                        <DataGridTextColumn Header="اسم المريض" Binding="{Binding Customer.FullPatientName}" Width="1.5*"/>
+
+                    </controls:PaginatedGridControl>
+                </GroupBox>
+ 
+                <customers:CustomerCard Grid.Row="1" 
+                                       DataContext="{Binding Customer}" 
+                                       Margin="0"
+                                       VerticalAlignment="Bottom"/>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

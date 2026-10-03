@@ -1,7 +1,13 @@
 ﻿using SMART_CLINIC_SOFTWAR_2026.ViewModel.MedCheck;
+<<<<<<< HEAD
 using SMART_CLINIC_SOFTWAR_2026.ViewModel.Medicens;
 using System;
 using System.Collections.Generic;
+=======
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
+>>>>>>> featur/medcheck-mangament
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,10 +27,17 @@ namespace SMART_CLINIC_SOFTWAR_2026.View.MedCheck
     /// </summary>
     public partial class CustMedCheckFromVisitWindow : Window
     {
+<<<<<<< HEAD
         public CustMedCheckFromVisitWindow(long CustID)
         {
             InitializeComponent();
            // this.DataContext = new CustMedCheckFromVisitViewModel(CustID); 
+=======
+        public CustMedCheckFromVisitWindow(long? CustID)
+        {
+            InitializeComponent();
+            this.DataContext = new CustMedCheckFromVistViewModel(CustID); 
+>>>>>>> featur/medcheck-mangament
         }
     }
 }
