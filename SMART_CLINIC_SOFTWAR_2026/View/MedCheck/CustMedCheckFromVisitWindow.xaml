@@ -7,12 +7,8 @@
         xmlns:customers="clr-namespace:SMART_CLINIC_SOFTWAR_2026.View.Customers"
         xmlns:controls="clr-namespace:SMART_CLINIC_SOFTWAR_2026.View.Resorsus.DataViews"
         mc:Ignorable="d"
-<<<<<<< HEAD
-        x:Name="MedCheckFromVisitWin"
-        Title="الفحوصات الطبية للزيارة" 
-=======
+
         Title="الفحوصات الطبية في الزيارة" 
->>>>>>> featur/medcheck-mangament
         Height="720" 
         Width="1100"
         WindowStartupLocation="CenterScreen"
@@ -27,11 +23,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-<<<<<<< HEAD
-        <!-- 1. شريط الأزرار العلوي مقسم بين اليمين واليسار -->
-=======
         <!-- 1. شريط الأزرار العلوي -->
->>>>>>> featur/medcheck-mangament
         <Border Grid.Row="0" 
                 Background="{StaticResource SurfaceBrush}" 
                 BorderBrush="{StaticResource BorderBrush}" 
@@ -46,64 +38,28 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-<<<<<<< HEAD
-                <!-- أزرار العمليات الرئيسية والإستدلال (الجهة اليمنى) -->
-                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                    <Button x:Name="BtnNewMedCheck" 
-                            Command="{Binding NewMedCheckCommand}" 
-                            Padding="10,6" Margin="0,0,6,0">
-=======
-                <!-- أزرار التحكم والخيارات العامة (الجانب الأيمن/البداية) -->
+                <!-- أزرار التحكم والخيارات العامة (الجانب الأيمن) -->
                 <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
                     <Button x:Name="BtnNewMedCheck" 
                             Command="{Binding NewMedCheckCommand}" 
                             Padding="12,6" Margin="0,0,6,0">
->>>>>>> featur/medcheck-mangament
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="➕" Margin="0,0,6,0" VerticalAlignment="Center"/>
                             <TextBlock Text="فحص جديد" VerticalAlignment="Center" FontWeight="Bold"/>
                         </StackPanel>
                     </Button>
 
-<<<<<<< HEAD
- 
-
-
-
-                    <Button x:Name="BtnPreviousDiagnose" 
-                            Command="{Binding PreviousDiagnoseCommand}" 
-                            Padding="10,6" Margin="0,0,6,0">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="🎯" Margin="0,0,6,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="تشخيص سابق" VerticalAlignment="Center" FontWeight="SemiBold"/>
-                        </StackPanel>
-                    </Button>
-
-                    <Button x:Name="BtnPrint" 
-                            Command="{Binding PrintCommand}" 
-                            Padding="10,6">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="🖨️" Margin="0,0,6,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="طباعة" VerticalAlignment="Center" FontWeight="SemiBold"/>
-=======
                     <Button x:Name="BtnPrint" 
                             Command="{Binding PrintCommand}" 
                             Padding="12,6">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="🖨️" Margin="0,0,6,0" VerticalAlignment="Center"/>
                             <TextBlock Text="طباعة" VerticalAlignment="Center" FontWeight="Bold"/>
->>>>>>> featur/medcheck-mangament
                         </StackPanel>
                     </Button>
                 </StackPanel>
 
-<<<<<<< HEAD
-                <!-- أزرار الإجراءات والحذف (الجهة اليسرى) -->
-                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
-                    <Button x:Name="BtnDelete" 
-                            Command="{Binding DeleteCommand}" 
-                            Padding="10,6" Margin="6,0,0,0">
-=======
+                <!-- أزرار الإجراءات والحذف والتشخيصات (الجانب الأيسر) -->
                 <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
 
                     <Button x:Name="BtnPreviousDiagnosis" 
@@ -118,7 +74,6 @@
                     <Button x:Name="BtnDelete" 
                             Command="{Binding DeleteCommand}" 
                             Padding="12,6" Margin="6,0,0,0">
->>>>>>> featur/medcheck-mangament
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="❌" Margin="0,0,6,0" VerticalAlignment="Center"/>
                             <TextBlock Text="حذف" VerticalAlignment="Center" FontWeight="SemiBold"/>
@@ -126,13 +81,8 @@
                     </Button>
 
                     <Button x:Name="BtnDeleteAll" 
-<<<<<<< HEAD
-                            Command="{Binding ClearAllCommand}" 
-                            Padding="10,6" Margin="6,0,0,0">
-=======
                             Command="{Binding DeleteAllCommand}" 
                             Padding="12,6" Margin="6,0,0,0">
->>>>>>> featur/medcheck-mangament
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="🗑️" Margin="0,0,6,0" VerticalAlignment="Center"/>
                             <TextBlock Text="حذف الكل" VerticalAlignment="Center" FontWeight="SemiBold"/>
@@ -142,22 +92,8 @@
             </Grid>
         </Border>
 
-<<<<<<< HEAD
-        <!-- 2. محتوى النافذة الرئيسي المقسم إلى جانبين -->
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <!-- العمود الأيمن: قائمة الفحوصات العامة المتاحة -->
-                <ColumnDefinition Width="1.2*"/>
-                <!-- العمود الأيسر: فحوصات الزيارة الحالية + بطاقة المريض أسفله -->
-                <ColumnDefinition Width="1*"/>
-            </Grid.ColumnDefinitions>
-
-            <!-- العمود الأول (الأيمن): القائمة العامة للفحوصات مع شريط البحث المدمج -->
-            <GroupBox Grid.Column="0" 
-                      Header="قائمة الفحوصات العامة" 
-=======
         <!-- 2. محتوى النافذة الرئيسي -->
-        <Grid Grid.Row="1" Margin="0,0,0,0">
+        <Grid Grid.Row="1" Margin="0">
             <Grid.ColumnDefinitions>
                 <!-- العمود الأيمن: قائمة الفحوصات العامة -->
                 <ColumnDefinition Width="1.2*"/>
@@ -168,7 +104,6 @@
             <!-- العمود الأول: القائمة العامة للفحوصات الطبية -->
             <GroupBox Grid.Column="0" 
                       Header="قائمة الفحوصات الطبية العامة" 
->>>>>>> featur/medcheck-mangament
                       FontWeight="Bold" 
                       Foreground="{StaticResource TextPrimaryBrush}" 
                       Background="{StaticResource SurfaceBrush}" 
@@ -181,11 +116,7 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-<<<<<<< HEAD
-                    <!-- شريط البحث العلوي القائم على النموذج المعتمد -->
-=======
                     <!-- شريط البحث -->
->>>>>>> featur/medcheck-mangament
                     <Grid Grid.Row="0" Margin="0,0,0,8">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
@@ -193,11 +124,7 @@
                         </Grid.ColumnDefinitions>
 
                         <Button Grid.Column="0" 
-<<<<<<< HEAD
-                                Command="{Binding ClearSearchAvailableCommand}"
-=======
                                 Command="{Binding ClearSearchCommand}"
->>>>>>> featur/medcheck-mangament
                                 Padding="10,5" Margin="0,0,6,0">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="🧹" Margin="0,0,4,0" VerticalAlignment="Center"/>
@@ -206,11 +133,7 @@
                         </Button>
 
                         <TextBox Grid.Column="1" 
-<<<<<<< HEAD
-                                 Text="{Binding SearchAvailableQuery, UpdateSourceTrigger=PropertyChanged}"
-=======
                                  Text="{Binding SearchMedCheckQuery, UpdateSourceTrigger=PropertyChanged}"
->>>>>>> featur/medcheck-mangament
                                  Padding="8,6" 
                                  VerticalContentAlignment="Center" 
                                  FontSize="13"
@@ -218,23 +141,6 @@
                                  BorderBrush="{StaticResource BorderBrush}"/>
                     </Grid>
 
-<<<<<<< HEAD
-                    <!-- جدول بيانات الفحوصات المتاحة مع التحكم بالترقيم -->
-                    <controls:PaginatedGridControl 
-                             Grid.Row="1"
-                             ItemsSource="{Binding AvailableExaminationsList}"
-                             SelectedItem="{Binding SelectedAvailableExamination, Mode=TwoWay}"
-                             CurrentPage="{Binding AvailableCurrentPage, Mode=TwoWay}"
-                             TotalRows="{Binding AvailableTotalRows, Mode=TwoWay}"
-                             NumberOfRows="{Binding AvailablePageSize, Mode=TwoWay}"
-                             PageChangedCommand="{Binding AvailablePageChangedCommand}"
-                             RowDoubleClickCommand="{Binding AddExaminationToVisitCommand}">
-
-                        <DataGridTextColumn Header="الرقم" Binding="{Binding ID}" Width="0.8*"/>
-                        <DataGridTextColumn Header="اسم الفحص" Binding="{Binding MED_NAME}" Width="2*"/>
-                        <DataGridTextColumn Header="نوع الفحص" Binding="{Binding MED_TYPE}" Width="1.3*"/>
-                        <DataGridTextColumn Header="سعر الفحص" Binding="{Binding MED_PRICE, StringFormat={}{0:N2}}" Width="1.2*"/>
-=======
                     <!-- جدول البيانات الرئيسي الممتد -->
                     <controls:PaginatedGridControl 
                              Grid.Row="1"
@@ -245,31 +151,23 @@
                              NumberOfRows="{Binding AllMedChecksPageSize, Mode=TwoWay}"
                              PageChangedCommand="{Binding AllMedChecksPageChangedCommand}">
 
-                        <DataGridTextColumn Header="كود الفحص" Binding="{Binding MEDCHECK_CODE}" Width="0.8*"/>
-                        <DataGridTextColumn Header="اسم الفحص" Binding="{Binding MEDCHECK_NAME}" Width="2*"/>
-                        <DataGridTextColumn Header="نوع الفحص" Binding="{Binding MEDCHECK_TYPE}" Width="1.2*"/>
-                        <DataGridTextColumn Header="السعر" Binding="{Binding MEDCHECK_PRICE}" Width="1*"/>
->>>>>>> featur/medcheck-mangament
+                        <controls:PaginatedGridControl.Columns>
+                            <DataGridTextColumn Header="كود الفحص" Binding="{Binding MEDCHECK_CODE}" Width="0.8*"/>
+                            <DataGridTextColumn Header="اسم الفحص" Binding="{Binding MEDCHECK_NAME}" Width="2*"/>
+                            <DataGridTextColumn Header="نوع الفحص" Binding="{Binding MEDCHECK_TYPE}" Width="1.2*"/>
+                            <DataGridTextColumn Header="السعر" Binding="{Binding MEDCHECK_PRICE}" Width="1*"/>
+                        </controls:PaginatedGridControl.Columns>
 
                     </controls:PaginatedGridControl>
                 </Grid>
             </GroupBox>
 
-<<<<<<< HEAD
-            <!-- العمود الثاني (الأيسر): فحوصات الزيارة وفي الأسفل بطاقة المريض المثبتة -->
-            <Grid Grid.Column="1" Margin="6,0,0,0">
-                <Grid.RowDefinitions>
-                    <!-- جدول فحوصات الزيارة يأخذ معظم المساحة العلوية -->
-                    <RowDefinition Height="*"/>
-                    <!-- بطاقة المريض مثبتة في الأسفل تماماً -->
-=======
             <!-- العمود الثاني: فحوصات الزيارة الحالية وفي أسفلها بطاقة المريض -->
             <Grid Grid.Column="1" Margin="6,0,0,0">
                 <Grid.RowDefinitions>
                     <!-- جدول فحوصات الزيارة -->
                     <RowDefinition Height="*"/>
                     <!-- بطاقة المريض مثبتة في الأسفل -->
->>>>>>> featur/medcheck-mangament
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
@@ -284,40 +182,24 @@
                           Padding="6">
 
                     <controls:PaginatedGridControl 
-<<<<<<< HEAD
-                                 ItemsSource="{Binding VisitExaminationsList}"
-                                 SelectedItem="{Binding SelectedVisitExamination, Mode=TwoWay}"
-                                 CurrentPage="{Binding VisitCurrentPage, Mode=TwoWay}"
-=======
                                  ItemsSource="{Binding VisitMedChecksList}"
                                  SelectedItem="{Binding SelectedVisitMedCheck, Mode=TwoWay}"
                                  CurrentPage="{Binding VisitPage, Mode=TwoWay}"
->>>>>>> featur/medcheck-mangament
                                  TotalRows="{Binding VisitTotalRows, Mode=TwoWay}"
                                  NumberOfRows="{Binding VisitPageSize, Mode=TwoWay}"
                                  PageChangedCommand="{Binding VisitPageChangedCommand}">
 
-<<<<<<< HEAD
-                        <DataGridTextColumn Header="الرقم" Binding="{Binding ID}" Width="0.8*"/>
-                        <DataGridTextColumn Header="اسم الفحص" Binding="{Binding MED_NAME}" Width="1.8*"/>
-                        <DataGridTextColumn Header="نوع الفحص" Binding="{Binding MED_TYPE}" Width="1.2*"/>
-                        <DataGridTextColumn Header="السعر" Binding="{Binding MED_PRICE, StringFormat={}{0:N2}}" Width="1*"/>
-                        <DataGridTextColumn Header="النتيجة" Binding="{Binding MED_RESULT}" Width="1.2*"/>
-=======
-                        <DataGridTextColumn Header="كود الفحص" Binding="{Binding MEDCHECK_CODE}" Width="0.8*"/>
-                        <DataGridTextColumn Header="اسم الفحص" Binding="{Binding MEDCHECK_NAME}" Width="2*"/>
-                        <DataGridTextColumn Header="نوع الفحص" Binding="{Binding MEDCHECK_TYPE}" Width="1.2*"/>
-                        <DataGridTextColumn Header="السعر" Binding="{Binding MEDCHECK_PRICE}" Width="1*"/>
->>>>>>> featur/medcheck-mangament
+                        <controls:PaginatedGridControl.Columns>
+                            <DataGridTextColumn Header="كود الفحص" Binding="{Binding MEDCHECK_CODE}" Width="0.8*"/>
+                            <DataGridTextColumn Header="اسم الفحص" Binding="{Binding MEDCHECK_NAME}" Width="2*"/>
+                            <DataGridTextColumn Header="نوع الفحص" Binding="{Binding MEDCHECK_TYPE}" Width="1.2*"/>
+                            <DataGridTextColumn Header="السعر" Binding="{Binding MEDCHECK_PRICE}" Width="1*"/>
+                        </controls:PaginatedGridControl.Columns>
 
                     </controls:PaginatedGridControl>
                 </GroupBox>
 
-<<<<<<< HEAD
-                <!-- 2. بطاقة المريض في الأسفل تحت جدول فحوصات الزيارة مباشرة -->
-=======
                 <!-- 2. بطاقة المريض مثبتة بأسفل جدول الزيارة -->
->>>>>>> featur/medcheck-mangament
                 <customers:CustomerCard Grid.Row="1" 
                                        DataContext="{Binding Customer}" 
                                        Margin="0"
