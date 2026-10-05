@@ -1,0 +1,153 @@
+﻿<Window x:Class="SMART_CLINIC_SOFTWAR_2026.View.Apointments.AppointmentManagementWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SMART_CLINIC_SOFTWAR_2026.View.Apointments"
+        xmlns:customers="clr-namespace:SMART_CLINIC_SOFTWAR_2026.View.Customers"
+        xmlns:controls="clr-namespace:SMART_CLINIC_SOFTWAR_2026.View.Resorsus.DataViews"
+        mc:Ignorable="d"
+        Title="إدارة مواعيد المريض" 
+        Height="720" 
+        Width="1100"
+        WindowStartupLocation="CenterScreen"
+        FlowDirection="RightToLeft"
+        Background="{StaticResource BgMainBrush}">
+
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" 
+                Background="{StaticResource SurfaceBrush}" 
+                BorderBrush="{StaticResource BorderBrush}" 
+                BorderThickness="1" 
+                CornerRadius="8" 
+                Padding="8" 
+                Margin="0,0,0,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button x:Name="BtnNewAppointment" 
+                            Command="{Binding NewAppointmentCommand}" 
+                            Padding="12,6" Margin="0,0,6,0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="➕" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="إضافة موعد " VerticalAlignment="Center" FontWeight="Bold"/>
+                        </StackPanel>
+                    </Button>
+
+ 
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button x:Name="BtnCancelAppointment" 
+                            Command="{Binding CancelAppointmentCommand}" 
+                            Padding="12,6" Margin="6,0,0,0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🚫" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="إلغاء الموعد" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button x:Name="BtnDelete" 
+                            Command="{Binding DeleteAppointmentCommand}" 
+                            Padding="12,6" Margin="6,0,0,0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🗑️" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="حذف" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.8*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <GroupBox Grid.Column="0" 
+                      Header="سجل مواعيد المريض المحدد" 
+                      FontWeight="Bold" 
+                      Foreground="{StaticResource TextPrimaryBrush}" 
+                      Background="{StaticResource SurfaceBrush}" 
+                      BorderBrush="{StaticResource BorderBrush}" 
+                      Margin="0,0,6,0" 
+                      Padding="6">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" Margin="0,0,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button Grid.Column="0" 
+                                Command="{Binding ClearSearchCommand}"
+                                Padding="10,5" Margin="0,0,6,0">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="🧹" Margin="0,0,4,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="مسح" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                            </StackPanel>
+                        </Button>
+
+                        <TextBox Grid.Column="1" 
+                                 Text="{Binding SearchPatientAppointmentQuery, UpdateSourceTrigger=PropertyChanged}"
+                                 Padding="8,6" 
+                                 VerticalContentAlignment="Center" 
+                                 FontSize="13"
+                                 Background="{StaticResource SurfaceBrush}"
+                                 BorderBrush="{StaticResource BorderBrush}"/>
+                    </Grid>
+
+                    <!-- جدول استعراض ومراقبة مواعيد هذا المريض -->
+                    <controls:PaginatedGridControl 
+                             Grid.Row="1"
+                             ItemsSource="{Binding PatientAppointmentsList}"
+                             SelectedItem="{Binding SelectedPatientAppointment, Mode=TwoWay}"
+                             CurrentPage="{Binding PatientCurrentPage, Mode=TwoWay}"
+                             TotalRows="{Binding PatientTotalRows, Mode=TwoWay}"
+                             NumberOfRows="{Binding PatientPageSize, Mode=TwoWay}"
+                             PageChangedCommand="{Binding PatientPageChangedCommand}">
+
+                        <DataGridTextColumn Header="كود الموعد" Binding="{Binding APO_CODE}" Width="0.8*"/>
+                        <DataGridTextColumn Header="تاريخ الموعد" Binding="{Binding APO_DATE, StringFormat={}{0:yyyy/MM/dd}}" Width="1.2*"/>
+                        <DataGridTextColumn Header="الوقت" Binding="{Binding APO_TIME}" Width="1*"/>
+                        <DataGridTextColumn Header="اسم الطبيب" Binding="{Binding DOC_NAME}" Width="1.5*"/>
+                        <DataGridTextColumn Header="حالة الموعد" Binding="{Binding APO_STATUS}" Width="1*"/>
+                        <DataGridTextColumn Header="ملاحظات" Binding="{Binding APO_NOTE}" Width="1.8*"/>
+
+                    </controls:PaginatedGridControl>
+                </Grid>
+            </GroupBox>
+
+            <!-- العمود الأيسر: بطاقة المريض معنونة وتتمدد لتملأ المساحة الرأسية بالكامل -->
+            <GroupBox Grid.Column="1" 
+                      Header="بيانات المريض المحدد" 
+                      FontWeight="Bold" 
+                      Foreground="{StaticResource TextPrimaryBrush}" 
+                      Background="{StaticResource SurfaceBrush}" 
+                      BorderBrush="{StaticResource BorderBrush}"
+                      Margin="6,0,0,0"
+                      Padding="6">
+
+                <customers:CustomerCard DataContext="{Binding Customer}" 
+                                       HorizontalAlignment="Stretch"
+                                       VerticalAlignment="Stretch"/>
+            </GroupBox>
+        </Grid>
+    </Grid>
+</Window>

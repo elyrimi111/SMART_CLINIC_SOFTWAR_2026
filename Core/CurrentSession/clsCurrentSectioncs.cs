@@ -14,13 +14,7 @@ namespace Core.CurrentSession
     {
 
       public static clsClinc CurrentClinc { get; set; } = new clsClinc();
-      public static clsUser CurrentUser { get; set; }  = new clsUser();
-
-      
-
-     
-
-       
+      public static clsUser CurrentUser { get; set; }  = new clsUser(); 
 
     }
 }
