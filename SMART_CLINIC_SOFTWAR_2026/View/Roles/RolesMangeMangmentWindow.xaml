@@ -1,0 +1,300 @@
+﻿<Window x:Class="SMART_CLINIC_SOFTWAR_2026.View.Roles.RolesMangeMangmentWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SMART_CLINIC_SOFTWAR_2026.View.Roles"
+        xmlns:controls="clr-namespace:SMART_CLINIC_SOFTWAR_2026.View.Resorsus.DataViews"
+        mc:Ignorable="d"
+        Title="إدارة الأدوار والصلاحيات" 
+        Height="720" 
+        Width="1200"
+        MinHeight="650" 
+        MinWidth="1000"
+        WindowStartupLocation="CenterScreen"
+        FlowDirection="RightToLeft"
+        Background="{StaticResource BgMainBrush}">
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- الهيدر الرئيسي -->
+        <Border Grid.Row="0" 
+                Background="{StaticResource HeaderBgBrush}" 
+                BorderBrush="{StaticResource BorderBrush}" 
+                BorderThickness="0,0,0,1" 
+                Padding="10,8">
+            <TextBlock Text="إدارة الأدوار والوظائف وصلاحيات النظام" 
+                       FontSize="16" 
+                       FontWeight="Bold" 
+                       HorizontalAlignment="Center" 
+                       Foreground="{StaticResource TextPrimaryBrush}"/>
+        </Border>
+
+        <!-- محتوى النافذة الرئيسي -->
+        <Grid Grid.Row="1" Margin="8">
+            <Grid.ColumnDefinitions>
+                <!-- العمود الأيمن: نموذج الإدخال + جدول الأدوار -->
+                <ColumnDefinition Width="420"/>
+                <!-- العمود الأيسر: جدول صلاحيات الدور المحدد -->
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- القسم الأيمن: نموذج بيانات الدور + جدول الأدوار + الأزرار -->
+            <Grid Grid.Column="0" Margin="0,0,8,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- 1. نموذج بيانات الدور -->
+                <GroupBox Grid.Row="0" 
+                          Header="بيانات الدور" 
+                          FontWeight="Bold" 
+                          Foreground="{StaticResource TextPrimaryBrush}" 
+                          Background="{StaticResource SurfaceBrush}" 
+                          BorderBrush="{StaticResource BorderBrush}" 
+                          Padding="8"
+                          Margin="0,0,0,8">
+                    <StackPanel Margin="0,2">
+                        <!-- المعرف -->
+                        <Grid Margin="0,4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="110"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="معرف الدور" VerticalAlignment="Center" HorizontalAlignment="Right" FontWeight="Normal" Margin="0,0,5,0"/>
+                            <TextBox Grid.Column="1" Text="{Binding SelectedRole.ROL_ID, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"/>
+                        </Grid>
+
+                        <!-- اسم الدور -->
+                        <Grid Margin="0,4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="110"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="اسم الدور" VerticalAlignment="Center" HorizontalAlignment="Right" FontWeight="Normal" Margin="0,0,5,0"/>
+                            <TextBox Grid.Column="1" Text="{Binding SelectedRole.ROL_NAME, UpdateSourceTrigger=PropertyChanged}"/>
+                        </Grid>
+
+                        <!-- المفتاح البرمجي -->
+                        <Grid Margin="0,4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="110"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="المفتاح البرمجي" VerticalAlignment="Center" HorizontalAlignment="Right" FontWeight="Normal" Margin="0,0,5,0"/>
+                            <TextBox Grid.Column="1" Text="{Binding SelectedRole.ROL_KEY, UpdateSourceTrigger=PropertyChanged}"/>
+                        </Grid>
+
+                        <!-- الوصف -->
+                        <Grid Margin="0,4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="110"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="الوصف" VerticalAlignment="Center" HorizontalAlignment="Right" FontWeight="Normal" Margin="0,0,5,0"/>
+                            <TextBox Grid.Column="1" Text="{Binding SelectedRole.ROL_DESCRIPTION, UpdateSourceTrigger=PropertyChanged}"/>
+                        </Grid>
+
+                        <!-- الحالة -->
+                        <Grid Margin="0,4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="110"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="الحالة" VerticalAlignment="Center" HorizontalAlignment="Right" FontWeight="Normal" Margin="0,0,5,0"/>
+                            <CheckBox Grid.Column="1" Content="دور نشط" IsChecked="{Binding SelectedRole.STATUS, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"/>
+                        </Grid>
+                    </StackPanel>
+                </GroupBox>
+
+                <!-- 2. جدول الأدوار المرقّم -->
+                <GroupBox Grid.Row="1" 
+                          Header="قائمة الأدوار المعتمدة" 
+                          FontWeight="Bold" 
+                          Foreground="{StaticResource TextPrimaryBrush}" 
+                          Background="{StaticResource SurfaceBrush}" 
+                          BorderBrush="{StaticResource BorderBrush}" 
+                          Padding="4">
+                    <controls:PaginatedGridControl 
+                                 ItemsSource="{Binding RolesList}"
+                                 SelectedItem="{Binding SelectedRole, Mode=TwoWay}"
+                                 CurrentPage="{Binding RolesCurrentPage, Mode=TwoWay}"
+                                 TotalRows="{Binding RolesTotalRows, Mode=TwoWay}"
+                                 NumberOfRows="{Binding RolesPageSize, Mode=TwoWay}"
+                                 PageChangedCommand="{Binding RolesPageChangedCommand}">
+
+                        <DataGridTextColumn Header="المعرف" Binding="{Binding ROL_ID}" Width="0.6*"/>
+                        <DataGridTextColumn Header="اسم الدور" Binding="{Binding ROL_NAME}" Width="1.8*"/>
+                        <DataGridTextColumn Header="المفتاح" Binding="{Binding ROL_KEY}" Width="1.2*"/>
+
+                        <DataGridTemplateColumn Header="الحالة" Width="0.8*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock TextAlignment="Center" VerticalAlignment="Center">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Text" Value="غير نشط"/>
+                                                <Setter Property="Foreground" Value="Red"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding STATUS}" Value="True">
+                                                        <Setter Property="Text" Value="نشط"/>
+                                                        <Setter Property="Foreground" Value="Green"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                    </controls:PaginatedGridControl>
+                </GroupBox>
+
+                <!-- 3. شريط أزرار التحكم بالدور -->
+                <Border Grid.Row="2" 
+                        Background="{StaticResource HeaderBgBrush}" 
+                        BorderBrush="{StaticResource BorderBrush}" 
+                        BorderThickness="1" 
+                        Margin="0,8,0,0" 
+                        Padding="4">
+                    <UniformGrid Columns="4" Rows="1">
+                        <Button x:Name="BtnSave" 
+                                Command="{Binding SaveRoleCommand}" 
+                                Style="{StaticResource AccentButtonStyle}" 
+                                Margin="2">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <TextBlock Text="💾" Margin="0,0,4,0" VerticalAlignment="Center" Foreground="{StaticResource TextWhiteBrush}"/>
+                                <TextBlock Text="حفظ" VerticalAlignment="Center" Foreground="{StaticResource TextWhiteBrush}"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button x:Name="BtnEdit" 
+                                Command="{Binding UpdateRoleCommand}" 
+                                Margin="2">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <TextBlock Text="✏️" Margin="0,0,4,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="تعديل" VerticalAlignment="Center" FontWeight="Bold"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button x:Name="BtnDelete" 
+                                Command="{Binding DeleteRoleCommand}" 
+                                Style="{StaticResource DangerButtonStyle}" 
+                                Margin="2">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <TextBlock Text="✖" Margin="0,0,4,0" VerticalAlignment="Center" Foreground="{StaticResource TextWhiteBrush}"/>
+                                <TextBlock Text="حذف" VerticalAlignment="Center" Foreground="{StaticResource TextWhiteBrush}"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button x:Name="BtnClear" 
+                                Command="{Binding ClearFieldsCommand}" 
+                                Margin="2">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <TextBlock Text="🧹" Margin="0,0,4,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="مسح" VerticalAlignment="Center" FontWeight="Bold"/>
+                            </StackPanel>
+                        </Button>
+                    </UniformGrid>
+                </Border>
+            </Grid>
+
+            <!-- القسم الأيسر: شريط البحث وصلاحيات الدور المحدد -->
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- شريط البحث للصلاحيات -->
+                <Grid Grid.Row="0" Margin="0,0,0,8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Column="0" 
+                            Command="{Binding ClearPermissionSearchCommand}"
+                            Padding="10,4" 
+                            Margin="0,0,8,0"
+                            VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🧹" Margin="0,0,4,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="مسح" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                        </StackPanel>
+                    </Button>
+
+                    <TextBox Grid.Column="1" 
+                             Text="{Binding SearchPermissionQuery, UpdateSourceTrigger=PropertyChanged}"
+                             Padding="8,6" 
+                             VerticalContentAlignment="Center" 
+                             FontSize="13"
+                             Background="{StaticResource SurfaceBrush}"
+                             BorderBrush="{StaticResource BorderBrush}"/>
+                </Grid>
+
+                <!-- جدول صلاحيات الدور المرقّم -->
+                <GroupBox Grid.Row="1" 
+                          Header="صلاحيات الدور المحدد" 
+                          FontWeight="Bold" 
+                          Foreground="{StaticResource TextPrimaryBrush}" 
+                          Background="{StaticResource SurfaceBrush}" 
+                          BorderBrush="{StaticResource BorderBrush}" 
+                          Padding="4">
+                    <controls:PaginatedGridControl 
+                                 ItemsSource="{Binding RolePermissionsList}"
+                                 SelectedItem="{Binding SelectedRolePermission, Mode=TwoWay}"
+                                 CurrentPage="{Binding PermissionsCurrentPage, Mode=TwoWay}"
+                                 TotalRows="{Binding PermissionsTotalRows, Mode=TwoWay}"
+                                 NumberOfRows="{Binding PermissionsPageSize, Mode=TwoWay}"
+                                 PageChangedCommand="{Binding PermissionsPageChangedCommand}">
+
+                        <DataGridTextColumn Header="اسم الشاشة / النوافذ" Binding="{Binding PermissionName}" Width="2*" IsReadOnly="True"/>
+                        <DataGridCheckBoxColumn Header="فتح" Binding="{Binding CanView, UpdateSourceTrigger=PropertyChanged}" Width="0.8*"/>
+                        <DataGridCheckBoxColumn Header="إضافة" Binding="{Binding CanAdd, UpdateSourceTrigger=PropertyChanged}" Width="0.8*"/>
+                        <DataGridCheckBoxColumn Header="تعديل" Binding="{Binding CanEdit, UpdateSourceTrigger=PropertyChanged}" Width="0.8*"/>
+                        <DataGridCheckBoxColumn Header="حذف" Binding="{Binding CanDelete, UpdateSourceTrigger=PropertyChanged}" Width="0.8*"/>
+                        <DataGridCheckBoxColumn Header="طباعة" Binding="{Binding CanPrint, UpdateSourceTrigger=PropertyChanged}" Width="0.8*"/>
+
+                    </controls:PaginatedGridControl>
+                </GroupBox>
+
+                <!-- أزرار الاختيار السريع للصلاحيات -->
+                <Border Grid.Row="2" 
+                        Background="{StaticResource SurfaceBrush}" 
+                        BorderBrush="{StaticResource BorderBrush}" 
+                        BorderThickness="1" 
+                        CornerRadius="4"
+                        Margin="0,8,0,0" 
+                        Padding="6">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <Button Command="{Binding SelectAllRolePermissionsCommand}" Padding="12,4" Margin="0,0,6,0">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="☑" Margin="0,0,4,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="تحديد الكل" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Command="{Binding UnselectAllRolePermissionsCommand}" Padding="12,4">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="☐" Margin="0,0,4,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="إلغاء الكل" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

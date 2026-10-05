@@ -22,7 +22,6 @@
         <!-- كروت زجاجية متناسقة مع ثيم مدار الطبي -->
         <SolidColorBrush x:Key="GlassCardBg" Color="#E6FFFFFF"/>
         <SolidColorBrush x:Key="GlassBorderBrush" Color="#B8D5D8"/>
-        <SolidColorBrush x:Key="UserTypeBgBrush" Color="#EFF5F5"/>
         <SolidColorBrush x:Key="InfoBoxBgBrush" Color="#F4F8F8"/>
 
         <!-- أيقونات Vector مميزة للوصف الطبي -->
@@ -65,7 +64,7 @@
                         Width="410" 
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
-                        Margin="369,99,0,0"
+                        Margin="369,85,0,0"
                         Padding="20,18">
                     <Border.Effect>
                         <DropShadowEffect Color="{StaticResource ColorPrimaryDark}" Direction="270" ShadowDepth="4" BlurRadius="18" Opacity="0.18"/>
@@ -74,63 +73,45 @@
                     <StackPanel>
 
                         <!-- اسم المستخدم -->
-                        <Grid Margin="0,0,0,10">
+                        <Grid Margin="0,0,0,12">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="90"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" Text="اسم المستخدم" VerticalAlignment="Center" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}"/>
                             <ComboBox x:Name="CmbUsername" 
                                       Grid.Column="1" 
-                                      Height="30" 
+                                      Height="32" 
                                       IsEditable="True"
                                       ItemsSource="{Binding UsersList}" 
+                                      SelectedItem="{Binding SelectedUser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                       DisplayMemberPath="USER_NAME" 
                                       TextSearch.TextPath="USER_NAME"
-                                      SelectedValuePath="USER_NAME"
-                                      SelectedValue="{Binding Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                      Text="{Binding Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         </Grid>
 
                         <!-- كلمة المرور -->
-                        <Grid Margin="0,0,0,10">
+                        <Grid Margin="0,0,0,14">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="90"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" Text="كلمة المرور" VerticalAlignment="Center" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}"/>
                             <PasswordBox x:Name="TxtPassword" 
                                          Grid.Column="1" 
-                                         Height="30"/>
-                        </Grid>
-
-                        <!-- نوع المستخدم -->
-                        <Grid Margin="0,0,0,10">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="100"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="نوع المستخدم" VerticalAlignment="Center" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}"/>
-                            <Border Grid.Column="1" Background="{StaticResource UserTypeBgBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="4" Height="30">
-                                <TextBlock x:Name="TxtUserType" 
-                                           VerticalAlignment="Center"
-                                           TextAlignment="Center"
-                                           Foreground="{StaticResource PrimaryBrush}"
-                                           FontWeight="Bold"
-                                           FontSize="12"
-                                           Text="{Binding SelectedUserType, Mode=OneWay}"/>
-                            </Border>
+                                         Height="32"/>
                         </Grid>
 
                         <!-- زر تسجيل الدخول -->
-                        <Grid Margin="0,2,0,2">
+                        <Grid Margin="0,2,0,4">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="90"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <Button x:Name="BtnLogin" 
                                     Grid.Column="1" 
                                     Content="تسجيل الدخول" 
-                                    Height="32" 
+                                    Height="34" 
                                     IsDefault="True" 
                                     Cursor="Hand"
                                     Style="{StaticResource AccentButtonStyle}" 
@@ -139,9 +120,9 @@
                         </Grid>
 
                         <!-- رسالة الخطأ (مساحة كافية تتسع للسطور دون قطع) -->
-                        <Grid MinHeight="22" Margin="0,4,0,2">
+                        <Grid MinHeight="24" Margin="0,4,0,4">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="90"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="1"
@@ -161,8 +142,8 @@
                                 BorderBrush="{StaticResource BorderBrush}" 
                                 BorderThickness="1" 
                                 CornerRadius="8" 
-                                Margin="0,4,0,0" 
-                                Padding="8,8">
+                                Margin="0,6,0,0" 
+                                Padding="8,10">
                             <StackPanel>
                                 <TextBlock Text="عن النظام" 
                                            FontSize="11" 
@@ -194,7 +175,7 @@
                         </Border>
 
                         <!-- حقوق الملكية -->
-                        <Border Margin="0,8,0,0" 
+                        <Border Margin="0,10,0,0" 
                                 Padding="0,6,0,0" 
                                 BorderBrush="{StaticResource BorderBrush}" 
                                 BorderThickness="0,1,0,0">

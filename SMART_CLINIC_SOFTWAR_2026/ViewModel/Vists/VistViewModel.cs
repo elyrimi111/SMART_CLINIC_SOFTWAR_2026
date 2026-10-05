@@ -6,16 +6,19 @@ using Core.Entites.Clinc;
 using Core.Entites.Customer;
 using Core.Entites.Orders;
 using Core.Entites.Vist;
+using SMART_CLINIC_SOFTWAR_2026.View.Apointments;
 using SMART_CLINIC_SOFTWAR_2026.View.Clinc;
 using SMART_CLINIC_SOFTWAR_2026.View.Customers;
 using SMART_CLINIC_SOFTWAR_2026.View.Diagnose;
+using SMART_CLINIC_SOFTWAR_2026.View.Holdays;
+using SMART_CLINIC_SOFTWAR_2026.View.MedCheck; 
 using SMART_CLINIC_SOFTWAR_2026.View.Medicens;
+using SMART_CLINIC_SOFTWAR_2026.View.MedRepo;
 using SMART_CLINIC_SOFTWAR_2026.View.Services;
 using SMART_CLINIC_SOFTWAR_2026.ViewModel.Clinc;
 using SMART_CLINIC_SOFTWAR_2026.ViewModel.Commands;
 using SMART_CLINIC_SOFTWAR_2026.ViewModel.Customers;
 using SMART_CLINIC_SOFTWAR_2026.ViewModel.Medicens;
-using SMART_CLINIC_SOFTWAR_2026.View.MedCheck; 
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -26,8 +29,6 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using SMART_CLINIC_SOFTWAR_2026.View.Holdays;
-using SMART_CLINIC_SOFTWAR_2026.View.MedRepo;
 
 namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Vists
 {
@@ -452,6 +453,7 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Vists
 
         #region Methods
 
+        #region Methods
         private void CalculateTotal()
         {
             VIS_TOTAL = VIS_PRICE - VIS_DISCOUNT;
@@ -687,6 +689,7 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Vists
                 MessageBox.Show(ex.Message, "خطأ في جلب بيانات الطلبات", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+        #endregion
 
         #region Lookups Methods
 
@@ -787,7 +790,6 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Vists
 
         }
 
-
         private async Task OpenSickLeave()
         {
             var window = new HoldayFromVistWindow(CUST_ID);
@@ -804,8 +806,10 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Vists
 
         private async Task OpenAppointments()
         {
-            MessageBox.Show("تم التحقق من تفعيل الزيارة: سيتم فتح شاشة مواعيد المريض.", "المواعيد", MessageBoxButton.OK, MessageBoxImage.Information);
-            await Task.CompletedTask;
+
+            var window = new AppointmentManagementWindow(CUST_ID);
+
+            window.ShowDialog();
         }
 
         private async Task OpenPatientCard()

@@ -15,6 +15,8 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Users
     {
         #region Fields & Properties
 
+        private readonly UsersManger _usersManager;
+
         private clsUser _currentUser;
         public clsUser CurrentUser
         {
@@ -22,7 +24,7 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Users
             set { _currentUser = value; OnPropertyChanged(); }
         }
 
-        private string _errorMessage;
+        private string _errorMessage = string.Empty;
         public string ErrorMessage
         {
             get => _errorMessage;
@@ -55,12 +57,14 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Users
 
         public ChangeUserPasswordViewModel()
         {
+            _usersManager = new UsersManger();
+
             VerifyPasswordCommand = new RelayCommand(ExecuteVerifyPassword);
             SavePasswordCommand = new RelayCommand(ExecuteSavePassword, CanExecuteSavePassword);
             CloseWindowCommand = new RelayCommand(ExecuteCloseWindow);
+
             CurrentUser = clsCurrentSectioncs.CurrentUser;
         }
-
 
         #endregion
 
@@ -82,7 +86,7 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Users
                     return;
                 }
 
-                if ( string.Equals(clsCurrentSectioncs.CurrentUser.USER_PASSWORD, currentPassword))
+                if (CurrentUser != null && string.Equals(CurrentUser.USER_PASSWORD, currentPassword))
                 {
                     IsCurrentPasswordVerified = true;
                     ErrorMessage = string.Empty;
@@ -111,8 +115,8 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Users
                 var txtNew = passwordBoxes[0] as PasswordBox;
                 var txtConfirm = passwordBoxes[1] as PasswordBox;
 
-                string newPassword = txtNew?.Password;
-                string confirmPassword = txtConfirm?.Password;
+                string newPassword = txtNew?.Password ?? string.Empty;
+                string confirmPassword = txtConfirm?.Password ?? string.Empty;
 
                 if (string.IsNullOrWhiteSpace(newPassword))
                 {
@@ -146,11 +150,24 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Users
 
                 try
                 {
-                    UsersManger.UpdateUser(CurrentUser.USER_ID,CurrentUser.USER_CODE,CurrentUser.USER_NAME, newPassword,CurrentUser.USER_TYPE,CurrentUser.CLI_ID);
+                    // تحديث كلمة المرور في كائن المستخدم الحالي
+                    CurrentUser.USER_PASSWORD = newPassword;
 
-                    MessageBox.Show("تم تغيير كلمة المرور بنجاح!", "تأكيد", MessageBoxButton.OK, MessageBoxImage.Information);
+                    // حفظ التعديلات في قاعدة البيانات
+                    bool isUpdated = _usersManager.UpdateUser(CurrentUser);
 
-                    ExecuteCloseWindow(parameter);
+                    if (isUpdated)
+                    {
+                        // تحديث الجلسة الحالية بكلمة المرور الجديدة
+                        clsCurrentSectioncs.CurrentUser.USER_PASSWORD = newPassword;
+
+                        MessageBox.Show("تم تغيير كلمة المرور بنجاح!", "تأكيد", MessageBoxButton.OK, MessageBoxImage.Information);
+                        ExecuteCloseWindow(parameter);
+                    }
+                    else
+                    {
+                        ErrorMessage = "فشل تحديث كلمة المرور، يرجى المحاولة لاحقاً.";
+                    }
                 }
                 catch (Exception ex)
                 {
