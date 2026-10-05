@@ -2,6 +2,7 @@
 using BLL.Mangers.Customers;
 using Core.Entites.Customer;
 using Core.Entities.Appointments;
+using SMART_CLINIC_SOFTWAR_2026.View.Apointments;
 using SMART_CLINIC_SOFTWAR_2026.ViewModel.Commands;
 using System;
 using System.Collections.Generic;
@@ -22,9 +23,7 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Apointments
         /// <summary>
         /// Default constructor for WPF Design-time support
         /// </summary>
-        public AppointmentManagementViewModel() : this(null)
-        {
-        }
+ 
 
         public AppointmentManagementViewModel(long? custId)
         {
@@ -251,8 +250,25 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Apointments
 
         private void ExecuteNewAppointment()
         {
-            // فتح شاشة إضافة موعد جديد للمريض
+            var appointmentView = new ApointmentsView();
+
+            var popupWindow = new Window
+            {
+                Title = "حجز موعد جديد",
+                Content = appointmentView,
+                Width = 1200,
+                Height = 750,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                ResizeMode = ResizeMode.NoResize,
+                FlowDirection = FlowDirection.RightToLeft, 
+                Background = (System.Windows.Media.Brush)Application.Current.FindResource("BgMainBrush") 
+            };
+
+            popupWindow.ShowDialog();
+
+          _ = LoadPatientAppointmentsAsync();
         }
+
 
         private void ExecuteSearchPatientAppointments()
         {
