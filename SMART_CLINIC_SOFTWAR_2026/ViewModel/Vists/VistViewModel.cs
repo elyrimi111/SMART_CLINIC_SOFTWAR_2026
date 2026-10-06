@@ -453,6 +453,7 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Vists
 
         #region Methods
 
+        #region Methods
         private void CalculateTotal()
         {
             VIS_TOTAL = VIS_PRICE - VIS_DISCOUNT;
@@ -688,6 +689,7 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Vists
                 MessageBox.Show(ex.Message, "خطأ في جلب بيانات الطلبات", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+        #endregion
 
         #region Lookups Methods
 

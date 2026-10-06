@@ -23,6 +23,8 @@ using System.Windows.Input;
 using System.Security.Cryptography.Xml;
 using SMART_CLINIC_SOFTWAR_2026.View.Users;
 using SMART_CLINIC_SOFTWAR_2026.ViewModel.Resption;
+using SMART_CLINIC_SOFTWAR_2026.View.Roles;
+using SMART_CLINIC_SOFTWAR_2026.ViewModel.Users;
 
 
 namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.MainLayoutViewModel
@@ -48,14 +50,12 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.MainLayoutViewModel
             set { CurrentClinc.CLI_NAME = value; }
             get { return CurrentClinc.CLI_NAME; }
         }
-
-
+        
         public string CLI_LOC
         {
             set { CurrentClinc.CLI_LOC = value; }
             get { return CurrentClinc.CLI_LOC; }
         }
-
 
         public long CLI_CODE
         {
@@ -87,10 +87,8 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.MainLayoutViewModel
             }
         }
 
-        // دالة لتحديث أو جلب البيانات من الخدمات / قاعدة البيانات
         public void LoadDashboardData()
         {
-            // مثال: اسند القيم الحقيقية هنا من Database أو Services
             WaitingPatientsCount = 5;
             TodayAppointmentsCount = 12;
         }
@@ -131,6 +129,7 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.MainLayoutViewModel
         public ICommand LogoutCommand { get; }
         public ICommand ExitAppCommand { get; }
         public ICommand ChangePasswordCommand { get; }
+        public ICommand OpenUsersCommand { get; }
         #endregion
 
         public MainLayoutViewModel()
@@ -152,7 +151,8 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.MainLayoutViewModel
             ExitAppCommand = new RelayCommand(ExecuteExitApp);
             ChangePasswordCommand = new RelayCommand(ExecuteChangePassword);
 
-            OpenTestingCommand = new RelayCommand(OpenTestingWindo);
+            OpenUsersCommand = new RelayCommand(ExecuteNavigateToUsers);
+
 
         }
 
@@ -218,8 +218,6 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.MainLayoutViewModel
             OpenOrSelectTab("استقبال المرضى", receptionView);
         }
 
-
-
         private void ExecuteNavigateToPatients(object? parameter)
         {
             OpenOrSelectTab("المرضى", new CustomersView());
@@ -269,6 +267,37 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.MainLayoutViewModel
         {
             OpenOrSelectTab("حول النظام", new ServicesView());
         }
+        private void ExecuteNavigateToUsers(object? parameter)
+        {
+            var vm = new UsersChoseOptionViewModel();
+
+            vm.OnNavigateToUsersList = () =>
+            {
+                var UserlistWindow = new UsersListWindow();
+                UserlistWindow.ShowDialog(); 
+            };
+
+            vm.OnNavigateToManageAccount = () =>
+            {
+ 
+                 var userMangementWindow = new UserMangementWindow();
+                userMangementWindow.ShowDialog();
+            };
+
+            vm.OnNavigateToRolesPermissions = () =>
+            {
+                MessageBox.Show("سيتم فتح شاشة إدارة الأدوار والصلاحيات هنا.", "الصلاحيات والأدوار", MessageBoxButton.OK, MessageBoxImage.Information);
+            };
+             
+            var usersView = new UsersChoseOptionView
+            {
+                DataContext = vm
+            };
+
+            OpenOrSelectTab("إدارة المستخدمين", usersView);
+        }
+
+
         #endregion
 
         #region Methods - Session Execution

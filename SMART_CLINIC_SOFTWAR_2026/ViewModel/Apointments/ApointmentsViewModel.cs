@@ -492,34 +492,57 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Apointments
         private void OpenDoctorsList()
         {
             var doctorsWin = new DoctorsListWindow();
-            if (Application.Current.MainWindow != null)
-                doctorsWin.Owner = Application.Current.MainWindow;
 
-            if (doctorsWin.ShowDialog() == true)
+            // 1. الاحتفاظ بالنافذة الرئيسية الحالية
+            var previousMainWindow = Application.Current.MainWindow;
+
+            try
             {
-                if (doctorsWin.DataContext is DoctorsListViewModel vm && vm.SelectedDoctor != null)
+                // 2. تعيين النافذة الجديدة لتصبح هي النافذة الأصلية للبرنامج
+                Application.Current.MainWindow = doctorsWin;
+
+                if (doctorsWin.ShowDialog() == true)
                 {
-                    DOC_ID = vm.SelectedDoctor.DOC_ID;
-                    DOC_NAME = vm.SelectedDoctor.DOC_NAME;
+                    if (doctorsWin.DataContext is DoctorsListViewModel vm && vm.SelectedDoctor != null)
+                    {
+                        DOC_ID = vm.SelectedDoctor.DOC_ID;
+                        DOC_NAME = vm.SelectedDoctor.DOC_NAME;
+                    }
                 }
+            }
+            finally
+            {
+
+                Application.Current.MainWindow = previousMainWindow;
             }
         }
 
         private void OpenCustomersList()
         {
             var customersWin = new CustomersListWindow();
-            if (Application.Current.MainWindow != null)
-                customersWin.Owner = Application.Current.MainWindow;
 
-            if (customersWin.ShowDialog() == true)
+            var previousMainWindow = Application.Current.MainWindow;
+
+            try
             {
-                if (customersWin.DataContext is CustomersListViewModel vm && vm.SelectedCustomer != null)
+                Application.Current.MainWindow = customersWin;
+
+                if (customersWin.ShowDialog() == true)
                 {
-                    CUST_ID = vm.SelectedCustomer.CUST_ID;
-                    CUST_NAME = $"{vm.SelectedCustomer.CUST_F_NAME} {vm.SelectedCustomer.CUST_T_NAME} {vm.SelectedCustomer.CUST_L_NAME}".Trim();
+                    if (customersWin.DataContext is CustomersListViewModel vm && vm.SelectedCustomer != null)
+                    {
+                        CUST_ID = vm.SelectedCustomer.CUST_ID;
+                        CUST_NAME = $"{vm.SelectedCustomer.CUST_F_NAME} {vm.SelectedCustomer.CUST_T_NAME} {vm.SelectedCustomer.CUST_L_NAME}".Trim();
+                    }
                 }
             }
+            finally
+            {
+
+                Application.Current.MainWindow = previousMainWindow;
+            }
         }
+
 
         #endregion
     }

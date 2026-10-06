@@ -181,8 +181,7 @@
 
                     </controls:PaginatedGridControl>
                 </GroupBox>
-
-                <!-- 2. بطاقة المريض في الأسفل تماماً تحت جدول تشخيصات الزيارة -->
+ 
                 <customers:CustomerCard Grid.Row="1" 
                                        DataContext="{Binding Customer}" 
                                        Margin="0"

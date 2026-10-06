@@ -1,9 +1,7 @@
-﻿using Core.Entites.Doctors;
-using Core.Entites.User;
+﻿using Core.Entites.User;
 using DAL.Repo.Users;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
 
 namespace BLL.Mangers.Users
 {
@@ -17,6 +15,7 @@ namespace BLL.Mangers.Users
         }
 
         #region Business Logic Methods
+
         public List<clsUser> GetAllUsers()
         {
             try
@@ -29,15 +28,20 @@ namespace BLL.Mangers.Users
             }
         }
 
-        public List<clsUser> GetAllByClincID(long CLI_ID)
+        public List<clsUser> GetAllByClincID(long cliId)
         {
+            if (cliId <= 0)
+            {
+                throw new ArgumentException("معرف العيادة غير صالح.");
+            }
+
             try
             {
-                return _usersRepo.GetAllByClincID(CLI_ID);
+                return _usersRepo.GetAllByClincID(cliId);
             }
             catch (Exception ex)
             {
-                throw new Exception("حدث خطأ في BLL أثناء جلب قائمة المستخدمين: " + ex.Message, ex);
+                throw new Exception("حدث خطأ في BLL أثناء جلب قائمة المستخدمين للعيادة: " + ex.Message, ex);
             }
         }
 
@@ -57,25 +61,25 @@ namespace BLL.Mangers.Users
                 throw new Exception($"حدث خطأ أثناء جلب بيانات المستخدم رقم {userId}: " + ex.Message, ex);
             }
         }
-      
-        public clsUser? GetUserByUsername(string UserName)
+
+        public clsUser? GetUserByUsername(string username)
         {
-            if (string.IsNullOrEmpty(UserName))
+            if (string.IsNullOrWhiteSpace(username))
             {
-                throw new ArgumentException("معرف المستخدم غير صالح.");
+                throw new ArgumentException("اسم المستخدم لا يمكن أن يكون فارغاً.");
             }
 
             try
             {
-                return _usersRepo.GetByUsername(UserName);
+                return _usersRepo.GetByUsername(username.Trim());
             }
             catch (Exception ex)
             {
-                throw new Exception($"حدث خطأ أثناء جلب بيانات المستخدم رقم {UserName}: " + ex.Message, ex);
+                throw new Exception($"حدث خطأ أثناء جلب بيانات المستخدم {username}: " + ex.Message, ex);
             }
         }
 
-        public bool ValidateUserLogin(string username, string password, string userType)
+        public bool ValidateUserLogin(string username, string password)
         {
             if (string.IsNullOrWhiteSpace(username))
             {
@@ -87,14 +91,9 @@ namespace BLL.Mangers.Users
                 throw new ArgumentException("كلمة المرور مطلوبة.");
             }
 
-            if (string.IsNullOrWhiteSpace(userType))
-            {
-                throw new ArgumentException("نوع المستخدم مطلوب.");
-            }
-
             try
             {
-                return _usersRepo.ValidateLogin(username.Trim(), password, userType.Trim());
+                return _usersRepo.ValidateLogin(username.Trim(), password);
             }
             catch (Exception ex)
             {
@@ -102,26 +101,27 @@ namespace BLL.Mangers.Users
             }
         }
 
-        public long CreateUser(long userCode, string userName, string userPassword, string userType, long? cliId)
+        public long CreateUser(clsUser user)
         {
-            if (userCode <= 0)
+            if (user == null)
             {
-                throw new ArgumentException("كود المستخدم يجب أن يكون رقماً موجباً.");
+                throw new ArgumentNullException(nameof(user), "بيانات المستخدم غير موجودة.");
             }
 
-            if (string.IsNullOrWhiteSpace(userName))
+            if (string.IsNullOrWhiteSpace(user.USER_NAME))
             {
                 throw new ArgumentException("اسم المستخدم لا يمكن أن يكون فارغاً.");
             }
 
-            if (string.IsNullOrWhiteSpace(userPassword))
+            if (string.IsNullOrWhiteSpace(user.USER_PASSWORD))
             {
                 throw new ArgumentException("كلمة المرور لا يمكن أن تكون فارغة.");
             }
 
             try
             {
-                return _usersRepo.Add(userCode, userName.Trim(), userPassword, userType.Trim(), cliId);
+                user.USER_NAME = user.USER_NAME.Trim();
+                return _usersRepo.Add(user);
             }
             catch (Exception ex)
             {
@@ -129,25 +129,31 @@ namespace BLL.Mangers.Users
             }
         }
 
-        public static bool UpdateUser(long userId, long userCode, string userName, string userPassword, string userType, long cliId)
+        public bool UpdateUser(clsUser user)
         {
-            if (userId <= 0)
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user), "بيانات المستخدم غير موجودة.");
+            }
+
+            if (user.USER_ID <= 0)
             {
                 throw new ArgumentException("معرف المستخدم المراد تعديله غير صحيح.");
             }
 
-            if (string.IsNullOrWhiteSpace(userName))
+            if (string.IsNullOrWhiteSpace(user.USER_NAME))
             {
                 throw new ArgumentException("اسم المستخدم لا يمكن أن يكون فارغاً.");
             }
 
             try
             {
-                return clsUsersRepo.Update(userId, userCode, userName.Trim(), userPassword, userType.Trim(), cliId);
+                user.USER_NAME = user.USER_NAME.Trim();
+                return _usersRepo.Update(user);
             }
             catch (Exception ex)
             {
-                throw new Exception($"حدث خطأ في BLL أثناء تعديل البيانات للمستخدم {userId}: " + ex.Message, ex);
+                throw new Exception($"حدث خطأ في BLL أثناء تعديل البيانات للمستخدم رقم {user.USER_ID}: " + ex.Message, ex);
             }
         }
 
@@ -164,11 +170,11 @@ namespace BLL.Mangers.Users
             }
             catch (Exception ex)
             {
-                throw new Exception($"حدث خطأ في BLL أثناء حذف المستخدم {userId}: " + ex.Message, ex);
+                throw new Exception($"حدث خطأ في BLL أثناء حذف المستخدم رقم {userId}: " + ex.Message, ex);
             }
         }
 
-        public List<clsUser> GetUserPaged(int pageNumber, int rowsPerPage, string? userName = null)
+        public List<clsUser> GetUserPaged(int pageNumber, int rowsPerPage, string? searchQuery = null)
         {
             if (pageNumber <= 0)
             {
@@ -182,15 +188,13 @@ namespace BLL.Mangers.Users
 
             try
             {
-                return _usersRepo.GetUsersPaged(pageNumber, rowsPerPage, userName);
+                return _usersRepo.GetUsersPaged(pageNumber, rowsPerPage, searchQuery);
             }
             catch (Exception ex)
             {
                 throw new Exception("حدث خطأ أثناء جلب قائمة المستخدمين بنظام الصفحات: " + ex.Message, ex);
             }
         }
-
-
 
         public int GetTotalUsersCount(string? searchQuery = null)
         {
@@ -203,7 +207,6 @@ namespace BLL.Mangers.Users
                 throw new Exception("حدث خطأ أثناء حساب إجمالي عدد المستخدمين: " + ex.Message, ex);
             }
         }
-
 
         #endregion
     }

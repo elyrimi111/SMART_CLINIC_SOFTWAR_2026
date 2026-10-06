@@ -1,6 +1,7 @@
 <Solution>
   <Project Path="BLL/BLL.csproj" />
   <Project Path="Core/Core.csproj" />
+  <Project Path="DAL.NUnitTests1/DAL.NUnitTests1.csproj" Id="dcda4853-5a5b-45a6-8816-63298db2724c" />
   <Project Path="DAL/DAL.csproj" />
   <Project Path="SMART_CLINIC_SOFTWAR_2026/SMART_CLINIC_SOFTWAR_2026.csproj" />
 </Solution>

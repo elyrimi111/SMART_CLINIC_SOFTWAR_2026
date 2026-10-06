@@ -1,5 +1,4 @@
-﻿using Core.Entites.Doctors;
-using Core.Entites.User;
+﻿using Core.Entites.User;
 using DAL.ConnectionString;
 using Microsoft.Data.SqlClient;
 using System;
@@ -10,329 +9,247 @@ namespace DAL.Repo.Users
 {
     public class clsUsersRepo
     {
-
         #region Helper 
 
         private clsUser MapReaderToUser(SqlDataReader reader)
         {
-            var user = new clsUser
+            return new clsUser
             {
                 USER_ID = reader["USER_ID"] != DBNull.Value ? Convert.ToInt64(reader["USER_ID"]) : 0,
-                USER_CODE = reader["USER_CODE"] != DBNull.Value ? Convert.ToInt64(reader["USER_CODE"]) : 0,
+                USER_CODE = reader["USER_CODE"] != DBNull.Value ? Convert.ToInt64(reader["USER_CODE"]) : null,
                 USER_NAME = reader["USER_NAME"] != DBNull.Value ? reader["USER_NAME"].ToString()! : string.Empty,
                 USER_PASSWORD = reader["USER_PASSWORD"] != DBNull.Value ? reader["USER_PASSWORD"].ToString()! : string.Empty,
-                USER_TYPE = reader["USER_TYPE"] != DBNull.Value ? reader["USER_TYPE"].ToString()! : string.Empty,
-                CLI_ID = reader["CLI_ID"] != DBNull.Value ? Convert.ToInt64(reader["CLI_ID"]) : 0
+                FIRST_NAME = reader["FIRST_NAME"] != DBNull.Value ? reader["FIRST_NAME"].ToString() : null,
+                SECOND_NAME = reader["SECOND_NAME"] != DBNull.Value ? reader["SECOND_NAME"].ToString() : null,
+                LAST_NAME = reader["LAST_NAME"] != DBNull.Value ? reader["LAST_NAME"].ToString() : null,
+                CLI_ID = reader["CLI_ID"] != DBNull.Value ? Convert.ToInt64(reader["CLI_ID"]) : null,
+                ROL_ID = reader["ROL_ID"] != DBNull.Value ? Convert.ToInt64(reader["ROL_ID"]) : null,
+                STATUS = reader["STATUS"] != DBNull.Value && Convert.ToBoolean(reader["STATUS"])
             };
-
-            return user;
         }
+
         #endregion
 
-        #region Manual ADO.NET CRUD Operations (SqlDataReader Only)
+        #region CRUD Operations
 
         public List<clsUser> GetAll()
         {
             var usersList = new List<clsUser>();
-            string query = @"SELECT USER_ID, USER_CODE, USER_NAME, USER_PASSWORD, USER_TYPE, CLI_ID 
+            string query = @"SELECT USER_ID, USER_CODE, USER_NAME, USER_PASSWORD, FIRST_NAME, SECOND_NAME, LAST_NAME, CLI_ID, ROL_ID, STATUS 
                             FROM USERS_TBL";
 
-            SqlConnection conn = new SqlConnection(clsConnectionStringcs.ConnectionString);
-            SqlCommand cmd = new SqlCommand(query, conn);
-            SqlDataReader? reader = null;
-
-            try
+            using (SqlConnection conn = new SqlConnection(clsConnectionStringcs.ConnectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
             {
-                conn.Open();
-                reader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-
-                while (reader.Read())
+                try
                 {
-                    usersList.Add(MapReaderToUser(reader));
+                    conn.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            usersList.Add(MapReaderToUser(reader));
+                        }
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("خطأ أثناء جلب قائمة المستخدمين: " + ex.Message, ex);
-            }
-            finally
-            {
-                if (reader != null && !reader.IsClosed)
+                catch (Exception ex)
                 {
-                    reader.Close();
+                    throw new Exception("خطأ أثناء جلب قائمة المستخدمين: " + ex.Message, ex);
                 }
-                if (conn.State == ConnectionState.Open)
-                {
-                    conn.Close();
-                }
-                cmd.Dispose();
-                conn.Dispose();
             }
 
             return usersList;
         }
-        public List<clsUser> GetAllByClincID(long CLI_ID)
+
+        public List<clsUser> GetAllByClincID(long cliId)
         {
             var usersList = new List<clsUser>();
-            string query = @"SELECT USER_ID, USER_CODE, USER_NAME, USER_PASSWORD, USER_TYPE, CLI_ID 
-              FROM USERS_TBL 
-              where CLI_ID = @CLI_ID";
+            string query = @"SELECT USER_ID, USER_CODE, USER_NAME, USER_PASSWORD, FIRST_NAME, SECOND_NAME, LAST_NAME, CLI_ID, ROL_ID, STATUS 
+                            FROM USERS_TBL 
+                            WHERE CLI_ID = @CLI_ID";
 
-
-            SqlConnection conn = new SqlConnection(clsConnectionStringcs.ConnectionString);
-            SqlCommand cmd = new SqlCommand(query, conn);
-
-            cmd.Parameters.AddWithValue("@CLI_ID", CLI_ID);
-
-            SqlDataReader? reader = null;
-
-            try
+            using (SqlConnection conn = new SqlConnection(clsConnectionStringcs.ConnectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
             {
-                conn.Open();
-                reader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+                cmd.Parameters.AddWithValue("@CLI_ID", cliId);
 
-                while (reader.Read())
+                try
                 {
-                    usersList.Add(MapReaderToUser(reader));
+                    conn.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            usersList.Add(MapReaderToUser(reader));
+                        }
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("خطأ أثناء جلب قائمة المستخدمين: " + ex.Message, ex);
-            }
-            finally
-            {
-                if (reader != null && !reader.IsClosed)
+                catch (Exception ex)
                 {
-                    reader.Close();
+                    throw new Exception("خطأ أثناء جلب قائمة مستخدمي العيادة: " + ex.Message, ex);
                 }
-                if (conn.State == ConnectionState.Open)
-                {
-                    conn.Close();
-                }
-                cmd.Dispose();
-                conn.Dispose();
             }
 
             return usersList;
         }
-
 
         public clsUser? GetById(long userId)
         {
-            string query = @"SELECT USER_ID, USER_CODE, USER_NAME, USER_PASSWORD, USER_TYPE, CLI_ID 
+            string query = @"SELECT USER_ID, USER_CODE, USER_NAME, USER_PASSWORD, FIRST_NAME, SECOND_NAME, LAST_NAME, CLI_ID, ROL_ID, STATUS 
                             FROM USERS_TBL 
                             WHERE USER_ID = @UserId";
 
-            SqlConnection conn = new SqlConnection(clsConnectionStringcs.ConnectionString);
-            SqlCommand cmd = new SqlCommand(query, conn);
-            SqlDataReader? reader = null;
-
-            try
+            using (SqlConnection conn = new SqlConnection(clsConnectionStringcs.ConnectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
             {
                 cmd.Parameters.Add("@UserId", SqlDbType.BigInt).Value = userId;
 
-                conn.Open();
-                reader = cmd.ExecuteReader(CommandBehavior.SingleRow);
-
-                if (reader.Read())
+                try
                 {
-                    return MapReaderToUser(reader);
+                    conn.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.SingleRow))
+                    {
+                        if (reader.Read())
+                        {
+                            return MapReaderToUser(reader);
+                        }
+                    }
+                    return null;
                 }
-                return null;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"خطأ أثناء البحث عن المستخدم برقم {userId}: " + ex.Message, ex);
-            }
-            finally
-            {
-                if (reader != null && !reader.IsClosed)
+                catch (Exception ex)
                 {
-                    reader.Close();
+                    throw new Exception($"خطأ أثناء البحث عن المستخدم برقم {userId}: " + ex.Message, ex);
                 }
-                if (conn.State == ConnectionState.Open)
-                {
-                    conn.Close();
-                }
-                cmd.Dispose();
-                conn.Dispose();
             }
         }
 
-
-        public clsUser? GetByUsername(string Username)
+        public clsUser? GetByUsername(string username)
         {
-            string query = @"SELECT USER_ID, USER_CODE, USER_NAME, USER_PASSWORD, USER_TYPE, CLI_ID 
+            string query = @"SELECT USER_ID, USER_CODE, USER_NAME, USER_PASSWORD, FIRST_NAME, SECOND_NAME, LAST_NAME, CLI_ID, ROL_ID, STATUS 
                             FROM USERS_TBL 
-                            WHERE USER_NAME =@Username";
+                            WHERE USER_NAME = @Username";
 
-            SqlConnection conn = new SqlConnection(clsConnectionStringcs.ConnectionString);
-            SqlCommand cmd = new SqlCommand(query, conn);
-            SqlDataReader? reader = null;
-
-            try
+            using (SqlConnection conn = new SqlConnection(clsConnectionStringcs.ConnectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
             {
-                cmd.Parameters.AddWithValue("@Username", Username);
+                cmd.Parameters.AddWithValue("@Username", username);
 
-                conn.Open();
-                reader = cmd.ExecuteReader(CommandBehavior.SingleRow);
-
-                if (reader.Read())
+                try
                 {
-                    return MapReaderToUser(reader);
+                    conn.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.SingleRow))
+                    {
+                        if (reader.Read())
+                        {
+                            return MapReaderToUser(reader);
+                        }
+                    }
+                    return null;
                 }
-                return null;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"خطأ أثناء البحث عن المستخدم برقم {Username}: " + ex.Message, ex);
-            }
-            finally
-            {
-                if (reader != null && !reader.IsClosed)
+                catch (Exception ex)
                 {
-                    reader.Close();
+                    throw new Exception($"خطأ أثناء البحث عن اسم المستخدم {username}: " + ex.Message, ex);
                 }
-                if (conn.State == ConnectionState.Open)
-                {
-                    conn.Close();
-                }
-                cmd.Dispose();
-                conn.Dispose();
             }
         }
 
-        public bool ValidateLogin(string username, string password, string userType)
+        public bool ValidateLogin(string username, string password)
         {
-            string query = @"SELECT USER_ID, USER_CODE, USER_NAME, USER_PASSWORD, USER_TYPE, CLI_ID 
+            string query = @"SELECT USER_ID 
                             FROM USERS_TBL 
                             WHERE USER_NAME = @UserName 
                               AND USER_PASSWORD = @Password 
-                              AND USER_TYPE = @UserType";
+                              AND STATUS = 1";
 
-            SqlConnection conn = new SqlConnection(clsConnectionStringcs.ConnectionString);
-            SqlCommand cmd = new SqlCommand(query, conn);
-            SqlDataReader? reader = null;
-
-            try
+            using (SqlConnection conn = new SqlConnection(clsConnectionStringcs.ConnectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
             {
-                cmd.Parameters.Add("@UserName", SqlDbType.VarChar, 200).Value = (object)username ?? DBNull.Value;
+                cmd.Parameters.Add("@UserName", SqlDbType.VarChar, 50).Value = (object)username ?? DBNull.Value;
                 cmd.Parameters.Add("@Password", SqlDbType.VarChar, -1).Value = (object)password ?? DBNull.Value;
-                cmd.Parameters.Add("@UserType", SqlDbType.VarChar, 50).Value = (object)userType ?? DBNull.Value;
 
-                conn.Open();
-                reader = cmd.ExecuteReader(CommandBehavior.SingleRow);
-
-                if (reader.Read())
+                try
                 {
-                    return true;
+                    conn.Open();
+                    object result = cmd.ExecuteScalar();
+                    return result != null && result != DBNull.Value;
                 }
-                return false;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("خطأ أثناء التحقق من بيانات تسجيل الدخول: " + ex.Message, ex);
-            }
-            finally
-            {
-                if (reader != null && !reader.IsClosed)
+                catch (Exception ex)
                 {
-                    reader.Close();
+                    throw new Exception("خطأ أثناء التحقق من بيانات تسجيل الدخول: " + ex.Message, ex);
                 }
-                if (conn.State == ConnectionState.Open)
-                {
-                    conn.Close();
-                }
-                cmd.Dispose();
-                conn.Dispose();
             }
         }
 
-        public long Add(long userCode, string userName, string userPassword, string userType, long? cliId)
+        public long Add(clsUser user)
         {
-            string query = @"INSERT INTO USERS_TBL (USER_CODE, USER_NAME, USER_PASSWORD, USER_TYPE, CLI_ID)
-                            VALUES (@UserCode, @UserName, @UserPassword, @UserType, @CliId);
-                            SELECT SCOPE_IDENTITY() AS NewID;";
+            string query = @"INSERT INTO USERS_TBL (USER_CODE, USER_NAME, USER_PASSWORD, FIRST_NAME, SECOND_NAME, LAST_NAME, CLI_ID, ROL_ID, STATUS)
+                            VALUES (@UserCode, @UserName, @UserPassword, @FirstName, @SecondName, @LastName, @CliId, @RolId, @Status);
+                            SELECT SCOPE_IDENTITY();";
 
-            SqlConnection conn = new SqlConnection(clsConnectionStringcs.ConnectionString);
-            SqlCommand cmd = new SqlCommand(query, conn);
-            SqlDataReader? reader = null;
-
-            try
+            using (SqlConnection conn = new SqlConnection(clsConnectionStringcs.ConnectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
             {
-                cmd.Parameters.Add("@UserCode", SqlDbType.BigInt).Value = userCode;
-                cmd.Parameters.Add("@UserName", SqlDbType.VarChar, 200).Value = (object)userName ?? DBNull.Value;
-                cmd.Parameters.Add("@UserPassword", SqlDbType.VarChar, -1).Value = (object)userPassword ?? DBNull.Value;
-                cmd.Parameters.Add("@UserType", SqlDbType.VarChar, 50).Value = (object)userType ?? DBNull.Value;
-                cmd.Parameters.Add("@CliId", SqlDbType.BigInt).Value = cliId.HasValue ? cliId.Value : DBNull.Value;
+                cmd.Parameters.Add("@UserCode", SqlDbType.BigInt).Value = user.USER_CODE.HasValue ? user.USER_CODE.Value : DBNull.Value;
+                cmd.Parameters.Add("@UserName", SqlDbType.VarChar, 50).Value = (object)user.USER_NAME ?? DBNull.Value;
+                cmd.Parameters.Add("@UserPassword", SqlDbType.VarChar, -1).Value = (object)user.USER_PASSWORD ?? DBNull.Value;
+                cmd.Parameters.Add("@FirstName", SqlDbType.VarChar, 50).Value = (object?)user.FIRST_NAME ?? DBNull.Value;
+                cmd.Parameters.Add("@SecondName", SqlDbType.NVarChar, 50).Value = (object?)user.SECOND_NAME ?? DBNull.Value;
+                cmd.Parameters.Add("@LastName", SqlDbType.VarChar, 50).Value = (object?)user.LAST_NAME ?? DBNull.Value;
+                cmd.Parameters.Add("@CliId", SqlDbType.BigInt).Value = user.CLI_ID.HasValue ? user.CLI_ID.Value : DBNull.Value;
+                cmd.Parameters.Add("@RolId", SqlDbType.BigInt).Value = user.ROL_ID.HasValue ? user.ROL_ID.Value : DBNull.Value;
+                cmd.Parameters.Add("@Status", SqlDbType.Bit).Value = user.STATUS;
 
-                conn.Open();
-                reader = cmd.ExecuteReader();
-
-                if (reader.Read())
+                try
                 {
-                    return Convert.ToInt64(reader["NewID"]);
+                    conn.Open();
+                    object result = cmd.ExecuteScalar();
+                    return result != null && result != DBNull.Value ? Convert.ToInt64(result) : 0;
                 }
-                return 0;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("خطأ أثناء إضافة المستخدم: " + ex.Message, ex);
-            }
-            finally
-            {
-                if (reader != null && !reader.IsClosed)
+                catch (Exception ex)
                 {
-                    reader.Close();
+                    throw new Exception("خطأ أثناء إضافة المستخدم: " + ex.Message, ex);
                 }
-                if (conn.State == ConnectionState.Open)
-                {
-                    conn.Close();
-                }
-                cmd.Dispose();
-                conn.Dispose();
             }
         }
 
-        public static bool Update(long userId, long userCode, string userName, string userPassword, string userType, long? cliId)
+        public bool Update(clsUser user)
         {
             string query = @"UPDATE USERS_TBL 
                             SET USER_CODE = @UserCode,
                                 USER_NAME = @UserName,
                                 USER_PASSWORD = @UserPassword,
-                                USER_TYPE = @UserType,
-                                CLI_ID = @CliId
+                                FIRST_NAME = @FirstName,
+                                SECOND_NAME = @SecondName,
+                                LAST_NAME = @LastName,
+                                CLI_ID = @CliId,
+                                ROL_ID = @RolId,
+                                STATUS = @Status
                             WHERE USER_ID = @UserId";
 
-            SqlConnection conn = new SqlConnection(clsConnectionStringcs.ConnectionString);
-            SqlCommand cmd = new SqlCommand(query, conn);
+            using (SqlConnection conn = new SqlConnection(clsConnectionStringcs.ConnectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.Add("@UserId", SqlDbType.BigInt).Value = user.USER_ID;
+                cmd.Parameters.Add("@UserCode", SqlDbType.BigInt).Value = user.USER_CODE.HasValue ? user.USER_CODE.Value : DBNull.Value;
+                cmd.Parameters.Add("@UserName", SqlDbType.VarChar, 50).Value = (object)user.USER_NAME ?? DBNull.Value;
+                cmd.Parameters.Add("@UserPassword", SqlDbType.VarChar, -1).Value = (object)user.USER_PASSWORD ?? DBNull.Value;
+                cmd.Parameters.Add("@FirstName", SqlDbType.VarChar, 50).Value = (object?)user.FIRST_NAME ?? DBNull.Value;
+                cmd.Parameters.Add("@SecondName", SqlDbType.NVarChar, 50).Value = (object?)user.SECOND_NAME ?? DBNull.Value;
+                cmd.Parameters.Add("@LastName", SqlDbType.VarChar, 50).Value = (object?)user.LAST_NAME ?? DBNull.Value;
+                cmd.Parameters.Add("@CliId", SqlDbType.BigInt).Value = user.CLI_ID.HasValue ? user.CLI_ID.Value : DBNull.Value;
+                cmd.Parameters.Add("@RolId", SqlDbType.BigInt).Value = user.ROL_ID.HasValue ? user.ROL_ID.Value : DBNull.Value;
+                cmd.Parameters.Add("@Status", SqlDbType.Bit).Value = user.STATUS;
 
-            try
-            {
-                cmd.Parameters.Add("@UserId", SqlDbType.BigInt).Value = userId;
-                cmd.Parameters.Add("@UserCode", SqlDbType.BigInt).Value = userCode;
-                cmd.Parameters.Add("@UserName", SqlDbType.VarChar, 200).Value = (object)userName ?? DBNull.Value;
-                cmd.Parameters.Add("@UserPassword", SqlDbType.VarChar, -1).Value = (object)userPassword ?? DBNull.Value;
-                cmd.Parameters.Add("@UserType", SqlDbType.VarChar, 50).Value = (object)userType ?? DBNull.Value;
-                cmd.Parameters.Add("@CliId", SqlDbType.BigInt).Value = cliId.HasValue ? cliId.Value : DBNull.Value;
-
-                conn.Open();
-                int rowsAffected = cmd.ExecuteNonQuery();
-                return rowsAffected > 0;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"خطأ أثناء تحديث بيانات المستخدم {userId}: " + ex.Message, ex);
-            }
-            finally
-            {
-                if (conn.State == ConnectionState.Open)
+                try
                 {
-                    conn.Close();
+                    conn.Open();
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    return rowsAffected > 0;
                 }
-                cmd.Dispose();
-                conn.Dispose();
+                catch (Exception ex)
+                {
+                    throw new Exception($"خطأ أثناء تحديث بيانات المستخدم رقم {user.USER_ID}: " + ex.Message, ex);
+                }
             }
         }
 
@@ -340,63 +257,51 @@ namespace DAL.Repo.Users
         {
             string query = @"DELETE FROM USERS_TBL WHERE USER_ID = @UserId";
 
-            SqlConnection conn = new SqlConnection(clsConnectionStringcs.ConnectionString);
-            SqlCommand cmd = new SqlCommand(query, conn);
-
-            try
+            using (SqlConnection conn = new SqlConnection(clsConnectionStringcs.ConnectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
             {
                 cmd.Parameters.Add("@UserId", SqlDbType.BigInt).Value = userId;
 
-                conn.Open();
-                int rowsAffected = cmd.ExecuteNonQuery();
-                return rowsAffected > 0;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"خطأ أثناء حذف المستخدم {userId}: " + ex.Message, ex);
-            }
-            finally
-            {
-                if (conn.State == ConnectionState.Open)
+                try
                 {
-                    conn.Close();
+                    conn.Open();
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    return rowsAffected > 0;
                 }
-                cmd.Dispose();
-                conn.Dispose();
+                catch (Exception ex)
+                {
+                    throw new Exception($"خطأ أثناء حذف المستخدم رقم {userId}: " + ex.Message, ex);
+                }
             }
         }
 
-        public List<clsUser> GetUsersPaged(int pageNumber, int rowsPerPage, string? userName = null)
+        public List<clsUser> GetUsersPaged(int pageNumber, int rowsPerPage, string? searchQuery = null)
         {
             List<clsUser> usersList = new List<clsUser>();
 
-            try
+            using (SqlConnection connection = new SqlConnection(clsConnectionStringcs.ConnectionString))
+            using (SqlCommand command = new SqlCommand("SP_GetUsersPaged", connection))
             {
-                using (SqlConnection connection = new SqlConnection(clsConnectionStringcs.ConnectionString))
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@PageNumber", pageNumber);
+                command.Parameters.AddWithValue("@RowsPerPage", rowsPerPage);
+                command.Parameters.AddWithValue("@SearchQuery", (object?)searchQuery ?? DBNull.Value);
+
+                try
                 {
-                    using (SqlCommand command = new SqlCommand("SP_GetUsersPaged", connection))
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        command.CommandType = CommandType.StoredProcedure;
-
-                        command.Parameters.AddWithValue("@PageNumber", pageNumber);
-                        command.Parameters.AddWithValue("@RowsPerPage", rowsPerPage);
-                        command.Parameters.AddWithValue("@UserName", (object?)userName ?? DBNull.Value);
-
-                        connection.Open();
-
-                        using (SqlDataReader reader = command.ExecuteReader())
+                        while (reader.Read())
                         {
-                            while (reader.Read())
-                            {
-                                usersList.Add(MapReaderToUser(reader));
-                            }
+                            usersList.Add(MapReaderToUser(reader));
                         }
                     }
                 }
-            }
-            catch (Exception)
-            {
-                throw;
+                catch (Exception ex)
+                {
+                    throw new Exception("خطأ أثناء جلب صفحة المستخدمين: " + ex.Message, ex);
+                }
             }
 
             return usersList;
@@ -404,38 +309,23 @@ namespace DAL.Repo.Users
 
         public int GetTotalUsersCount(string? searchQuery = null)
         {
-            int totalCount = 0;
-
-            try
+            using (SqlConnection connection = new SqlConnection(clsConnectionStringcs.ConnectionString))
+            using (SqlCommand command = new SqlCommand("SP_GetTotalUsersCount", connection))
             {
-                using (SqlConnection connection = new SqlConnection(clsConnectionStringcs.ConnectionString))
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@SearchQuery", (object?)searchQuery ?? DBNull.Value);
+
+                try
                 {
-                    string query = @"SELECT COUNT(*) FROM USERS_TBL 
-                             WHERE (@SearchValue IS NULL 
-                                 OR @SearchValue = '' 
-                                 OR USER_NAME LIKE '%' + @SearchValue + '%' 
-                                 OR USER_TYPE LIKE '%' + @SearchValue + '%' 
-                                 OR CAST(USER_ID AS VARCHAR) LIKE '%' + @SearchValue + '%')";
-
-                    using (SqlCommand command = new SqlCommand(query, connection))
-                    {
-                        command.Parameters.AddWithValue("@SearchValue", (object?)searchQuery ?? DBNull.Value);
-
-                        connection.Open();
-                        object result = command.ExecuteScalar();
-                        if (result != null && result != DBNull.Value)
-                        {
-                            totalCount = Convert.ToInt32(result);
-                        }
-                    }
+                    connection.Open();
+                    object result = command.ExecuteScalar();
+                    return result != null && result != DBNull.Value ? Convert.ToInt32(result) : 0;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("خطأ أثناء جلب إجمالي عدد المستخدمين: " + ex.Message, ex);
                 }
             }
-            catch (Exception ex)
-            {
-                throw;
-            }
-
-            return totalCount;
         }
 
         #endregion

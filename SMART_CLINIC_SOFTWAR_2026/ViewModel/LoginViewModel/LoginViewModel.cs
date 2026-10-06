@@ -3,14 +3,12 @@ using BLL.Mangers.Users;
 using Core.CurrentSession;
 using Core.Entites.Clinc;
 using Core.Entites.User;
-using Microsoft.Data.SqlClient;
 using SMART_CLINIC_SOFTWAR_2026.View.MainLayout;
 using SMART_CLINIC_SOFTWAR_2026.ViewModel.Commands;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -42,24 +40,20 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.LoginViewModel
             {
                 _username = value;
                 OnPropertyChanged();
-
-
-                if (!string.IsNullOrWhiteSpace(_username))
-                {
-                    string UserType = _getUserTypeByUserName(_username);
-                    
-                    _setUserTypeByUserName(UserType);
-                }
             }
         }
 
-        private string _selectedUserType ;
-        public string SelectedUserType
+        private clsUser? _selectedUser;
+        public clsUser? SelectedUser
         {
-            get => _selectedUserType;
+            get => _selectedUser;
             set
             {
-                _selectedUserType = value;
+                _selectedUser = value;
+                if (_selectedUser != null)
+                {
+                    Username = _selectedUser.USER_NAME;
+                }
                 OnPropertyChanged();
             }
         }
@@ -95,8 +89,7 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.LoginViewModel
         {
             _usersManger = new UsersManger();
             _clincManager = new clsClincManager();
-            LoginCommand = new RelayCommand( ExecuteLogin,
-                CanExecuteLogin);
+            LoginCommand = new RelayCommand(ExecuteLogin, CanExecuteLogin);
             LoadUsers();
         }
 
@@ -106,7 +99,7 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.LoginViewModel
             return !IsBusy;
         }
 
-        private async void ExecuteLogin(object? parameter)
+        private void ExecuteLogin(object? parameter)
         {
             var passwordBox = parameter as PasswordBox;
             string password = passwordBox?.Password ?? string.Empty;
@@ -122,18 +115,18 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.LoginViewModel
                 IsBusy = true;
                 ErrorMessage = string.Empty;
 
-                bool isValid = _usersManger.ValidateUserLogin(this.Username, password, SelectedUserType);
+                bool isValid = _usersManger.ValidateUserLogin(this.Username.Trim(), password);
 
                 if (isValid)
                 {
-                    clsCurrentSectioncs.CurrentUser =_usersManger.GetUserByUsername(this.Username);
+                    clsCurrentSectioncs.CurrentUser = _usersManger.GetUserByUsername(this.Username.Trim());
 
                     Window? currentWindow = passwordBox != null ? Window.GetWindow(passwordBox) : Application.Current.MainWindow;
                     _navigateToMainWindow(currentWindow);
                 }
                 else
                 {
-                    ErrorMessage = "اسم المستخدم أو كلمة المرور أو نوع المستخدم غير صحيح.";
+                    ErrorMessage = "اسم المستخدم أو كلمة المرور غير صحيحة، أو الحساب غير مفعل.";
                 }
             }
             catch (Exception ex)
@@ -150,31 +143,26 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.LoginViewModel
 
         private void LoadUsers()
         {
-            var list = _usersManger.GetAllByClincID(clsCurrentSectioncs.CurrentClinc.CLI_ID);
-            UsersList = new ObservableCollection<clsUser>(list);
+            try
+            {
+                if (clsCurrentSectioncs.CurrentClinc != null && clsCurrentSectioncs.CurrentClinc.CLI_ID > 0)
+                {
+                    var list = _usersManger.GetAllByClincID(clsCurrentSectioncs.CurrentClinc.CLI_ID);
+                    UsersList = new ObservableCollection<clsUser>(list);
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = "خطأ أثناء تحميل قائمة المستخدمين: " + ex.Message;
+            }
         }
-      
+
         private void _navigateToMainWindow(Window? currentWindow)
         {
             MainLayoutWindo mainLayout = new MainLayoutWindo();
             Application.Current.MainWindow = mainLayout;
             mainLayout.Show();
             currentWindow?.Close();
-        }
-      
-        private string _getUserTypeByUserName(string USER_NAEM)
-        {
-            clsUser? user = _usersList.FirstOrDefault(u => u.USER_NAME != null && u.USER_NAME.Equals(USER_NAEM, StringComparison.OrdinalIgnoreCase));
-
-            return user != null ? user.USER_TYPE?.Trim().ToUpper() ?? string.Empty : string.Empty;
-        }
-       
-        private void _setUserTypeByUserName(string USER_TYPE)
-        {
-            if (!string.IsNullOrEmpty(USER_TYPE))
-            {
-                SelectedUserType = USER_TYPE;
-            }
         }
     }
 }

@@ -2,6 +2,7 @@
 using BLL.Mangers.Customers;
 using Core.Entites.Customer;
 using Core.Entities.Appointments;
+using SMART_CLINIC_SOFTWAR_2026.View.Apointments;
 using SMART_CLINIC_SOFTWAR_2026.ViewModel.Commands;
 using System;
 using System.Collections.Generic;
@@ -251,8 +252,18 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Apointments
 
         private void ExecuteNewAppointment()
         {
-            // فتح شاشة إضافة موعد جديد للمريض
+            var window = new Window
+            {
+                Content = new ApointmentsView(),
+                Title = "حجز موعد جديد",
+                Width = 900,
+                Height = 600,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen
+            };
+
+            window.ShowDialog();
         }
+
 
         private void ExecuteSearchPatientAppointments()
         {
