@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SMART_CLINIC_SOFTWAR_2026.ViewModel.Users;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,7 @@ namespace SMART_CLINIC_SOFTWAR_2026.View.Users
         public UsersChoseOptionView()
         {
             InitializeComponent();
+            this.DataContext = new UsersChoseOptionViewModel(); 
         }
     }
 }

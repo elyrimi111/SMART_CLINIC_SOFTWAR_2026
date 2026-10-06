@@ -17,11 +17,11 @@ namespace BLL.Mangers.Role
 
         #region GetAll
 
-        public async Task<List<clsRole>> GetAllRolesAsync()
+        public static  async Task<List<clsRole>> GetAllRolesAsync()
         {
             try
             {
-                return await _rolesRepo.GetAllRolesAsync();
+                return await clsRolesRepo.GetAllRolesAsync();
             }
             catch (Exception ex)
             {
@@ -33,7 +33,7 @@ namespace BLL.Mangers.Role
 
         #region Get By Id
 
-        public async Task<clsRole?> GetRoleByIdAsync(long? rolId)
+        public static async Task<clsRole?> GetRoleByIdAsync(long? rolId)
         {
             if (rolId <= 0)
             {
@@ -42,7 +42,7 @@ namespace BLL.Mangers.Role
 
             try
             {
-                return await _rolesRepo.GetRoleByIdAsync(rolId);
+                return await clsRolesRepo.GetRoleByIdAsync(rolId);
             }
             catch (Exception ex)
             {

@@ -12,7 +12,7 @@ namespace DAL.Repo.Roles
     {
         #region Helper Methods 
 
-        private clsRole MapDataReaderToRole(SqlDataReader reader)
+        private static clsRole MapDataReaderToRole(SqlDataReader reader)
         {
             return new clsRole
             {
@@ -28,7 +28,7 @@ namespace DAL.Repo.Roles
 
         #region GetAll
 
-        public async Task<List<clsRole>> GetAllRolesAsync()
+        public static async Task<List<clsRole>> GetAllRolesAsync()
         {
             List<clsRole> rolesList = new List<clsRole>();
 
@@ -63,7 +63,7 @@ namespace DAL.Repo.Roles
 
         #region (GetById)
 
-        public async Task<clsRole?> GetRoleByIdAsync(long? rolId)
+        public static async Task<clsRole?> GetRoleByIdAsync(long? rolId)
         {
             clsRole? role = null;
 

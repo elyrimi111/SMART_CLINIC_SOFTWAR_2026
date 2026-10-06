@@ -15,12 +15,9 @@ namespace Core.Entites.User
         public string? FIRST_NAME { get; set; }
         public string? SECOND_NAME { get; set; }
         public string? LAST_NAME { get; set; }
-
         public long? CLI_ID { get; set; }
         public long? ROL_ID { get; set; }
-
         public bool STATUS { get; set; } = true;
-
         public string FULL_NAME => $"{FIRST_NAME} {SECOND_NAME} {LAST_NAME}".Trim();
 
         public override string ToString()

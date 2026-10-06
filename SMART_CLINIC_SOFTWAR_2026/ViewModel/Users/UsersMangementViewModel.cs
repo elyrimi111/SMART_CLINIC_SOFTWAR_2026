@@ -1,12 +1,14 @@
-﻿using BLL.Mangers.Users;
+﻿using BLL.Mangers.Role;
+using BLL.Mangers.Users;
 using Core.Entites.User;
+using Core.Entities.Roles;
 using SMART_CLINIC_SOFTWAR_2026.ViewModel.Commands;
 using System;
-using System.Collections.Generic;
+using System.Collections.Generic; 
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -15,30 +17,47 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Users
 {
     public class UsersMangementViewModel : BaseViewModel
     {
+        public class clsUsersTable
+        {
+            public clsUser? User { get; set; }
+            public string? ROL_NAME { get; set; }
+
+            public clsUsersTable(clsUser? user, string? rol_name)
+            {
+                User = user;
+                ROL_NAME = rol_name;
+            }
+        }
+
         private readonly UsersManger _usersManger;
 
         public UsersMangementViewModel()
         {
             _usersManger = new UsersManger();
             UsersList = new ObservableCollection<clsUser>();
+            UsersTableList = new ObservableCollection<clsUsersTable>();
+            RolesList = new ObservableCollection<clsRole>();
 
             _pageSize = 15;
             _currentPage = 1;
 
-            LoadUsersCommand = new RelayCommand(async param => await GetUsersAsync());
-            PageChangedCommand = new RelayCommand(async param => await GetUsersAsync());
+            LoadUsersCommand = new RelayCommand(async param => await FillUsersDataToScreen());
+            PageChangedCommand = new RelayCommand(async param => await FillUsersDataToScreen());
             ClearSearchCommand = new RelayCommand(param => ClearSearch());
 
             AddUserCommand = new RelayCommand(async param => await AddUserAsync(), param => CanAddUser());
+            UpdateUserCommand = new RelayCommand(async param => await UpdateUserAsync(), param => CanUpdateUser());
             DeleteUserCommand = new RelayCommand(async param => await DeleteUserAsync(), param => CanDeleteUser());
             ClearFieldsCommand = new RelayCommand(param => ClearFields());
+            RefreshCommand = new RelayCommand(async param => await FillUsersDataToScreen());
 
             _ = InitializeViewModelAsync();
         }
 
         private async Task InitializeViewModelAsync()
         {
-            await GetUsersAsync();
+            await GetAllRolesAsync();
+            await FillUsersDataToScreen();
         }
 
         #region Properties
@@ -144,39 +163,16 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Users
             }
         }
 
-        private string? _fullName;
+        // خاصية مشتقة تدمج الحقول الثلاثة تلقائياً لقراءتها فقط
         public string FULL_NAME
         {
             get
             {
-                var name = $"{FIRST_NAME} {SECOND_NAME} {LAST_NAME}".Trim();
-                return string.IsNullOrWhiteSpace(name) ? _fullName ?? string.Empty : name;
-            }
-            set
-            {
-                if (_fullName != value)
-                {
-                    _fullName = value;
-                    OnPropertyChanged();
-
-                    // تقسيم الاسم الكامل المدخل إلى الأجزاء عند كتابته مباشرة في الواجهة
-                    if (!string.IsNullOrWhiteSpace(value))
-                    {
-                        var parts = value.Trim().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                        FIRST_NAME = parts.Length > 0 ? parts[0] : string.Empty;
-                        SECOND_NAME = parts.Length > 1 ? parts[1] : string.Empty;
-                        LAST_NAME = parts.Length > 2 ? string.Join(" ", parts.Skip(2)) : string.Empty;
-                    }
-                    else
-                    {
-                        FIRST_NAME = string.Empty;
-                        SECOND_NAME = string.Empty;
-                        LAST_NAME = string.Empty;
-                    }
-                }
+                var parts = new[] { FIRST_NAME, SECOND_NAME, LAST_NAME }
+                            .Where(s => !string.IsNullOrWhiteSpace(s));
+                return string.Join(" ", parts);
             }
         }
-
 
         private long? _cli_ID;
         public long? CLI_ID
@@ -231,6 +227,43 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Users
             }
         }
 
+        private ObservableCollection<clsRole> _rolesList;
+        public ObservableCollection<clsRole> RolesList
+        {
+            get => _rolesList;
+            set
+            {
+                _rolesList = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ObservableCollection<clsUsersTable> _userTableList;
+        public ObservableCollection<clsUsersTable> UsersTableList
+        {
+            get => _userTableList;
+            set
+            {
+                _userTableList = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private clsUsersTable? _selectedUserTable;
+        public clsUsersTable? SelectedUserTable
+        {
+            get => _selectedUserTable;
+            set
+            {
+                if (_selectedUserTable != value)
+                {
+                    _selectedUserTable = value;
+                    OnPropertyChanged();
+                    SelectedUser = value?.User;
+                }
+            }
+        }
+
         private clsUser? _selectedUser;
         public clsUser? SelectedUser
         {
@@ -257,7 +290,7 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Users
                     _searchQuery = value;
                     OnPropertyChanged();
                     CurrentPage = 1;
-                    _ = GetUsersAsync();
+                    _ = FillUsersDataToScreen();
                 }
             }
         }
@@ -273,7 +306,7 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Users
                     _pageSize = value;
                     OnPropertyChanged();
                     CurrentPage = 1;
-                    _ = GetUsersAsync();
+                    _ = FillUsersDataToScreen();
                 }
             }
         }
@@ -311,8 +344,10 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Users
         public ICommand PageChangedCommand { get; }
         public ICommand ClearSearchCommand { get; }
         public ICommand AddUserCommand { get; }
+        public ICommand UpdateUserCommand { get; }
         public ICommand DeleteUserCommand { get; }
         public ICommand ClearFieldsCommand { get; }
+        public ICommand RefreshCommand { get; }
 
         #endregion
 
@@ -324,24 +359,65 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Users
                    string.IsNullOrWhiteSpace(USER_PASSWORD);
         }
 
-        private async Task GetUsersAsync()
+        private async Task FillUsersDataToScreen()
+        {
+            var rawUsers = await GetUsersAsync();
+            UsersTableList = await ConvertFromUsersListIntoUsersTableList(rawUsers);
+        }
+
+        private async Task<ObservableCollection<clsUsersTable>> ConvertFromUsersListIntoUsersTableList(ObservableCollection<clsUser> userList)
+        {
+            var usersTable = new ObservableCollection<clsUsersTable>();
+
+            foreach (clsUser user in userList)
+            {
+                var tableRow = await ConvertFromUserToUserTable(user);
+                usersTable.Add(tableRow);
+            }
+
+            return usersTable;
+        }
+
+        private async Task<clsUsersTable> ConvertFromUserToUserTable(clsUser user)
+        {
+            string roleName = "غير محدد";
+
+            if (user.ROL_ID.HasValue && user.ROL_ID.Value > 0)
+            {
+                var localRole = RolesList.FirstOrDefault(r => r.ROL_ID == user.ROL_ID.Value);
+                if (localRole != null)
+                {
+                    roleName = localRole.ROL_NAME;
+                }
+                else
+                {
+                    var role = await clsRoleManger.GetRoleByIdAsync(user.ROL_ID.Value);
+                    if (role != null) roleName = role.ROL_NAME;
+                }
+            }
+
+            return new clsUsersTable(user, roleName);
+        }
+
+        private async Task<ObservableCollection<clsUser>> GetUsersAsync()
         {
             try
             {
-                await Task.Run(() =>
+                var (total, pagedUsers) = await Task.Run(() =>
                 {
-                    TotalRows = _usersManger.GetTotalUsersCount(SearchQuery);
-                    var pagedUsers = _usersManger.GetUserPaged(CurrentPage, PageSize, SearchQuery) ?? new List<clsUser>();
-
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        UsersList = new ObservableCollection<clsUser>(pagedUsers);
-                    });
+                    int count = _usersManger.GetTotalUsersCount(SearchQuery);
+                    var users = _usersManger.GetUserPaged(CurrentPage, PageSize, SearchQuery) ?? new List<clsUser>();
+                    return (count, users);
                 });
+
+                TotalRows = total;
+                UsersList = new ObservableCollection<clsUser>(pagedUsers);
+                return UsersList;
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "خطأ في جلب بيانات المستخدمين", MessageBoxButton.OK, MessageBoxImage.Error);
+                return new ObservableCollection<clsUser>();
             }
         }
 
@@ -353,6 +429,11 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Users
         private bool CanAddUser()
         {
             return !IsEmptyInputs() && SelectedUser == null;
+        }
+
+        private bool CanUpdateUser()
+        {
+            return !IsEmptyInputs() && SelectedUser != null && USER_ID > 0;
         }
 
         private bool CanDeleteUser()
@@ -375,13 +456,44 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Users
                 if (insertedId > 0)
                 {
                     MessageBox.Show("تمت إضافة المستخدم بنجاح.", "نجاح", MessageBoxButton.OK, MessageBoxImage.Information);
-                    await GetUsersAsync();
+                    await FillUsersDataToScreen();
                     ClearFields();
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "خطأ في الإضافة", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private async Task UpdateUserAsync()
+        {
+            if (USER_ID <= 0) return;
+
+            try
+            {
+                var updatedUser = BuildUserFromProperties();
+                bool isSuccess = false;
+
+                await Task.Run(() =>
+                {
+                    isSuccess = _usersManger.UpdateUser(updatedUser);
+                });
+
+                if (isSuccess)
+                {
+                    MessageBox.Show("تم تعديل بيانات المستخدم بنجاح.", "نجاح", MessageBoxButton.OK, MessageBoxImage.Information);
+                    await FillUsersDataToScreen();
+                    ClearFields();
+                }
+                else
+                {
+                    MessageBox.Show("فشلت عملية تحديث البيانات.", "خطأ", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "خطأ في التحديث", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -404,7 +516,7 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Users
                     if (isSuccess)
                     {
                         MessageBox.Show("تم حذف المستخدم بنجاح.", "نجاح", MessageBoxButton.OK, MessageBoxImage.Information);
-                        await GetUsersAsync();
+                        await FillUsersDataToScreen();
                         ClearFields();
                     }
                 }
@@ -460,7 +572,17 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.Users
             CLI_ID = null;
             ROL_ID = null;
             STATUS = true;
+            SelectedUserTable = null;
             SelectedUser = null;
+        }
+
+        private async Task GetAllRolesAsync()
+        {
+            var rolesList = await clsRoleManger.GetAllRolesAsync();
+            if (rolesList != null)
+            {
+                RolesList = new ObservableCollection<clsRole>(rolesList);
+            }
         }
 
         #endregion

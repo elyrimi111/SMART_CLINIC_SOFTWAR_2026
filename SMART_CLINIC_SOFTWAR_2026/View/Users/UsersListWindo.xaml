@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         Title="قائمة المستخدمين" 
         Height="520" 
-        Width="750"
+        Width="800"
         WindowStartupLocation="CenterScreen"
         FlowDirection="RightToLeft"
         Background="{StaticResource BgMainBrush}">
@@ -20,12 +20,12 @@
 
     <Grid Margin="12">
         <Grid.RowDefinitions>
+            <!-- 0. العنوان العلوي -->
             <RowDefinition Height="Auto"/>
-            <!-- العنوان العلوي -->
+            <!-- 1. شريط البحث والمسح -->
             <RowDefinition Height="Auto"/>
-            <!-- شريط البحث والمسح -->
+            <!-- 2. الجدول المرقّم -->
             <RowDefinition Height="*"/>
-            <!-- الجدول المرقّم -->
         </Grid.RowDefinitions>
 
         <!-- 1. العنوان العلوي -->
@@ -76,7 +76,7 @@
                            IsHitTestVisible="False"/>
 
                 <!-- النص التوضيحي Placeholder -->
-                <TextBlock Text="بحث باسم المستخدم، النوع، أو الرقم..." 
+                <TextBlock Text="بحث باسم المستخدم، الكود، أو الاسم الكامل..." 
                            HorizontalAlignment="Left" 
                            VerticalAlignment="Center" 
                            Margin="32,0,0,0" 
@@ -109,9 +109,11 @@
              NumberOfRows="{Binding PageSize, Mode=TwoWay}"
              PageChangedCommand="{Binding PageChangedCommand}">
 
-            <DataGridTextColumn Header="رقم المستخدم" Binding="{Binding USER_ID}" Width="1.2*"/>
-            <DataGridTextColumn Header="اسم المستخدم" Binding="{Binding USER_NAME}" Width="2*"/>
-            <DataGridTextColumn Header="نوع المستخدم" Binding="{Binding USER_TYPE}" Width="1.5*"/>
+            <DataGridTextColumn Header="رقم المستخدم" Binding="{Binding USER_ID}" Width="1*"/>
+            <DataGridTextColumn Header="كود المستخدم" Binding="{Binding USER_CODE}" Width="1*"/>
+            <DataGridTextColumn Header="اسم الحساب" Binding="{Binding USER_NAME}" Width="1.5*"/>
+            <DataGridTextColumn Header="الاسم الكامل" Binding="{Binding FULL_NAME}" Width="2*"/>
+            <DataGridCheckBoxColumn Header="نشط" Binding="{Binding STATUS}" Width="0.8*"/>
 
         </controls:PaginatedGridControl>
 

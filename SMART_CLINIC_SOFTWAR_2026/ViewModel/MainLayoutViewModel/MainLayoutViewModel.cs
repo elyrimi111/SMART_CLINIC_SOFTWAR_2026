@@ -24,6 +24,7 @@ using System.Security.Cryptography.Xml;
 using SMART_CLINIC_SOFTWAR_2026.View.Users;
 using SMART_CLINIC_SOFTWAR_2026.ViewModel.Resption;
 using SMART_CLINIC_SOFTWAR_2026.View.Roles;
+using SMART_CLINIC_SOFTWAR_2026.ViewModel.Users;
 
 
 namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.MainLayoutViewModel
@@ -217,8 +218,6 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.MainLayoutViewModel
             OpenOrSelectTab("استقبال المرضى", receptionView);
         }
 
-
-
         private void ExecuteNavigateToPatients(object? parameter)
         {
             OpenOrSelectTab("المرضى", new CustomersView());
@@ -268,12 +267,36 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.MainLayoutViewModel
         {
             OpenOrSelectTab("حول النظام", new ServicesView());
         }
-
         private void ExecuteNavigateToUsers(object? parameter)
         {
-            OpenOrSelectTab("المستخدمين", new UsersChoseOptionView());
+            var vm = new UsersChoseOptionViewModel();
+
+            vm.OnNavigateToUsersList = () =>
+            {
+                var UserlistWindow = new UsersListWindow();
+                UserlistWindow.ShowDialog(); 
+            };
+
+            vm.OnNavigateToManageAccount = () =>
+            {
  
+                 var userMangementWindow = new UserMangementWindow();
+                userMangementWindow.ShowDialog();
+            };
+
+            vm.OnNavigateToRolesPermissions = () =>
+            {
+                MessageBox.Show("سيتم فتح شاشة إدارة الأدوار والصلاحيات هنا.", "الصلاحيات والأدوار", MessageBoxButton.OK, MessageBoxImage.Information);
+            };
+             
+            var usersView = new UsersChoseOptionView
+            {
+                DataContext = vm
+            };
+
+            OpenOrSelectTab("إدارة المستخدمين", usersView);
         }
+
 
         #endregion
 
