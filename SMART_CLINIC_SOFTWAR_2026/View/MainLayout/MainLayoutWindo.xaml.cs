@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using SMART_CLINIC_SOFTWAR_2026.ViewModel.MainLayoutViewModel; 
 
 namespace SMART_CLINIC_SOFTWAR_2026.View.MainLayout
 {
@@ -22,7 +23,7 @@ namespace SMART_CLINIC_SOFTWAR_2026.View.MainLayout
         public MainLayoutWindo()
         {
             InitializeComponent();           
-            this.DataContext = new ViewModel.MainLayoutViewModel.MainLayoutViewModel();
+            this.DataContext = new MainLayoutViewModel();
         }
     }
 }

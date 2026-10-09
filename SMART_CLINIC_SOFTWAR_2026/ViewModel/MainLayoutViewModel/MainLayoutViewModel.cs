@@ -152,7 +152,7 @@ namespace SMART_CLINIC_SOFTWAR_2026.ViewModel.MainLayoutViewModel
             ChangePasswordCommand = new RelayCommand(ExecuteChangePassword);
 
             OpenUsersCommand = new RelayCommand(ExecuteNavigateToUsers);
-
+           
 
         }
 
