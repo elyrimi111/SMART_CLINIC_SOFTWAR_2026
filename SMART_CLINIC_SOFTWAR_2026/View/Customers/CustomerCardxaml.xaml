@@ -43,12 +43,8 @@
                 </Grid>
             </Border>
 
-            <Border Grid.Row="1" Padding="8">
+            <Border Grid.Row="1" Padding="12">
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="65"/>
-                    </Grid.ColumnDefinitions>
 
                     <StackPanel Grid.Column="0" VerticalAlignment="Center">
 
@@ -63,7 +59,6 @@
                             </TextBlock.Text>
                         </TextBlock>
 
-                        <!-- العمر والهاتف -->
                         <Grid Margin="0,2">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -75,8 +70,8 @@
                                 <TextBlock Text="{Binding CUST_AGE, StringFormat='{}{0} سنة', TargetNullValue='--'}" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}"/>
                             </StackPanel>
 
-                            <StackPanel Grid.Column="1">
-                                <TextBlock Text="الهاتف:" FontSize="10" Foreground="{StaticResource TextSecondaryBrush}"/>
+                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                <TextBlock Text="الهاتف:" FontSize="10" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,8,0"/>
                                 <TextBlock Text="{Binding CUST_MOBILE1, TargetNullValue='--'}" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}"/>
                             </StackPanel>
                         </Grid>
@@ -86,19 +81,6 @@
                             <TextBlock Text="{Binding CUST_SAVE_STATE, TargetNullValue='غير مؤمن'}" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" TextTrimming="CharacterEllipsis"/>
                         </StackPanel>
                     </StackPanel>
-
-                    <Border Grid.Column="1" 
-                            BorderBrush="{StaticResource BorderBrush}" 
-                            BorderThickness="1" 
-                            CornerRadius="6" 
-                            Background="{StaticResource BgMainBrush}" 
-                            Height="75"
-                            VerticalAlignment="Center">
-                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                            <TextBlock Text="👤" FontSize="28" HorizontalAlignment="Center" Foreground="{StaticResource TextSecondaryBrush}"/>
-                            <TextBlock Text="صورة" FontSize="9" Foreground="{StaticResource TextSecondaryBrush}" HorizontalAlignment="Center"/>
-                        </StackPanel>
-                    </Border>
                 </Grid>
             </Border>
             <Border Grid.Row="2" 
